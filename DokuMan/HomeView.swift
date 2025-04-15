@@ -60,14 +60,16 @@ struct HomeView: View {
     func loadMockupDocument() {
         if let url = Bundle.main.url(forResource: "meldebescheinigung", withExtension: "pdf"),
            let data = try? Data(contentsOf: url) {
-            mockupDocument = Document(name: "Meldebescheinigung", category: "Wohnung", versions: [DocumentVersion(fileData: data, dateAdded: Date())])
+            let category: DocumentCategory = .wohnung
+            mockupDocument = Document(name: "Meldebescheinigung", category: category, versions: [DocumentVersion(fileData: data, dateAdded: Date())])
         }
     }
     
     func loadMockupDocument2() {
         if let url = Bundle.main.url(forResource: "krankenversicherung", withExtension: "pdf"),
            let data = try? Data(contentsOf: url) {
-            mockupDocument2 = Document(name: "krankenversicherung", category: "Versicherung", versions: [DocumentVersion(fileData: data, dateAdded: Date())])
+            let category: DocumentCategory = .versicherung
+            mockupDocument2 = Document(name: "krankenversicherung", category: category, versions: [DocumentVersion(fileData: data, dateAdded: Date())])
         }
     }
 }

@@ -11,6 +11,8 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @State private var showAddDoc = false
+    
     var body: some View {
         ZStack {
             TabView {
@@ -22,9 +24,9 @@ struct ContentView: View {
                     .tabItem {
                         Label("Favourites", systemImage: "star")
                     }
-                Text("nothing")
+                AddDocumentView()
                     .tabItem {
-                        Label("", systemImage: "nothing")
+                        Label("Scanner", systemImage: "document.viewfinder")
                     }
                 Text("Item 3")
                     .tabItem {
@@ -36,32 +38,27 @@ struct ContentView: View {
                     }
             }
             .accentColor(.cyan)
-//            .background(
-//                LinearGradient(
-//                    gradient: Gradient(colors: [Color.blue, Color.purple]),
-//                    startPoint: .top,
-//                    endPoint: .bottom
-//                )
-//                .edgesIgnoringSafeArea(.bottom)
-//            )
+
             
-            VStack {
-                Spacer()
-                Button(action: {
-                    print("add document tapped")
-                }) {
-                    Circle()
-                        .fill(Color.cyan)
-                        .frame(width: 70, height: 70)
-                        .overlay(
-                            Image(systemName: "plus")
-                                .foregroundColor(.white)
-                                .font(.title)
-                        )
-                        .shadow(radius: 10)
-                }
-//                .padding(.bottom, 20)
-            }
+//            VStack {
+//                Spacer()
+//                Button(action: {
+//                    showAddDoc = true
+//                }) {
+//                    Circle()
+//                        .fill(Color.cyan)
+//                        .frame(width: 70, height: 70)
+//                        .overlay(
+//                            Image(systemName: "document.viewfinder")
+//                                .foregroundColor(.white)
+//                                .font(.title)
+//                        )
+//                        .shadow(radius: 5)
+//                }
+//            }
+//            .sheet(isPresented: $showAddDoc) {
+//                AddDocumentView()
+//            }
         }
     }
 }

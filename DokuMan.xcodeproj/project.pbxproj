@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4A4A67E82DAE55EE00AC8BDF /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		4A4A67B42DAD0A7900AC8BDF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		4A4A67A62DAD0A7600AC8BDF /* DokuMan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DokuMan.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4A67B32DAD0A7900AC8BDF /* DokuManTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DokuManTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4A67BD2DAD0A7900AC8BDF /* DokuManUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DokuManUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		4A4A679D2DAD0A7600AC8BDF = {
 			isa = PBXGroup;
 			children = (
+				4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */,
 				4A4A67A82DAD0A7600AC8BDF /* DokuMan */,
 				4A4A67B62DAD0A7900AC8BDF /* DokuManTests */,
 				4A4A67C02DAD0A7900AC8BDF /* DokuManUITests */,
@@ -236,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A4A67E82DAE55EE00AC8BDF /* CategoriesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +407,7 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -428,6 +436,7 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
