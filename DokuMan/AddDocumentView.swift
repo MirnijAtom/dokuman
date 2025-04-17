@@ -11,6 +11,7 @@ import SwiftUI
 struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @Binding var selectedTab: Int
     
     @State private var name: String = ""
     @State private var date: Date = Date()
@@ -49,12 +50,13 @@ struct AddDocumentView: View {
                                 Image(systemName: category.icon)
                                     .foregroundColor(.white)
                             }
-                            
                         }
                     }
                 }
                 Section {
-                    Button("Save", action: { saveDocument() })
+                    Button("Save") {
+                        saveDocument()
+                    }
                 }
                 Section {
                     if !data.isEmpty {
@@ -94,10 +96,13 @@ struct AddDocumentView: View {
         let newDocument = Document(name: name, category: category, versions: [newDocumentVersion])
         modelContext.insert(newDocument)
         try? modelContext.save()
+        print("Saved: \(newDocument.name)")
+        selectedTab = 0
         dismiss()
     }
 }
 
 #Preview {
-    AddDocumentView()
+    AddDocumentView(selectedTab: .constant(1))
+        .modelContainer(for: Document.self)
 }

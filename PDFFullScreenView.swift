@@ -8,11 +8,18 @@
 import SwiftUI
 
 struct PDFFullScreenView: View {
+    var document: Document
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        PDFPreview(data: document.versions.first!.fileData)
+            .frame(maxWidth: .infinity)
     }
 }
 
 #Preview {
-    PDFFullScreenView()
+    PDFFullScreenView(document: Document(
+            name: "Meldebescheinigung",
+            category: .wohnung,
+            versions: [DocumentVersion(fileData: loadPDF(named: "krankenversicherung"), dateAdded: Date())]
+        ))
+        .modelContainer(for: Document.self)
 }

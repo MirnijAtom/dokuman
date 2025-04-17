@@ -5,6 +5,7 @@
 //  Created by Aleksandrs Bertulis on 14.04.25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeView: View {
@@ -48,6 +49,7 @@ struct HomeView: View {
                         }
                     }
                 }
+                Text("Documents count: \(documents.count)")
             }
         }
     }
