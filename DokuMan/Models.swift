@@ -9,13 +9,14 @@ import SwiftUI
 import SwiftData
 
 @Model
-class Document {
+class Document: Identifiable {
+    var id: UUID = UUID() // 👈 SwiftUI needs this
     var name: String
     var category: DocumentCategory
     var isFavorite: Bool = false
     var isArchived: Bool = false
     var versions: [DocumentVersion] = []
-    
+
     init(name: String, category: DocumentCategory, versions: [DocumentVersion]) {
         self.name = name
         self.category = category

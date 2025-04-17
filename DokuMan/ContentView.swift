@@ -12,11 +12,12 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var showAddDoc = false
+    @Query var documents: [Document]
     
     var body: some View {
         ZStack {
             TabView {
-                HomeView()
+                HomeView(documents: documents)
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }

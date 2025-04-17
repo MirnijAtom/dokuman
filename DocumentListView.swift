@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct DocumentListView: View {
+    var title: String
+    var documents: [Document]
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
 #Preview {
-    DocumentListView()
+//    DocumentListView()
 }

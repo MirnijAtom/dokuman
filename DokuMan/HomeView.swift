@@ -8,72 +8,91 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.modelContext) var modelContext
+    
+    var documents: [Document]
     @State private var mockupDocument: Document?
     @State private var mockupDocument2: Document?
     
     var categories = ["Wohnung", "Versicherungen", "Visa"]
     
     var body: some View {
-        List {
-            Section(header: Text("Pinned")) {
-                HStack {
-                    GroupBox {
-                        if let document = mockupDocument {
-                            VStack {
+        NavigationStack {
+            List {
+                // ForEach now works with Identifiable Documents
+                Section(header: Text("Pinned")) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(documents) { document in
+                                
                                 PDFPreview(data: document.versions.first!.fileData)
-                                    .frame(height: 100)
-                                    .cornerRadius(8)
-                                Text(document.name)
+                                    .frame(width: 100, height: 150)
+                                    .cornerRadius(10)
                             }
-                        } else {
-                            Text("No document loaded")
-                                .foregroundColor(.gray)
                         }
                     }
-                    GroupBox {
-                        if let document = mockupDocument2 {
-                            VStack {
-                                PDFPreview(data: document.versions.first!.fileData)
-                                    .frame(height: 100)
-                                    .cornerRadius(8)
-                                Text(document.name)
-                            }
-                        } else {
-                            Text("No document loaded")
-                                .foregroundColor(.gray)
-                        }
+                }
+                
+                
+                Section(header: Text("Categories")) {
+                    ForEach(DocumentCategory.allCases, id: \.self) { category in
+                        let docsInCategory = documents.filter { $0.category == category }
                         
+                        if !docsInCategory.isEmpty {
+                            NavigationLink {
+                                DocumentListView(title: category.label, documents: docsInCategory)
+                            } label: {
+                                Label(category.label, systemImage: category.icon)
+                                    .foregroundColor(category.color)
+                            }
+                        }
                     }
                 }
-                .padding()
-                .onAppear {
-                    loadMockupDocument()
-                    loadMockupDocument2()
-                }
             }
-            Section(header: Text("Categories")) {
-                ForEach(categories, id: \.self) { Text($0) }
-            }
-        }
-    }
-    
-    func loadMockupDocument() {
-        if let url = Bundle.main.url(forResource: "meldebescheinigung", withExtension: "pdf"),
-           let data = try? Data(contentsOf: url) {
-            let category: DocumentCategory = .wohnung
-            mockupDocument = Document(name: "Meldebescheinigung", category: category, versions: [DocumentVersion(fileData: data, dateAdded: Date())])
-        }
-    }
-    
-    func loadMockupDocument2() {
-        if let url = Bundle.main.url(forResource: "krankenversicherung", withExtension: "pdf"),
-           let data = try? Data(contentsOf: url) {
-            let category: DocumentCategory = .versicherung
-            mockupDocument2 = Document(name: "krankenversicherung", category: category, versions: [DocumentVersion(fileData: data, dateAdded: Date())])
         }
     }
 }
 
+func generateDummyPDFData() -> Data {
+    let format = UIGraphicsPDFRendererFormat()
+    let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 300, height: 300), format: format)
+    
+    return renderer.pdfData { context in
+        context.beginPage()
+        let text = "This is a simulated PDF file."
+        text.draw(at: CGPoint(x: 50, y: 50))
+    }
+}
+
 #Preview {
-    HomeView()
+    HomeView(
+        documents: [
+            Document(
+                name: "Meldebescheinigung",
+                category: .wohnung,
+                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
+            ),
+            Document(
+                name: "Krankenversicherung",
+                category: .versicherung,
+                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
+            ),
+            Document(
+                name: "Wohnung Vertrag",
+                category: .wohnung,
+                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
+            ),
+            Document(
+                name: "Lohnabrechnung März",
+                category: .arbeit,
+                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
+            ),
+            Document(
+                name: "Steuerbescheid 2023",
+                category: .steuern,
+                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
+            )
+        ]
+    )
+    .modelContainer(for: Document.self)
 }
