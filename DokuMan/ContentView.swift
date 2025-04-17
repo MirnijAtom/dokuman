@@ -38,27 +38,6 @@ struct ContentView: View {
                     }
             }
             .accentColor(.cyan)
-
-            
-//            VStack {
-//                Spacer()
-//                Button(action: {
-//                    showAddDoc = true
-//                }) {
-//                    Circle()
-//                        .fill(Color.cyan)
-//                        .frame(width: 70, height: 70)
-//                        .overlay(
-//                            Image(systemName: "document.viewfinder")
-//                                .foregroundColor(.white)
-//                                .font(.title)
-//                        )
-//                        .shadow(radius: 5)
-//                }
-//            }
-//            .sheet(isPresented: $showAddDoc) {
-//                AddDocumentView()
-//            }
         }
     }
 }
