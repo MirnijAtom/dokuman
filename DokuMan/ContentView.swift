@@ -17,26 +17,30 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             TabView(selection: $selectedTab) {
-                HomeView(documents: documents)
+                HomeView()
                     .tabItem {
                         Label("Home", systemImage: "house")
                     }
                     .tag(0)
+                
                 FavouritesView()
                     .tabItem {
                         Label("Favourites", systemImage: "star")
                     }
                     .tag(1)
+                
                 AddDocumentView(selectedTab: $selectedTab)
                     .tabItem {
                         Label("Scanner", systemImage: "document.viewfinder")
                     }
                     .tag(3)
-                Text("Item 3")
+                
+                ArchiveView()
                     .tabItem {
                         Label("Archive", systemImage: "archivebox")
                     }
                     .tag(4)
+                
                 Text("Item 4")
                     .tabItem {
                         Label("search", systemImage: "magnifyingglass")
@@ -50,4 +54,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(for: Document.self)
 }

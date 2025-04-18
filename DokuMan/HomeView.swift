@@ -10,35 +10,36 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
-    
-    var documents: [Document]
-    @State private var mockupDocument: Document?
-    @State private var mockupDocument2: Document?
-    
-    var categories = ["Wohnung", "Versicherungen", "Visa"]
-    
+
+    @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
+
     var body: some View {
         NavigationStack {
             List {
-                // ForEach now works with Identifiable Documents
+                // Pinned Section
                 Section(header: Text("Pinned")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
                             ForEach(documents) { document in
-                                
                                 PDFPreview(data: document.versions.first!.fileData)
                                     .frame(width: 100, height: 150)
                                     .cornerRadius(10)
                             }
                         }
+                        .padding(.vertical)
                     }
                 }
-                
-                
+
+                // Button to add mockup files
+                Button("Add mockup files") {
+                    addMockupFiles()
+                }
+
+                // Categories Section
                 Section(header: Text("Categories")) {
                     ForEach(DocumentCategory.allCases, id: \.self) { category in
                         let docsInCategory = documents.filter { $0.category == category }
-                        
+
                         if !docsInCategory.isEmpty {
                             NavigationLink {
                                 DocumentListView(title: category.label, documents: docsInCategory)
@@ -49,52 +50,39 @@ struct HomeView: View {
                         }
                     }
                 }
+
+                // Debug Count
                 Text("Documents count: \(documents.count)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
             }
+            .navigationTitle("Home")
         }
     }
-}
 
-func generateDummyPDFData() -> Data {
-    let format = UIGraphicsPDFRendererFormat()
-    let renderer = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 300, height: 300), format: format)
-    
-    return renderer.pdfData { context in
-        context.beginPage()
-        let text = "This is a simulated PDF file."
-        text.draw(at: CGPoint(x: 50, y: 50))
+    func addMockupFiles() {
+        let fileNames = [
+            ("krankenversicherung", DocumentCategory.versicherung),
+            ("lebenslauf", DocumentCategory.arbeit),
+            ("meldebescheinigung", DocumentCategory.wohnung),
+            ("portfolio", DocumentCategory.studium),
+            ("versicherung", DocumentCategory.versicherung)
+        ]
+
+        for (name, category) in fileNames {
+            if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
+               let data = try? Data(contentsOf: url) {
+                let version = DocumentVersion(fileData: data, dateAdded: Date())
+                let document = Document(name: name.capitalized, category: category, versions: [version])
+                modelContext.insert(document)
+            }
+        }
+
+        try? modelContext.save()
     }
 }
 
 #Preview {
-    HomeView(
-        documents: [
-            Document(
-                name: "Meldebescheinigung",
-                category: .wohnung,
-                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
-            ),
-            Document(
-                name: "Krankenversicherung",
-                category: .versicherung,
-                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
-            ),
-            Document(
-                name: "Wohnung Vertrag",
-                category: .wohnung,
-                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
-            ),
-            Document(
-                name: "Lohnabrechnung März",
-                category: .arbeit,
-                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
-            ),
-            Document(
-                name: "Steuerbescheid 2023",
-                category: .steuern,
-                versions: [DocumentVersion(fileData: generateDummyPDFData(), dateAdded: Date())]
-            )
-        ]
-    )
-    .modelContainer(for: Document.self)
+    HomeView()
+        .modelContainer(for: Document.self)
 }

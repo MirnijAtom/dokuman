@@ -17,8 +17,9 @@ class Document: Identifiable {
     var isArchived: Bool = false
     var versions: [DocumentVersion] = []
 
-    init(name: String, category: DocumentCategory, versions: [DocumentVersion]) {
+    init(name: String, isArchived: Bool = false, category: DocumentCategory, versions: [DocumentVersion]) {
         self.name = name
+        self.isArchived = isArchived
         self.category = category
         self.versions = versions
     }
