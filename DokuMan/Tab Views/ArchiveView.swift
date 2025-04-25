@@ -23,7 +23,7 @@ struct ArchiveView: View {
 
     
     // A4 size in points (595 x 842)
-    let a4Size = CGSize(width: 155, height: 218)
+    let a4Size = CGSize(width: 148.75, height: 210.5)
     
     var body: some View {
         NavigationStack {
@@ -35,33 +35,30 @@ struct ArchiveView: View {
                             fullScreenIsPresented = true
                         }) {
                             VStack(spacing: 8) {
-                                ZStack {
-                                    // A4 sized container
-
-                                    Rectangle()
-                                        .frame(width: a4Size.width - 4, height: a4Size.height - 4)
-                                        .foregroundColor(.gray.opacity(0.2)) // gray background
-                                        .cornerRadius(2)
-                                        .shadow(radius: 2)
-                                    
+                                
                                     PDFPreview(data: document.versions.first!.fileData)
                                         .scaledToFill() // Scale the PDF to fill the fixed container
                                         .frame(width: a4Size.width, height: a4Size.height) // Set the fixed size
                                         .blur(radius: 0.4)
-                                        .opacity(0.6)
-                                        .cornerRadius(2)
-                                }
+                                        .opacity(0.9)
+                                        .cornerRadius(5)
+                                        .overlay(RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.black.opacity(0.5), lineWidth: 1)
+                                            .fill(Color.gray.opacity(0.2)))
+                                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+                                        .contextMenu {
+                                            Button("Archive") {
+                                                archiveDocument(document: document)
+                                            }
+                                            Button("Delete", role: .destructive) {
+                                                deleteDocument(document: document)
+                                            }
+                                        }
+
+
                                 Text(document.name)
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                            }
-                        }
-                        .contextMenu {
-                            Button("Archive") {
-                                archiveDocument(document: document)
-                            }
-                            Button("Delete", role: .destructive) {
-                                deleteDocument(document: document)
                             }
                         }
                         .buttonStyle(PlainButtonStyle())

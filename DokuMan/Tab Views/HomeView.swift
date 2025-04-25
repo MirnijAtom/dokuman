@@ -10,21 +10,33 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
+    // A4 size in points (595 x 842)
+    let a4Size = CGSize(width: 119, height: 168.4)
+
 
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
 
     var body: some View {
+        let favorites = documents.filter { $0.isFavorite }
+
         NavigationStack {
             List {
                 // Pinned Section
-                Section(header: Text("Pinned")) {
+                Section(header: Text("Favourites")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            ForEach(documents) { document in
+                            ForEach(favorites) { document in
                                 PDFPreview(data: document.versions.first!.fileData)
-                                    .frame(width: 100, height: 150)
-                                    .cornerRadius(10)
-                            }
+                                    .scaledToFill() // Scale the PDF to fill the fixed container
+                                    .frame(width: a4Size.width, height: a4Size.height) // Set the fixed size
+                                    .blur(radius: 0.4)
+                                    .opacity(0.9)
+                                    .cornerRadius(5)
+                                    .overlay(RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color.black.opacity(0.5), lineWidth: 1)
+                                        .fill(Color.gray.opacity(0.2)))
+                                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+                                }
                         }
                         .padding(.vertical)
                     }
@@ -73,7 +85,8 @@ struct HomeView: View {
             if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
                let data = try? Data(contentsOf: url) {
                 let version = DocumentVersion(fileData: data, dateAdded: Date())
-                let document = Document(name: name.capitalized, category: category, versions: [version])
+                let document = Document(name: name.capitalized, category: category,  versions: [version])
+                document.isFavorite = true
                 modelContext.insert(document)
             }
         }
