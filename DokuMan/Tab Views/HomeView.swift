@@ -10,48 +10,73 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
+    
     // A4 size in points (595 x 842)
-    let a4Size = CGSize(width: 119, height: 168.4)
-
-
+    let a4Size = CGSize(width: 132, height: 187)
+    
+    @State private var selectedDocument: Document? = nil
+    @State private var fullScreenIsPresented = false
+    
+    
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
-
+    
     var body: some View {
         let favorites = documents.filter { $0.isFavorite }
-
+        
         NavigationStack {
-            List {
-                // Pinned Section
-                Section(header: Text("Favourites")) {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack {
-                            ForEach(favorites) { document in
-                                PDFPreview(data: document.versions.first!.fileData)
-                                    .scaledToFill() // Scale the PDF to fill the fixed container
-                                    .frame(width: a4Size.width, height: a4Size.height) // Set the fixed size
-                                    .blur(radius: 0.4)
-                                    .opacity(0.9)
-                                    .cornerRadius(5)
-                                    .overlay(RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                                        .fill(Color.gray.opacity(0.2)))
-                                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+            
+            // Pinned Section
+            HStack { Text("Favourites")
+                Spacer()
+                NavigationLink(destination: FavouritesView()) {
+                    Text("See all")
+                }
+            }
+            .padding(.horizontal)
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack {
+                    ForEach(favorites) { document in
+                        Button(action: {
+                            selectedDocument = document
+                            fullScreenIsPresented = true
+                        }) {
+                            PDFPreview(data: document.versions.first!.fileData)
+                                .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
+                                .frame(width: a4Size.width, height: a4Size.height)
+                                .clipped() // Ensure that the overflow content is clipped (cut off)
+                                .mask(RoundedRectangle(cornerRadius: 5)) // Mask the view to rounded corners
+                                .shadow(radius: 3) // Then apply the shadow
+                            
+                                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+                                .contextMenu {
+                                    Button("Remove from Favorites") {
+                                        deleteFromFavorites(document)
+                                    }
+                                    Button("Archive") {
+                                        archiveDocument(document)
+                                    }
+                                    Button("Delete", role: .destructive) {
+                                        deleteDocument(document)
+                                    }
                                 }
                         }
-                        .padding(.vertical)
                     }
+                    .padding(5)
                 }
-
+                .padding(10)
+            }
+            
+            List {
                 // Button to add mockup files
                 Button("Add mockup files") {
                     addMockupFiles()
                 }
-
+                
                 // Categories Section
                 Section(header: Text("Categories")) {
                     ForEach(DocumentCategory.allCases, id: \.self) { category in
                         let docsInCategory = documents.filter { $0.category == category }
-
+                        
                         if !docsInCategory.isEmpty {
                             NavigationLink {
                                 DocumentListView(title: category.label, documents: docsInCategory)
@@ -62,16 +87,19 @@ struct HomeView: View {
                         }
                     }
                 }
-
+                
                 // Debug Count
                 Text("Documents count: \(documents.count)")
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
             .navigationTitle("Home")
+            .fullScreenCover(item: $selectedDocument) { document in
+                PDFFullScreenView(document: document)
+            }
         }
     }
-
+    
     func addMockupFiles() {
         let fileNames = [
             ("krankenversicherung", DocumentCategory.versicherung),
@@ -80,7 +108,7 @@ struct HomeView: View {
             ("portfolio", DocumentCategory.studium),
             ("versicherung", DocumentCategory.versicherung)
         ]
-
+        
         for (name, category) in fileNames {
             if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
                let data = try? Data(contentsOf: url) {
@@ -90,7 +118,23 @@ struct HomeView: View {
                 modelContext.insert(document)
             }
         }
-
+        
+        try? modelContext.save()
+    }
+    
+    func archiveDocument(_ document: Document) {
+        document.isFavorite = false
+        document.isArchived = true
+        try? modelContext.save()
+    }
+    
+    func deleteDocument(_ document: Document) {
+        modelContext.delete(document)
+        try? modelContext.save()
+    }
+    
+    func deleteFromFavorites(_ document: Document) {
+        document.isFavorite = false
         try? modelContext.save()
     }
 }

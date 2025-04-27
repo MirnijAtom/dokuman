@@ -25,7 +25,7 @@ struct ContentView: View {
                 
                 FavouritesView()
                     .tabItem {
-                        Label("Favourites", systemImage: "star")
+                        Label("Files", systemImage: "folder")
                     }
                     .tag(1)
                 
@@ -43,7 +43,7 @@ struct ContentView: View {
                 
                 Text("Item 4")
                     .tabItem {
-                        Label("search", systemImage: "magnifyingglass")
+                        Label("Account", systemImage: "person")
                     }
                     .tag(5)
             }

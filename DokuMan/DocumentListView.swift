@@ -48,7 +48,7 @@ struct DocumentListView: View {
                                             .frame(width: a4Size.width, height: a4Size.height)
                                             .clipped() // Ensure that the overflow content is clipped (cut off)
                                             .cornerRadius(5)
-                                            .shadow(radius: 1)
+                                            .shadow(radius: 3)
                                             .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                             .contextMenu {
                                                 Button("Add to Favorites") {
@@ -67,6 +67,7 @@ struct DocumentListView: View {
                                             .foregroundColor(.primary)
                                             .lineLimit(1)
                                     }
+                                    .padding()
                                 }
 
                                 .buttonStyle(PlainButtonStyle())
@@ -116,7 +117,8 @@ struct DocumentListView: View {
     }
     
     func addToFavorites(_ document: Document) {
-        
+            document.isFavorite.toggle()
+            try? modelContext.save()
     }
 }
 
