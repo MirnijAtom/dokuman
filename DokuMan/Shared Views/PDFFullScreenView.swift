@@ -43,7 +43,7 @@ struct PDFFullScreenView: View {
         }
     }
     func exportTempURL() -> URL? {
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(document.name)
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(document.name).appendingPathExtension("pdf")
         do {
             try document.versions.first!.fileData.write(to: tempURL)
             return tempURL
