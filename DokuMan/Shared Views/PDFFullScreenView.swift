@@ -54,16 +54,6 @@ struct PDFFullScreenView: View {
     }
 }
 
-struct ShareSheet: UIViewControllerRepresentable {
-    var activityItems: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
-}
-
 #Preview {
     PDFFullScreenView(document: Document(
             name: "Krankenversicherung",
