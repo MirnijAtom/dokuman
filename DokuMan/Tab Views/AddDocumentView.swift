@@ -105,9 +105,20 @@ struct AddDocumentView: View {
             .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
                 switch result {
                 case .success(let url):
-                    if let fileData = try? Data(contentsOf: url) {
-                        data = fileData
+                    guard url.startAccessingSecurityScopedResource() else {
+                        print("No permission to access file")
+                        return
                     }
+
+                    defer { url.stopAccessingSecurityScopedResource() }
+
+                    do {
+                        let fileData = try Data(contentsOf: url)
+                        data = fileData
+                    } catch {
+                        print("Error reading file: \(error)")
+                    }
+
                 case .failure(let error):
                     print("Failed to import PDF: \(error)")
                 }
