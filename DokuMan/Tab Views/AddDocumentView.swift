@@ -5,6 +5,7 @@
 //  Created by Aleksandrs Bertulis on 14.04.25.
 //
 
+import PhotosUI
 import SwiftData
 import SwiftUI
 
@@ -17,6 +18,8 @@ struct AddDocumentView: View {
     @State private var date: Date = Date()
     @State private var category: DocumentCategory = .wohnung
     @State private var data: Data = Data()
+    @State private var showPhotoPicker = false
+    @State private var showFileImporter = false
     
     @State private var allCategories = ["Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"]
     @State private var filtereSuggestions: [String] = []
@@ -65,11 +68,23 @@ struct AddDocumentView: View {
                 }
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
                         showScanner.toggle()
                     } label: {
                         Label("Scan", systemImage: "document.viewfinder")
+                    }
+                    
+                    Button {
+                        showPhotoPicker.toggle()
+                    } label: {
+                        Label("Photos", systemImage: "photo.on.rectangle")
+                    }
+
+                    Button {
+                        showFileImporter.toggle()
+                    } label: {
+                        Label("Import PDF", systemImage: "doc.fill")
                     }
                 }
             }
@@ -78,6 +93,23 @@ struct AddDocumentView: View {
                     if let image = images.first {
                         data = imageToPDF(image: image)
                     }
+                }
+            }
+            .sheet(isPresented: $showPhotoPicker) {
+                PhotoPicker { images in
+                    if let first = images.first {
+                        data = imageToPDF(image: first)
+                    }
+                }
+            }
+            .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
+                switch result {
+                case .success(let url):
+                    if let fileData = try? Data(contentsOf: url) {
+                        data = fileData
+                    }
+                case .failure(let error):
+                    print("Failed to import PDF: \(error)")
                 }
             }
         }
@@ -97,8 +129,57 @@ struct AddDocumentView: View {
         modelContext.insert(newDocument)
         try? modelContext.save()
         print("Saved: \(newDocument.name)")
+        data = Data()
+        name = ""
         selectedTab = 0
         dismiss()
+    }
+}
+
+struct PhotoPicker: UIViewControllerRepresentable {
+    var onComplete: ([UIImage]) -> Void
+    
+    func makeUIViewController(context: Context) -> PHPickerViewController {
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 3
+        config.filter = .images
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = context.coordinator
+        return picker
+    }
+    
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onComplete: onComplete)
+    }
+
+    class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        var onComplete: ([UIImage]) -> Void
+        
+        init(onComplete: @escaping ([UIImage]) -> Void) {
+            self.onComplete = onComplete // Capturing the closure explicitly
+        }
+        
+        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            picker.dismiss(animated: true)
+            let group = DispatchGroup()
+            var images: [UIImage] = []
+            
+            for result in results {
+                group.enter()
+                result.itemProvider.loadObject(ofClass: UIImage.self) { reading, _ in
+                    if let image = reading as? UIImage {
+                        images.append(image)
+                    }
+                    group.leave()
+                }
+            }
+            
+            group.notify(queue: .main) {
+                self.onComplete(images) // Ensure it's self.onComplete to capture correctly
+            }
+        }
     }
 }
 

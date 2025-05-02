@@ -6,120 +6,123 @@ struct DocumentListView: View {
     var title: String
     var documents: [Document]
     
-    @State private var listView = false
     @State private var selectedDocument: Document? = nil
     @State private var fullScreenIsPresented = false
-    @State private var isSelected = true
-    
     @State private var selectedDocuments: Set<Document> = []
+    @State private var isSharing = false
+
     
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    
     // A4 size in points (595 x 842)
     let a4Size = CGSize(width: 148.75, height: 210.5)
     
     var body: some View {
         NavigationStack {
-            Group {
-                if listView {
+            ScrollView {
+                LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(documents) { document in
-                        Text(document.name)
-                            .swipeActions {
-                                Button("Archive", systemImage: "archivebox") {
-                                    archiveDocument(document)
-                                }
-                                Button("Delete", systemImage: "trash", role: .destructive) {
-                                    deleteDocument(document)
+                        ZStack(alignment: .topTrailing) {
+                            Button(action: {
+                                selectedDocument = document
+                                fullScreenIsPresented = true
+                            }) {
+                                VStack(spacing: 8) {
+                                    PDFPreview(data: document.versions.first!.fileData)
+                                        .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
+                                        .frame(width: a4Size.width, height: a4Size.height)
+                                        .clipped() // Ensure that the overflow content is clipped (cut off)
+                                        .cornerRadius(5)
+                                        .shadow(radius: 3)
+                                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+                                        .contextMenu {
+                                            Button("Add to Favorites") {
+                                                addToFavorites(document)
+                                            }
+                                            Button("Archive") {
+                                                archiveDocument(document)
+                                            }
+                                            Button("Delete", role: .destructive) {
+                                                deleteDocument(document)
+                                            }
+                                        }
+                                    
+                                    Text(document.name)
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
+                                        .lineLimit(1)
                                 }
                             }
-                    }
-                } else {
-                    ScrollView {
-                        LazyVGrid(columns: columns, spacing: 16) {
-                            ForEach(documents) { document in
-                                
-                                ZStack(alignment: .topTrailing) {
-                                    Button(action: {
-                                        selectedDocument = document
-                                        fullScreenIsPresented = true
-                                    }) {
-                                        VStack(spacing: 8) {
-                                            PDFPreview(data: document.versions.first!.fileData)
-                                                .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
-                                                .frame(width: a4Size.width, height: a4Size.height)
-                                                .clipped() // Ensure that the overflow content is clipped (cut off)
-                                                .cornerRadius(5)
-                                                .shadow(radius: 3)
-                                                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
-                                                .contextMenu {
-                                                    Button("Add to Favorites") {
-                                                        addToFavorites(document)
-                                                    }
-                                                    Button("Archive") {
-                                                        archiveDocument(document)
-                                                    }
-                                                    Button("Delete", role: .destructive) {
-                                                        deleteDocument(document)
-                                                    }
-                                                }
-                                            
-                                            Text(document.name)
-                                                .font(.caption)
-                                                .foregroundColor(.primary)
-                                                .lineLimit(1)
-                                        }
-                                    }
-                                    .padding()
-                                    
-                                    
-                                    Button(action: {
-                                        toggleSelection(of: document)
-                                    }) {
-                                        Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
-                                            .foregroundColor(selectedDocuments.contains(document) ? . green : .gray)
-                                            .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
-                                            .font(.title)
-                                            .background(Color.white.opacity(1))
-                                            .clipShape(Circle())
-                                            .padding(20)
-                                    }
-                                }
-                                
-                                .buttonStyle(PlainButtonStyle())
+                            .padding()
+                            
+                            Button(action: {
+                                toggleSelection(of: document)
+                            }) {
+                                Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
+                                    .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
+                                    .font(.title)
+                                    .background(Color.white.opacity(1))
+                                    .clipShape(Circle())
+                                    .padding(20)
                             }
                         }
-                        .padding(.horizontal)
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isSharing = true
+                    } label: {
+                        Label("Share", systemImage: "square.and.arrow.up")
                     }
                 }
             }
             .navigationTitle(title)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        listView.toggle()
-                    } label: {
-                        listView
-                        ? Label("Grid View", systemImage: "square.grid.2x2")
-                        : Label("List View", systemImage: "list.bullet")
-                    }
-                }
-            }
             .fullScreenCover(item: $selectedDocument) { document in
                 PDFFullScreenView(document: document)
+            }
+            .sheet(isPresented: $isSharing) {
+                let urls = exportTempURLs(from: selectedDocuments)
+                if !urls.isEmpty {
+                    ShareSheet(activityItems: urls)
+                } else {
+                    Text("Error sharing documents.")
+                }
             }
         }
     }
     
+    func exportTempURLs(from documents: Set<Document>) -> [URL] {
+        var urls: [URL] = []
+        for doc in documents {
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(doc.name)
+                .appendingPathExtension("pdf")
+            do {
+                try doc.versions.first!.fileData.write(to: tempURL)
+                urls.append(tempURL)
+            } catch {
+                print("Failed to write PDF to temp for \(doc.name): \(error)")
+            }
+        }
+        return urls
+    }
+    
     func archiveDocument(_ document: Document) {
-            document.isArchived.toggle()
-            try? modelContext.save()
+        document.isArchived.toggle()
+        try? modelContext.save()
     }
     
     func deleteDocument(_ document: Document) {
-            modelContext.delete(document)
-            try? modelContext.save()
+        modelContext.delete(document)
+        try? modelContext.save()
     }
     
     func addToFavorites(_ document: Document) {
