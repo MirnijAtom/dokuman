@@ -38,6 +38,29 @@ class DocumentVersion {
     }
 }
 
+@Model
+class Number {
+    var name: String
+    var number: String
+    
+    init(name: String, number: String) {
+        self.name = name
+        self.number = number
+    }
+}
+
+extension Number {
+    static var defaultNumbers: [Number] {
+        [
+            Number(name: "Steuer-ID", number: ""),
+            Number(name: "Sozialversicherung", number: ""),
+            Number(name: "Rentenversicherung", number: ""),
+            Number(name: "Krankenversicherung", number: "")
+        ]
+    }
+}
+
+
 enum DocumentCategory: String, CaseIterable, Codable {
     case wohnung, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
     case fahrzeug, internet, mitgliedschaft, quittungen, behoerden, rechtliches, familie, sonstiges
@@ -105,3 +128,4 @@ enum DocumentCategory: String, CaseIterable, Codable {
         }
     }
 }
+

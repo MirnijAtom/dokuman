@@ -10,6 +10,7 @@ struct DocumentListView: View {
     @State private var fullScreenIsPresented = false
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSharing = false
+    @State private var isSelectionActive = false
 
     
     let columns = [
@@ -58,16 +59,18 @@ struct DocumentListView: View {
                             }
                             .padding()
                             
-                            Button(action: {
-                                toggleSelection(of: document)
-                            }) {
-                                Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
-                                    .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
-                                    .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
-                                    .font(.title)
-                                    .background(Color.white.opacity(1))
-                                    .clipShape(Circle())
-                                    .padding(20)
+                            if isSelectionActive {
+                                Button(action: {
+                                    toggleSelection(of: document)
+                                }) {
+                                    Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
+                                        .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
+                                        .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
+                                        .font(.title)
+                                        .background(Color.white.opacity(1))
+                                        .clipShape(Circle())
+                                        .padding(20)
+                                }
                             }
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -76,11 +79,22 @@ struct DocumentListView: View {
                 .padding(.horizontal)
             }
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isSharing = true
-                    } label: {
-                        Label("Share", systemImage: "square.and.arrow.up")
+                if isSelectionActive {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isSharing = true
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                isSelectionActive = false
+                            }
+                        } label: {
+                            Label("Share", systemImage: "square.and.arrow.up")
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Select") {
+                            isSelectionActive = true
+                        }
                     }
                 }
             }

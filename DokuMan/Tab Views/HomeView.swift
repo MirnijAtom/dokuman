@@ -18,6 +18,7 @@ struct HomeView: View {
     @State private var fullScreenIsPresented = false
     
     
+    @Query var numbers: [Number]
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     
     var body: some View {
@@ -86,6 +87,13 @@ struct HomeView: View {
                             }
                         }
                     }
+                }
+                
+                Section(header: Text("Numbers")) {
+                    ForEach(numbers) { number in
+                        Text("\(number.name) \(number.number)")
+                    }
+                    Text("Edit numbers")
                 }
                 
                 // Debug Count

@@ -13,6 +13,6 @@ struct DokuManApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Document.self)
+        .modelContainer(for: [Document.self, Number.self])
     }
 }
