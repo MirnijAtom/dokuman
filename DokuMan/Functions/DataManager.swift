@@ -16,5 +16,6 @@ struct DataManager {
             }
             try? context.save()
         }
+        print("FETCHINNG")
     }
 }

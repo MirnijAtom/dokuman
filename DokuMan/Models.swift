@@ -41,21 +41,23 @@ class DocumentVersion {
 @Model
 class Number {
     var name: String
-    var number: String
+    var idNumber: String
+    var isCompleted: Bool
     
-    init(name: String, number: String) {
+    init(name: String, idNumber: String, isCompleted: Bool = false) {
         self.name = name
-        self.number = number
+        self.idNumber = idNumber
+        self.isCompleted = isCompleted
     }
 }
 
 extension Number {
     static var defaultNumbers: [Number] {
         [
-            Number(name: "Steuer-ID", number: ""),
-            Number(name: "Sozialversicherung", number: ""),
-            Number(name: "Rentenversicherung", number: ""),
-            Number(name: "Krankenversicherung", number: "")
+            Number(name: "Steuer-ID", idNumber: "", isCompleted: false),
+            Number(name: "Sozialversicherung", idNumber: "", isCompleted: false),
+            Number(name: "Rentenversicherung", idNumber: "", isCompleted: false),
+            Number(name: "Krankenversicherung", idNumber: "", isCompleted: false)
         ]
     }
 }

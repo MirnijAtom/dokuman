@@ -91,9 +91,13 @@ struct HomeView: View {
                 
                 Section(header: Text("Numbers")) {
                     ForEach(numbers) { number in
-                        Text("\(number.name) \(number.number)")
+                        Text("\(number.name) \(number.idNumber)")
                     }
-                    Text("Edit numbers")
+                    NavigationLink {
+                        NumbersEditView()
+                    } label: {
+                        Text("Edit numbers")
+                    }
                 }
                 
                 // Debug Count
