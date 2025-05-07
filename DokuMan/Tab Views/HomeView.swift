@@ -42,11 +42,11 @@ struct HomeView: View {
                             fullScreenIsPresented = true
                         }) {
                             PDFPreview(data: document.versions.first!.fileData)
-                                .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
+                                .scaleEffect(1.03)
                                 .frame(width: a4Size.width, height: a4Size.height)
-                                .clipped() // Ensure that the overflow content is clipped (cut off)
-                                .mask(RoundedRectangle(cornerRadius: 5)) // Mask the view to rounded corners
-                                .shadow(radius: 3) // Then apply the shadow
+                                .clipped()
+                                .mask(RoundedRectangle(cornerRadius: 5))
+                                .shadow(radius: 3)
                             
                                 .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                 .contextMenu {
@@ -128,6 +128,8 @@ struct HomeView: View {
                 let document = Document(name: name.capitalized, category: category,  versions: [version])
                 document.isFavorite = true
                 modelContext.insert(document)
+            } else {
+                print("missing file \(name).pdf")
             }
         }
         

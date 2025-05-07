@@ -24,6 +24,7 @@ struct NumbersEditView: View {
             .sorted { $0.name < $1.name }
     }
     
+    @FocusState private var focusedField: UUID?
     @State private var editingNumber: Number?
     @State private var inputText: String = ""
     
@@ -56,6 +57,7 @@ struct NumbersEditView: View {
                         Divider()
                         
                         TextField("Type ID", text: $inputText)
+                            .focused($focusedField, equals: newNumber.id)
                             .font(.subheadline)
                             .foregroundStyle(Color.primary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -83,6 +85,7 @@ struct NumbersEditView: View {
                         editingNumber = number
                         inputText = number.idNumber
                         number.isCompleted = true
+                        focusedField = number.id
                         try? modelContext.save()
                     }
                 }

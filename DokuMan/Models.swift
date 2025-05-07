@@ -40,6 +40,7 @@ class DocumentVersion {
 
 @Model
 class Number {
+    var id: UUID = UUID()
     var name: String
     var idNumber: String
     var isCompleted: Bool
