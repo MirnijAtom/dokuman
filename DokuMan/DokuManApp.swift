@@ -11,7 +11,7 @@ import SwiftUI
 struct DokuManApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ContentView()
         }
         .modelContainer(for: [Document.self, Number.self])
     }

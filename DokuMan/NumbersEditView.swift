@@ -25,7 +25,9 @@ struct NumbersEditView: View {
     }
     
     @FocusState private var focusedField: UUID?
+    @FocusState private var nameFocusedField: UUID?
     @State private var editingNumber: Number?
+    @State private var nameInputText: String = ""
     @State private var inputText: String = ""
     
     
@@ -49,10 +51,17 @@ struct NumbersEditView: View {
                 
                 if let newNumber = editingNumber {
                     HStack {
-                        Text(newNumber.name)
-                            .font(.subheadline)
-                            .foregroundStyle(Color.primary)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if newNumber.name.isEmpty {
+                            TextField("name", text: $nameInputText)
+                                .font(.subheadline)
+                                .foregroundStyle(Color.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        } else {
+                            Text(newNumber.name)
+                                .font(.subheadline)
+                                .foregroundStyle(Color.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
                         
                         Divider()
                         
@@ -90,9 +99,34 @@ struct NumbersEditView: View {
                     }
                 }
             }
+            Button("New number") {
+                let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                modelContext.insert(newNumber)
+                editingNumber = newNumber
+                nameFocusedField = newNumber.id
+            }
         }
         .onAppear {
             DataManager.loadDefaultNumbersIfNeeded(context: modelContext)
+        }
+        .toolbar {
+            if editingNumber != nil {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        guard !inputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+
+                        if let numberToSave = editingNumber {
+                            numberToSave.idNumber = inputText
+                            numberToSave.isCompleted = true
+                            try? modelContext.save()
+                        }
+                        editingNumber = nil
+                        inputText = ""
+                        nameInputText = ""
+                        print("Number saved")
+                    }
+                }
+            }
         }
     }
 }
@@ -103,9 +137,8 @@ struct NumbersEditView: View {
     
     let completed = Number(name: "Steuer-ID", idNumber: "12X 12 12345", isCompleted: true)
     let incomplete = [
-        Number(name: "Sozialversicherung", idNumber: ""),
-        Number(name: "Rentenversicherung", idNumber: ""),
-        Number(name: "Krankenversicherung", idNumber: "")
+        Number(name: "Sozialversicherung", idNumber: "12 123456 A 123"),
+        Number(name: "Krankenversicherung", idNumber: "X123456789")
     ]
     
     for number in incomplete {
