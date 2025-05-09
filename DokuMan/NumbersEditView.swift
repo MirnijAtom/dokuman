@@ -84,26 +84,30 @@ struct NumbersEditView: View {
                         
                         Divider()
                         
-                        Text(number.idNumber)
+                        Text(numberExample(numberName: number.name))
                             .font(.subheadline)
                             .foregroundStyle(Color.secondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .contentShape(Rectangle())
-                    .onTapGesture {
-                        editingNumber = number
-                        inputText = number.idNumber
-                        number.isCompleted = true
-                        focusedField = number.id
-                        try? modelContext.save()
+                        .onTapGesture {
+                            withAnimation {
+                                editingNumber = number
+                                inputText = number.idNumber
+                                number.isCompleted = true
+                                focusedField = number.id
+                                try? modelContext.save()
+                            }
                     }
                 }
             }
             Button("New number") {
-                let newNumber = Number(name: "", idNumber: "", isCompleted: true)
-                modelContext.insert(newNumber)
-                editingNumber = newNumber
-                nameFocusedField = newNumber.id
+                withAnimation {
+                    let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                    modelContext.insert(newNumber)
+                    editingNumber = newNumber
+                    nameFocusedField = newNumber.id
+                }
             }
         }
         .onAppear {
@@ -113,20 +117,55 @@ struct NumbersEditView: View {
             if editingNumber != nil {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        guard !nameInputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
                         guard !inputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-
-                        if let numberToSave = editingNumber {
-                            numberToSave.idNumber = inputText
-                            numberToSave.isCompleted = true
-                            try? modelContext.save()
+                        withAnimation {
+                            if let numberToSave = editingNumber {
+                                numberToSave.idNumber = inputText
+                                numberToSave.isCompleted = true
+                                try? modelContext.save()
+                            }
+                            editingNumber = nil
+                            inputText = ""
+                            nameInputText = ""
+                            print("Number saved")
                         }
-                        editingNumber = nil
-                        inputText = ""
-                        nameInputText = ""
-                        print("Number saved")
                     }
                 }
             }
+        }
+        .overlay(
+            Group {
+                if editingNumber != nil {
+                    Color.clear
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            withAnimation {
+                                if let number = editingNumber {
+                                    number.isCompleted = false
+                                    try? modelContext.save()
+                                }
+                                editingNumber = nil
+                                inputText = ""
+                                nameInputText = ""
+                            }
+                        }
+                }
+            }
+        )
+    }
+    func numberExample(numberName: String) -> String {
+        switch numberName {
+        case "Sozialversicherung":
+            return "12 123456 A 123"
+        case "Krankenversicherung":
+            return "X123456789"
+        case "Steuer-ID":
+            return "12X 12 12345"
+        case "Rentenversicherung":
+            return "12 123456 A 123"
+        default:
+            return "0123456789"
         }
     }
 }
