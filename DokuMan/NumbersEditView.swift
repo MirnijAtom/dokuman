@@ -16,7 +16,6 @@ struct NumbersEditView: View {
             .filter { $0.isCompleted }
             .filter { !$0.idNumber.isEmpty}
             .sorted { $0.name < $1.name }
-        
     }
     var incompleteNumbers: [Number] {
         numbers
@@ -94,6 +93,7 @@ struct NumbersEditView: View {
                             withAnimation {
                                 editingNumber = number
                                 inputText = number.idNumber
+                                nameInputText = number.name
                                 number.isCompleted = true
                                 focusedField = number.id
                                 try? modelContext.save()
@@ -119,7 +119,7 @@ struct NumbersEditView: View {
                     Button("Save") {
                         guard !nameInputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
                         guard !inputText.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                        withAnimation {
+
                             if let numberToSave = editingNumber {
                                 numberToSave.idNumber = inputText
                                 numberToSave.isCompleted = true
@@ -129,7 +129,7 @@ struct NumbersEditView: View {
                             inputText = ""
                             nameInputText = ""
                             print("Number saved")
-                        }
+                        
                     }
                 }
             }

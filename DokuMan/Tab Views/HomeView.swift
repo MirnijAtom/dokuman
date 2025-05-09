@@ -19,6 +19,13 @@ struct HomeView: View {
     
     
     @Query var numbers: [Number]
+    var completedNumbers: [Number] {
+        numbers
+            .filter { $0.isCompleted }
+            .filter { !$0.idNumber.isEmpty}
+            .sorted { $0.name < $1.name }
+    }
+    
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     
     var body: some View {
@@ -90,13 +97,27 @@ struct HomeView: View {
                 }
                 
                 Section(header: Text("Numbers")) {
-                    ForEach(numbers) { number in
-                        Text("\(number.name) \(number.idNumber)")
-                    }
-                    NavigationLink {
-                        NumbersEditView()
-                    } label: {
-                        Text("Edit numbers")
+                    if completedNumbers.isEmpty {
+                        NavigationLink {
+                            NumbersEditView()
+                        } label: {
+                            Text("Add your first number")
+                        }
+                    } else {
+                        ForEach(completedNumbers) { number in
+                            HStack {
+                                Text(number.name)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                Divider()
+                                
+                                Text(number.idNumber)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
                     }
                 }
                 
