@@ -40,14 +40,14 @@ struct DocumentListView: View {
                                         .shadow(radius: 3)
                                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                         .contextMenu {
-                                            Button("Add to Favorites") {
-                                                addToFavorites(document)
+                                            Button("Favorites toggle") {
+                                                toggleFavorites(document, modelContext: modelContext)
                                             }
-                                            Button("Archive") {
-                                                archiveDocument(document)
+                                            Button("Archive toggle") {
+                                                archiveDocument(document, modelContext: modelContext)
                                             }
                                             Button("Delete", role: .destructive) {
-                                                deleteDocument(document)
+                                                deleteDocument(document, modelContext: modelContext)
                                             }
                                         }
                                     
@@ -129,21 +129,6 @@ struct DocumentListView: View {
         return urls
     }
     
-    func archiveDocument(_ document: Document) {
-        document.isArchived.toggle()
-        try? modelContext.save()
-    }
-    
-    func deleteDocument(_ document: Document) {
-        modelContext.delete(document)
-        try? modelContext.save()
-    }
-    
-    func addToFavorites(_ document: Document) {
-        document.isFavorite.toggle()
-        try? modelContext.save()
-    }
-    
     func toggleSelection(of document: Document) {
         if selectedDocuments.contains(document) {
             selectedDocuments.remove(document)
@@ -151,15 +136,6 @@ struct DocumentListView: View {
             selectedDocuments.insert(document)
         }
     }
-}
-
-// Helper function for preview
-func loadPDF(named name: String) -> Data {
-    guard let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
-          let data = try? Data(contentsOf: url) else {
-        return Data()
-    }
-    return data
 }
 
 #Preview {

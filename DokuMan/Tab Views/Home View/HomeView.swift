@@ -57,14 +57,14 @@ struct HomeView: View {
                             
                                 .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                 .contextMenu {
-                                    Button("Remove from Favorites") {
-                                        deleteFromFavorites(document)
+                                    Button("Favorites toggle") {
+                                        toggleFavorites(document, modelContext: modelContext)
                                     }
-                                    Button("Archive") {
-                                        archiveDocument(document)
+                                    Button("Archive toggle") {
+                                        archiveDocument(document, modelContext: modelContext)
                                     }
                                     Button("Delete", role: .destructive) {
-                                        deleteDocument(document)
+                                        deleteDocument(document, modelContext: modelContext)
                                     }
                                 }
                         }
@@ -77,7 +77,7 @@ struct HomeView: View {
             List {
                 // Button to add mockup files
                 Button("Add mockup files") {
-                    addMockupFiles()
+                    addMockupFiles(using: modelContext)
                 }
                 
                 // Categories Section
@@ -131,46 +131,6 @@ struct HomeView: View {
                 PDFFullScreenView(document: document)
             }
         }
-    }
-    
-    func addMockupFiles() {
-        let fileNames = [
-            ("krankenversicherung", DocumentCategory.versicherung),
-            ("lebenslauf", DocumentCategory.arbeit),
-            ("meldebescheinigung", DocumentCategory.wohnung),
-            ("portfolio", DocumentCategory.studium),
-            ("versicherung", DocumentCategory.versicherung)
-        ]
-        
-        for (name, category) in fileNames {
-            if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
-               let data = try? Data(contentsOf: url) {
-                let version = DocumentVersion(fileData: data, dateAdded: Date())
-                let document = Document(name: name.capitalized, category: category,  versions: [version])
-                document.isFavorite = true
-                modelContext.insert(document)
-            } else {
-                print("missing file \(name).pdf")
-            }
-        }
-        
-        try? modelContext.save()
-    }
-    
-    func archiveDocument(_ document: Document) {
-        document.isFavorite = false
-        document.isArchived = true
-        try? modelContext.save()
-    }
-    
-    func deleteDocument(_ document: Document) {
-        modelContext.delete(document)
-        try? modelContext.save()
-    }
-    
-    func deleteFromFavorites(_ document: Document) {
-        document.isFavorite = false
-        try? modelContext.save()
     }
 }
 
