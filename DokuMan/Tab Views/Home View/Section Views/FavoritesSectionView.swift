@@ -67,7 +67,7 @@ struct FavoritesSectionView: View {
         }
         .frame(minHeight: 226)
         .padding(.vertical, 12)
-        .background(Color.yellow)
+        .background(Color("AppTeal").opacity(0.3))
         .cornerRadius(0)
         .shadow(radius: 2)
 
@@ -76,10 +76,10 @@ struct FavoritesSectionView: View {
         }
         
         //Add mockup files
-        Button("Add mockup files") {
-            addMockupFiles(using: modelContext)
-        }
-        .padding()
+//        Button("Add mockup files") {
+//            addMockupFiles(using: modelContext)
+//        }
+//        .padding()
     }
 }
 

@@ -44,7 +44,7 @@ struct HomeView: View {
                 .padding(.top)
             }
             .navigationTitle("Home")
-            .background(Color.blue)
+            .background(Color.gray.opacity(0.1))
         }
     }
 }

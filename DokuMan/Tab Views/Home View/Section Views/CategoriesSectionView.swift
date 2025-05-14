@@ -13,22 +13,43 @@ struct CategoriesSectionView: View {
     
     var body: some View {
         
-        Text("Categories")
+        VStack(alignment: .leading, spacing: 8) {
+            
+            HStack {
+                Image(systemName: "tag.fill")
+                Text("Categories")
+            }
             .font(.headline)
             .padding(.horizontal)
-        
-        ForEach(DocumentCategory.allCases, id: \.self) { category in
-            let docsInCategory = documents.filter { $0.category == category }
             
-            if !docsInCategory.isEmpty {
-                NavigationLink {
-                    DocumentListView(title: category.label, documents: docsInCategory)
-                } label: {
-                    Label(category.label, systemImage: category.icon)
-                        .foregroundColor(category.color)
-                }
+            ForEach(DocumentCategory.allCases, id: \.self) { category in
+                let docsInCategory = documents.filter { $0.category == category }
+                
+                if !docsInCategory.isEmpty {
+                                    NavigationLink {
+                                        DocumentListView(title: category.label, documents: docsInCategory)
+                                    } label: {
+                                        HStack {
+                                            Label(category.label, systemImage: category.icon)
+                                                .foregroundColor(category.color)
+                                            Spacer()
+                                            Image(systemName: "chevron.right")
+                                                .foregroundColor(.gray)
+                                        }
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 8)
+                                        .background(Color("AppTeal").opacity(0.3))
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .padding(.horizontal)
+                                    }
+                                }
             }
         }
+        .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
+        .padding(.vertical, 12)
+        .background(Color.white)
+        .cornerRadius(0)
+        .shadow(radius: 2)
     }
 }
 

@@ -47,7 +47,7 @@ struct ContentView: View {
                     }
                     .tag(5)
             }
-            .accentColor(.cyan)
+            .accentColor(Color("AppTeal"))
         }
     }
 }
