@@ -23,7 +23,7 @@ struct ContentView: View {
                     }
                     .tag(0)
                 
-                FavouritesView()
+                FavoritesView()
                     .tabItem {
                         Label("Files", systemImage: "folder")
                     }
