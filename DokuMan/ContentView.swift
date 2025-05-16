@@ -23,7 +23,7 @@ struct ContentView: View {
                     }
                     .tag(0)
                 
-                FavoritesView()
+                FilesView()
                     .tabItem {
                         Label("Files", systemImage: "folder")
                     }
@@ -47,7 +47,7 @@ struct ContentView: View {
                     }
                     .tag(5)
             }
-            .accentColor(Color("AppTeal"))
+            .accentColor(Color.teal)
         }
     }
 }

@@ -58,7 +58,7 @@ struct NumbersSectionView: View {
                                     .padding(4)
                             }
                             .padding(.horizontal)
-                            .background(Color("AppTeal").opacity(0.3))
+                            .background(.regularMaterial)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                             .padding(.horizontal)
                             
@@ -77,9 +77,9 @@ struct NumbersSectionView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 86, maxHeight: 186)
         .padding(.vertical, 12)
-        .background(Color.white)
+        .background(Color.teal.tertiary)
         .cornerRadius(0)
-        .shadow(radius: 2)
+//        .shadow(radius: 2)
     }
 }
 

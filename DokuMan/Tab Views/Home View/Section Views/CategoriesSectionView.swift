@@ -38,7 +38,7 @@ struct CategoriesSectionView: View {
                                         }
                                         .padding(.horizontal)
                                         .padding(.vertical, 8)
-                                        .background(Color("AppTeal").opacity(0.3))
+                                        .background(.regularMaterial)
                                         .clipShape(RoundedRectangle(cornerRadius: 8))
                                         .padding(.horizontal)
                                     }
@@ -47,9 +47,9 @@ struct CategoriesSectionView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
         .padding(.vertical, 12)
-        .background(Color.white)
+        .background(Color.teal.tertiary)
         .cornerRadius(0)
-        .shadow(radius: 2)
+//        .shadow(radius: 2)
     }
 }
 
