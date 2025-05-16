@@ -22,7 +22,7 @@ struct FilesView: View {
     @State private var isSelectionActive = false
     
     @State private var searchText: String = ""
-
+    
     
     let columns = [
         GridItem(.flexible()),
@@ -45,20 +45,23 @@ struct FilesView: View {
         ZStack(alignment: .bottom) {
             NavigationStack {
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 16) {
+                    LazyVGrid(columns: columns, spacing: 0) {
                         ForEach(filteredDocuments) { document in
                             ZStack(alignment: .topTrailing) {
                                 Button(action: {
                                     selectedDocument = document
                                     fullScreenIsPresented = true
                                 }) {
-                                    VStack(spacing: 8) {
+                                    VStack(spacing: 16) {
                                         PDFPreview(data: document.versions.first!.fileData)
                                             .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
                                             .frame(width: a4Size.width, height: a4Size.height)
                                             .clipped() // Ensure that the overflow content is clipped (cut off)
                                             .cornerRadius(5)
-                                            .shadow(radius: 3)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 5)
+                                                    .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
+                                            )
                                             .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                             .contextMenu {
                                                 Button("Favorites toggle") {
@@ -78,7 +81,7 @@ struct FilesView: View {
                                             .lineLimit(1)
                                     }
                                 }
-                                .padding()
+                                .padding(15)
                                 
                                 if isSelectionActive {
                                     Button(action: {
@@ -96,10 +99,11 @@ struct FilesView: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                         }
-                        .animation(.spring(), value: filteredDocuments)
+                        .animation(.default, value: filteredDocuments)
                     }
                     .padding(.horizontal)
                 }
+                .background(Color.teal.gradient)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     isSearchFocused = false
@@ -146,22 +150,45 @@ struct FilesView: View {
             }
             
             //Search Button
-            
-            HStack {
-                Image(systemName: "magnifyingglass")
-                TextField("Search", text: $searchText)
-                    .focused($isSearchFocused)
+            if isSearchFocused {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                    TextField("Search", text: $searchText)
+                        .focused($isSearchFocused)
+                }
+                .frame(maxWidth: 250)
+                .padding()
+                .background(Color.teal.opacity(0.1))
+                .background(.ultraThinMaterial)
+                .clipShape(.capsule)
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+            } else {
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundStyle(.secondary)
+                    Text("Search")
+                        .foregroundStyle(.secondary)
+                        .onTapGesture {
+                            withAnimation {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                                    isSearchFocused = true
+                                    print("tapped search focus, \(isSearchFocused)")
+
+                                }
+                            }
+                        }
+                }
+                .frame(maxWidth: 100, maxHeight: 20)
+                .padding()
+                .background(Color.teal.opacity(0.1))
+                .background(.ultraThinMaterial)
+                .clipShape(.capsule)
+                .padding(.horizontal)
+                .padding(.bottom, 20)
             }
-            .frame(maxWidth: 250)
-            .padding()
-            .background(Color.teal.opacity(0.1))
-            .background(.ultraThinMaterial)
-            .clipShape(.capsule)
-            .padding(.horizontal)
-            .padding(.bottom, 20)
-            
         }
-        
+
     }
     
     func exportTempURLs(from documents: Set<Document>) -> [URL] {
