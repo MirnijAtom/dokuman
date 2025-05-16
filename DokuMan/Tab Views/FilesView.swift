@@ -14,12 +14,14 @@ struct FilesView: View {
     @Query var documents: [Document]
     
     @FocusState private var isSearchFocused: Bool
+    @State private var isSearchSelected: Bool = false
     
     @State private var selectedDocument: Document? = nil
     @State private var fullScreenIsPresented = false
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSharing = false
     @State private var isSelectionActive = false
+    
     
     @State private var searchText: String = ""
     
@@ -107,6 +109,7 @@ struct FilesView: View {
                 .contentShape(Rectangle())
                 .onTapGesture {
                     isSearchFocused = false
+                    isSearchSelected = false
                     searchText = ""
                     print("taptap")
                 }
@@ -150,43 +153,34 @@ struct FilesView: View {
             }
             
             //Search Button
-            if isSearchFocused {
-                HStack {
-                    Image(systemName: "magnifyingglass")
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+
+                if isSearchSelected {
                     TextField("Search", text: $searchText)
                         .focused($isSearchFocused)
-                }
-                .frame(maxWidth: 250)
-                .padding()
-                .background(Color.teal.opacity(0.1))
-                .background(.ultraThinMaterial)
-                .clipShape(.capsule)
-                .padding(.horizontal)
-                .padding(.bottom, 20)
-            } else {
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundStyle(.secondary)
+                        .transition(.opacity)
+                } else {
                     Text("Search")
                         .foregroundStyle(.secondary)
                         .onTapGesture {
-                            withAnimation {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                                    isSearchFocused = true
-                                    print("tapped search focus, \(isSearchFocused)")
-
-                                }
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                isSearchSelected = true
+                                isSearchFocused = true
                             }
                         }
+                        .transition(.opacity)
                 }
-                .frame(maxWidth: 100, maxHeight: 20)
-                .padding()
-                .background(Color.teal.opacity(0.1))
-                .background(.ultraThinMaterial)
-                .clipShape(.capsule)
-                .padding(.horizontal)
-                .padding(.bottom, 20)
             }
+            .animation(.easeInOut, value: isSearchSelected)
+            .frame(maxWidth: isSearchSelected ? 300 : 100, maxHeight: 20)
+            .padding()
+            .background(Color.teal.opacity(0.1))
+            .background(.ultraThinMaterial)
+            .clipShape(.capsule)
+            .padding(.horizontal)
+            .padding(.bottom, 20)
         }
 
     }
