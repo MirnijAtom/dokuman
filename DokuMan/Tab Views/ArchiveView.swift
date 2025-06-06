@@ -37,14 +37,16 @@ struct ArchiveView: View {
                             VStack(spacing: 8) {
                                 
                                     PDFPreview(data: document.versions.first!.fileData)
-                                        .scaledToFill() // Scale the PDF to fill the fixed container
-                                        .frame(width: a4Size.width, height: a4Size.height) // Set the fixed size
-                                        .blur(radius: 0.4)
-                                        .opacity(0.9)
+                                        .scaleEffect(1.03)
+                                        .frame(width: a4Size.width, height: a4Size.height)
+                                        .clipped()
                                         .cornerRadius(5)
-                                        .overlay(RoundedRectangle(cornerRadius: 5)
-                                            .stroke(Color.black.opacity(0.5), lineWidth: 1)
-                                            .fill(Color.gray.opacity(0.2)))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
+                                                .fill(Color.gray.opacity(0.1))
+                                        )
+                                        .blur(radius: 0.5)
                                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                         .contextMenu {
                                             Button("Archive") {

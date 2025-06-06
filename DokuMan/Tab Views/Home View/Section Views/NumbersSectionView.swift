@@ -69,7 +69,7 @@ struct NumbersSectionView: View {
                     NavigationLink {
                         NumbersEditView()
                     } label: {
-                        Text("Add more")
+                        Text("Add number")
                     }
                     .padding()
                 }
@@ -79,7 +79,6 @@ struct NumbersSectionView: View {
         .padding(.vertical, 12)
         .background(Color.teal.tertiary)
         .cornerRadius(0)
-//        .shadow(radius: 2)
     }
 }
 

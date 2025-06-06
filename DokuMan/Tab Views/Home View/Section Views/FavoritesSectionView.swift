@@ -44,8 +44,11 @@ struct FavoritesSectionView: View {
                                 .scaleEffect(1.03)
                                 .frame(width: a4Size.width, height: a4Size.height)
                                 .clipped()
-                                .mask(RoundedRectangle(cornerRadius: 5))
-                                .shadow(radius: 3)
+                                .cornerRadius(5)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 5)
+                                        .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
+                                )
                                 .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                 .contextMenu {
                                     Button("Favorites toggle") {
@@ -69,7 +72,6 @@ struct FavoritesSectionView: View {
         .padding(.vertical, 12)
         .background(Color.teal.tertiary)
         .cornerRadius(0)
-//        .shadow(radius: 2)
 
         .fullScreenCover(item: $selectedDocument) { document in
             PDFFullScreenView(document: document)

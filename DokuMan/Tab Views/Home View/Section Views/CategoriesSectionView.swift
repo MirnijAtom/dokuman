@@ -49,7 +49,6 @@ struct CategoriesSectionView: View {
         .padding(.vertical, 12)
         .background(Color.teal.tertiary)
         .cornerRadius(0)
-//        .shadow(radius: 2)
     }
 }
 

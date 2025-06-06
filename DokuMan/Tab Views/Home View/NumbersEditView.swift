@@ -47,11 +47,14 @@ struct NumbersEditView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
+                .onDelete(perform: deleteCompleted)
                 
                 if let newNumber = editingNumber {
                     HStack {
                         if newNumber.name.isEmpty {
                             TextField("name", text: $nameInputText)
+                                .autocorrectionDisabled(true)
+                                .focused($nameFocusedField, equals: newNumber.id)
                                 .font(.subheadline)
                                 .foregroundStyle(Color.primary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,6 +68,7 @@ struct NumbersEditView: View {
                         Divider()
                         
                         TextField("Type ID", text: $inputText)
+                            .autocorrectionDisabled(true)
                             .focused($focusedField, equals: newNumber.id)
                             .font(.subheadline)
                             .foregroundStyle(Color.primary)
@@ -100,14 +104,12 @@ struct NumbersEditView: View {
                             }
                     }
                 }
-            }
+         }
             Button("New number") {
-                withAnimation {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
                     modelContext.insert(newNumber)
                     editingNumber = newNumber
                     nameFocusedField = newNumber.id
-                }
             }
         }
         .onAppear {
@@ -136,15 +138,23 @@ struct NumbersEditView: View {
         }
         .overlay(
             Group {
-                if editingNumber != nil {
+                if let editing = editingNumber {
                     Color.clear
                         .contentShape(Rectangle())
                         .onTapGesture {
                             withAnimation {
-                                if let number = editingNumber {
-                                    number.isCompleted = false
+                                let nameTrimmed = nameInputText.trimmingCharacters(in: .whitespaces)
+                                let idTrimmed = inputText.trimmingCharacters(in: .whitespaces)
+
+                                if nameTrimmed.isEmpty && idTrimmed.isEmpty {
+                                    modelContext.delete(editing)
+                                } else {
+                                    editing.name = nameTrimmed
+                                    editing.idNumber = idTrimmed
+                                    editing.isCompleted = idTrimmed.isEmpty ? false : true
                                     try? modelContext.save()
                                 }
+
                                 editingNumber = nil
                                 inputText = ""
                                 nameInputText = ""
@@ -153,6 +163,8 @@ struct NumbersEditView: View {
                 }
             }
         )
+        
+        Text("Numbers count: \(numbers.count)")
     }
     func numberExample(numberName: String) -> String {
         switch numberName {
@@ -165,7 +177,13 @@ struct NumbersEditView: View {
         case "Rentenversicherung":
             return "12 123456 A 123"
         default:
-            return "0123456789"
+            return ""
+        }
+    }
+    func deleteCompleted(at offsets: IndexSet) {
+        for index in offsets {
+            let number = completedNumbers[index]
+            modelContext.delete(number)
         }
     }
 }

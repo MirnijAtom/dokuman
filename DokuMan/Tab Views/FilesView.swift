@@ -56,9 +56,9 @@ struct FilesView: View {
                                 }) {
                                     VStack(spacing: 16) {
                                         PDFPreview(data: document.versions.first!.fileData)
-                                            .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
+                                            .scaleEffect(1.03)
                                             .frame(width: a4Size.width, height: a4Size.height)
-                                            .clipped() // Ensure that the overflow content is clipped (cut off)
+                                            .clipped()
                                             .cornerRadius(5)
                                             .overlay(
                                                 RoundedRectangle(cornerRadius: 5)
