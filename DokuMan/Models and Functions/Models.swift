@@ -53,18 +53,6 @@ class Number {
     }
 }
 
-extension Number {
-    static var defaultNumbers: [Number] {
-        [
-            Number(name: "Steuer-ID", idNumber: "", isCompleted: false),
-            Number(name: "Sozialversicherung", idNumber: "", isCompleted: false),
-            Number(name: "Rentenversicherung", idNumber: "", isCompleted: false),
-            Number(name: "Krankenversicherung", idNumber: "", isCompleted: false)
-        ]
-    }
-}
-
-
 enum DocumentCategory: String, CaseIterable, Codable {
     case wohnung, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
     case fahrzeug, internet, mitgliedschaft, quittungen, behoerden, rechtliches, familie, sonstiges

@@ -44,20 +44,20 @@ struct NumbersSectionView: View {
                         VStack(spacing: 4) {
                             HStack {
                                 Text(number.name)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.primary)
+                                    .numberTextStyle()
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(4)
                                 
                                 Divider()
                                 
                                 Text(number.idNumber)
-                                    .font(.subheadline)
+                                    .numberTextStyle()
                                     .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(4)
                             }
                             .padding(.horizontal)
+                            .padding(.vertical, 4)
                             .background(.regularMaterial)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                             .padding(.horizontal)
