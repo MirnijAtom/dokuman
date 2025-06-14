@@ -28,10 +28,12 @@ struct NumbersEditView: View {
     @State private var nameInputText: String = ""
     @State private var numberInputText: String = ""
     
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         List {
-            if numbers.isEmpty {
+            if numbers.isEmpty && editingNumber == nil {
                 Section {
                     Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
                 }
@@ -52,11 +54,15 @@ struct NumbersEditView: View {
                             
                             Divider()
                             
-                            Image(systemName: "document.on.document")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.secondary)
-                                .padding(.leading, 4)
-                                
+                            Button {
+                                UIPasteboard.general.string = number.idNumber
+                            } label: {
+                                Image(systemName: "document.on.document")
+                                    .numberTextStyle()
+                                    .foregroundStyle(Color.secondary)
+                                    .padding(.leading, 4)
+                            }
+                            
                         }
                     }
                     .onDelete(perform: deleteNumber)
@@ -64,7 +70,7 @@ struct NumbersEditView: View {
                     if let newNumber = editingNumber {
                         HStack {
                             
-                            TextField("name", text: $nameInputText)
+                            TextField("Name", text: $nameInputText)
                                 .autocorrectionDisabled(true)
                                 .focused($nameFocusedField, equals: newNumber.id)
                                 .numberTextStyle()
@@ -75,6 +81,7 @@ struct NumbersEditView: View {
                             
                             TextField("Type ID", text: $numberInputText)
                                 .autocorrectionDisabled(true)
+                                .autocapitalization(.allCharacters)
                                 .focused($focusedField, equals: newNumber.id)
                                 .numberTextStyle()
                                 .foregroundStyle(Color.primary)
@@ -86,27 +93,50 @@ struct NumbersEditView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(Color.clear)
                                 .padding(.leading, 4)
-                                
+                            
                         }
                     }
                 }
             }
-        
+            
             Button("New number") {
-                    let newNumber = Number(name: "", idNumber: "", isCompleted: true)
-                    editingNumber = newNumber
-                    nameFocusedField = newNumber.id
+                let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                editingNumber = newNumber
+                nameFocusedField = newNumber.id
             }
             .font(.subheadline)
             .fontWidth(.compressed)
             .fontWeight(.light)
             .fontDesign(.monospaced)
         }
-
+        
+        .navigationBarBackButtonHidden(editingNumber != nil)
         .toolbar {
             if editingNumber != nil {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Cancel", role: .destructive) {
+                        editingNumber = nil
+                        nameInputText = ""
+                        numberInputText = ""
+                    }
+                }
+                
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        
+                        if trimmedName.isEmpty {
+                            alertMessage = "Name is missing"
+                            showAlert = true
+                            return
+                        }
+                        if trimmedNumber.isEmpty {
+                            alertMessage = "Number is missing"
+                            showAlert = true
+                            return
+                        }
+                        
                         if let numberToAdd = editingNumber {
                             numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
                             numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
@@ -118,41 +148,44 @@ struct NumbersEditView: View {
                             numberInputText = ""
                         }
                     }
+                    .alert(alertMessage, isPresented: $showAlert) {
+                        Button("OK", role: .cancel) { }
+                    }
                 }
             }
         }
         
-//        .overlay(
-//            Group {
-//                if let editing = editingNumber {
-//                    Color.clear
-//                        .contentShape(Rectangle())
-//                        .onTapGesture {
-//                            withAnimation {
-//                                let nameTrimmed = nameInputText.trimmingCharacters(in: .whitespaces)
-//                                let idTrimmed = inputText.trimmingCharacters(in: .whitespaces)
-//
-//                                if nameTrimmed.isEmpty && idTrimmed.isEmpty {
-//                                    modelContext.delete(editing)
-//                                } else {
-//                                    editing.name = nameTrimmed
-//                                    editing.idNumber = idTrimmed
-//                                    editing.isCompleted = idTrimmed.isEmpty ? false : true
-//                                    try? modelContext.save()
-//                                }
-//
-//                                editingNumber = nil
-//                                inputText = ""
-//                                nameInputText = ""
-//                            }
-//                        }
-//                }
-//            }
-//        )
+        //        .overlay(
+        //            Group {
+        //                if let editing = editingNumber {
+        //                    Color.clear
+        //                        .contentShape(Rectangle())
+        //                        .onTapGesture {
+        //                            withAnimation {
+        //                                let nameTrimmed = nameInputText.trimmingCharacters(in: .whitespaces)
+        //                                let idTrimmed = inputText.trimmingCharacters(in: .whitespaces)
+        //
+        //                                if nameTrimmed.isEmpty && idTrimmed.isEmpty {
+        //                                    modelContext.delete(editing)
+        //                                } else {
+        //                                    editing.name = nameTrimmed
+        //                                    editing.idNumber = idTrimmed
+        //                                    editing.isCompleted = idTrimmed.isEmpty ? false : true
+        //                                    try? modelContext.save()
+        //                                }
+        //
+        //                                editingNumber = nil
+        //                                inputText = ""
+        //                                nameInputText = ""
+        //                            }
+        //                        }
+        //                }
+        //            }
+        //        )
         
         Text("Numbers count: \(numbers.count)")
     }
-
+    
     func deleteNumber(at offsets: IndexSet) {
         for index in offsets {
             let number = numbers[index]

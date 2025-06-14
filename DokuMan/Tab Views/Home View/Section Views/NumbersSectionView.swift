@@ -11,12 +11,8 @@ import SwiftUI
 struct NumbersSectionView: View {
     
     @Query var numbers: [Number]
-    var completedNumbers: [Number] {
-        numbers
-            .filter { $0.isCompleted }
-            .filter { !$0.idNumber.isEmpty}
-            .sorted { $0.name < $1.name }
-    }
+    
+    @State private var isExpanded = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -25,12 +21,23 @@ struct NumbersSectionView: View {
             HStack {
                 Image(systemName: "numbers.rectangle")
                 Text("Numbers")
+                    .font(.headline)
+                
+                Spacer()
+                
+                NavigationLink {
+                    NumbersEditView()
+                } label: {
+                    Text("Edit")
+                        .padding(.horizontal)
+                        .foregroundStyle(.secondary)
+                }
             }
-            .font(.headline)
             .padding(.horizontal)
+            .padding(.vertical, 5)
             
             // Content
-            if completedNumbers.isEmpty {
+            if numbers.isEmpty {
                 NavigationLink {
                     NumbersEditView()
                 } label: {
@@ -39,40 +46,46 @@ struct NumbersSectionView: View {
                         .foregroundStyle(.blue)
                 }
             } else {
-                VStack(spacing: 0) {
-                    ForEach(completedNumbers) { number in
-                        VStack(spacing: 4) {
-                            HStack {
-                                Text(number.name)
+                VStack {
+                    ForEach(numbers) { number in
+                        
+                        HStack {
+                            Text(number.name)
+                                .numberTextStyle()
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Divider()
+                            
+                            Text(number.idNumber)
+                                .numberTextStyle()
+                                .foregroundStyle(.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            
+                            Divider()
+                            
+                            Button {
+                                UIPasteboard.general.string = number.idNumber
+                            } label: {
+                                Image(systemName: "document.on.document")
                                     .numberTextStyle()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(4)
-                                
-                                Divider()
-                                
-                                Text(number.idNumber)
-                                    .numberTextStyle()
-                                    .foregroundStyle(.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(4)
+                                    .foregroundStyle(Color.secondary)
+                                    .padding(.leading, 4)
                             }
-                            .padding(.horizontal)
-                            .padding(.vertical, 4)
-                            .background(.regularMaterial)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .padding(.horizontal)
-                            
-                            
+                        }
+                        .frame(height: 30)
+                        .padding(.horizontal)
+                        .padding(.top, number == numbers.first ? 8 : 0)
+                        .padding(.bottom, number == numbers.last ? 8 : 0)
+                        if number != numbers.last {
                             Divider()
                         }
                     }
-                    NavigationLink {
-                        NumbersEditView()
-                    } label: {
-                        Text("Add number")
-                    }
-                    .padding()
                 }
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 86, maxHeight: 186)
@@ -86,17 +99,21 @@ struct NumbersSectionView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Number.self, configurations: config)
     
-    let completed = Number(name: "Steuer-ID", idNumber: "12X 12 12345", isCompleted: true)
     
-    let incomplete = [
+    let numbers = [
         Number(name: "Sozialversicherung", idNumber: "12 123456 A 123", isCompleted: true),
-        Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true)
+        Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true),
+        Number(name: "Insurance", idNumber: "ABVDSA4362346", isCompleted: true),
+        Number(name: "Lawyer insurance", idNumber: "436416JBI76a", isCompleted: true),
+        Number(name: "Bank insurance", idNumber: "12123123", isCompleted: true),
+        Number(name: "Renteversicherung", idNumber: "X123KHG456789", isCompleted: true),
+        Number(name: "Passport number", idNumber: "DE6598735", isCompleted: true)
     ]
     
-    for number in incomplete {
+    for number in numbers {
         container.mainContext.insert(number)
     }
-    container.mainContext.insert(completed)
+
     
     return NumbersSectionView()
         .modelContainer(container)
