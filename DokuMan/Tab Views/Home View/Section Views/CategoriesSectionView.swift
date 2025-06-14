@@ -21,28 +21,45 @@ struct CategoriesSectionView: View {
             }
             .font(.headline)
             .padding(.horizontal)
+            .padding(.vertical, 5)
             
-            ForEach(DocumentCategory.allCases, id: \.self) { category in
-                let docsInCategory = documents.filter { $0.category == category }
-                
-                if !docsInCategory.isEmpty {
-                                    NavigationLink {
-                                        DocumentListView(title: category.label, documents: docsInCategory)
-                                    } label: {
-                                        HStack {
-                                            Label(category.label, systemImage: category.icon)
-                                                .foregroundColor(category.color)
-                                            Spacer()
-                                            Image(systemName: "chevron.right")
-                                                .foregroundColor(.gray)
-                                        }
-                                        .padding(.horizontal)
-                                        .padding(.vertical, 8)
-                                        .background(.regularMaterial)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                        .padding(.horizontal)
-                                    }
-                                }
+            let nonEmptyCategories = DocumentCategory.allCases.filter { category in
+                documents.contains(where: { $0.category == category })
+            }
+            
+            if nonEmptyCategories.isEmpty {
+                Text("No categories yet")
+                    .padding(.horizontal)
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(nonEmptyCategories, id: \.self) { category in
+                        let docsInCategory = documents.filter { $0.category == category }
+                        
+                        NavigationLink {
+                            DocumentListView(title: category.label, documents: docsInCategory)
+                        } label: {
+                            HStack {
+                                Label(category.label, systemImage: category.icon)
+                                    .foregroundColor(category.color)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            }
+                            .frame(height: 40)
+                            .padding(.horizontal)
+                            .padding(.vertical, 0)
+                        }
+                        
+                        if category != nonEmptyCategories.last {
+                            Divider()
+                        }
+                    }
+                }
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
@@ -51,7 +68,6 @@ struct CategoriesSectionView: View {
         .cornerRadius(0)
     }
 }
-
 #Preview {
     CategoriesSectionView()
         .modelContainer(for: Document.self)
