@@ -48,13 +48,18 @@ struct ContentView: View {
                     Button {
                         showAddDoc = true
                     } label: {
-                        Image(systemName: "document.viewfinder")
-                            .font(.system(size: 30))
-                            .foregroundStyle(.appTeal)
-                            .frame(width: 60, height: 60)
-                            .background(Color.white)
-                            .clipShape(Circle())
-                            .shadow(radius: 4)
+                        ZStack {
+//                            Circle()
+//                                .foregroundStyle(Color.white.opacity(0.5))
+//                                .frame(width: 60, height: 60)
+                            Image(systemName: "document.viewfinder")
+                                .font(.system(size: 30))
+                                .foregroundStyle(.teal)
+                                .frame(width: 60, height: 60)
+                                .background(.white)
+                                .clipShape(Circle())
+                                .shadow(radius: 2)
+                        }
 
                     }
                     .padding(.bottom, 120)

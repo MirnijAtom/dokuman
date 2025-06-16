@@ -20,6 +20,8 @@ struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     
+    @FocusState private var nameFieldIsFocused: Bool
+    
     @State private var name: String = ""
     @State private var date: Date = Date()
     @State private var category: DocumentCategory = .wohnung
@@ -30,9 +32,9 @@ struct AddDocumentView: View {
     @State private var showNumbersEdit = false
     
     @State private var allCategories = ["Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"]
-//    @State private var filteredSuggestions: [String] = []
+    //    @State private var filteredSuggestions: [String] = []
     
-
+    
     
     var body: some View {
         NavigationStack {
@@ -51,7 +53,7 @@ struct AddDocumentView: View {
                             Spacer()
                         }
                     }
-
+                    
                     Button {
                         showScanner.toggle()
                     } label: {
@@ -62,12 +64,12 @@ struct AddDocumentView: View {
                             Text("Scan document")
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-
+                            
                             Spacer()
                         }
-
+                        
                     }
-
+                    
                     Button {
                         showPhotoPicker.toggle()
                     } label: {
@@ -78,12 +80,12 @@ struct AddDocumentView: View {
                             Text("Upload from Photos")
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-
+                            
                             Spacer()
                         }
-
+                        
                     }
-
+                    
                     Button {
                         showNumbersEdit.toggle()
                     } label: {
@@ -94,16 +96,20 @@ struct AddDocumentView: View {
                             Text("Add number")
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-
+                            
                             Spacer()
                         }
-
+                        
                     }
                 }
             } else {
+                
+                // Edit name, category and save
+                
                 Form {
                     Section {
                         TextField("Document name", text: $name)
+                            .focused($nameFieldIsFocused)
                         Menu {
                             ForEach(DocumentCategory.allCases, id: \.self) { cat in
                                 Button {
@@ -130,22 +136,24 @@ struct AddDocumentView: View {
                         }
                     }
                     Section {
-                        Button("Save") {
-                            saveDocument()
+                        HStack {
+                            Spacer()
+                            
+                            Button("Save") {
+                                saveDocument()
+                            }
+                            
+                            Spacer()
                         }
                     }
-                    Section {
-                        if !data.isEmpty {
-                            Text("Document scanned and saved")
-                        }
-                    }
-                }      
+                }
             }
         }
         .fullScreenCover(isPresented: $showScanner) {
             DocumentScanner { images in
                 if let image = images.first {
                     data = imageToPDF(image: image)
+                    nameFieldIsFocused = true
                 }
             }
         }
@@ -153,6 +161,7 @@ struct AddDocumentView: View {
             PhotoPicker { images in
                 if let first = images.first {
                     data = imageToPDF(image: first)
+                    nameFieldIsFocused = true
                 }
             }
         }
@@ -169,6 +178,7 @@ struct AddDocumentView: View {
                 do {
                     let fileData = try Data(contentsOf: url)
                     data = fileData
+                    nameFieldIsFocused = true
                 } catch {
                     print("Error reading file: \(error)")
                 }
@@ -198,7 +208,6 @@ struct AddDocumentView: View {
         print("Saved: \(newDocument.name)")
         data = Data()
         name = ""
-//        selectedTab = 0
         dismiss()
     }
 }
@@ -206,6 +215,6 @@ struct AddDocumentView: View {
 
 
 #Preview {
-    AddDocumentView(/*selectedTab: .constant(1)*/)
+    AddDocumentView()
         .modelContainer(for: Document.self)
 }
