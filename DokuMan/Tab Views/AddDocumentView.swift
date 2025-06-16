@@ -27,6 +27,23 @@ struct AddDocumentView: View {
     
     var body: some View {
         NavigationStack {
+            List {
+                Button {
+                    showFileImporter.toggle()
+                } label: {
+                    Label("Import PDF from files", systemImage: "doc.fill")
+                }
+                Button {
+                    showScanner.toggle()
+                } label: {
+                    Label("Scan document", systemImage: "document.viewfinder")
+                }
+                Button {
+                    showPhotoPicker.toggle()
+                } label: {
+                    Label("Upload from Photos", systemImage: "photo.on.rectangle")
+                }
+            }
             Form {
                 Section {
                     TextField("Document name", text: $name)
