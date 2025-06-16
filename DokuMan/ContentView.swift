@@ -49,9 +49,7 @@ struct ContentView: View {
                         showAddDoc = true
                     } label: {
                         ZStack {
-//                            Circle()
-//                                .foregroundStyle(Color.white.opacity(0.5))
-//                                .frame(width: 60, height: 60)
+
                             Image(systemName: "document.viewfinder")
                                 .font(.system(size: 30))
                                 .foregroundStyle(.teal)
