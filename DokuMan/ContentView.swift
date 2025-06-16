@@ -21,7 +21,7 @@ struct ContentView: View {
                 TabView(selection: $selectedTab) {
                     HomeView().tag(0)
                     FilesView().tag(1)
-                    ArchiveView().tag(2)
+                    NumbersEditView().tag(2)
                     Text("Item 4").tag(3)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
@@ -31,7 +31,7 @@ struct ContentView: View {
                     tabButton(icon: "house", iconFill: "house.fill", title: "Home", index: 0).frame(maxWidth: .infinity)
                     tabButton(icon: "folder", iconFill: "folder.fill",  title: "Files", index: 1).frame(maxWidth: .infinity)
 
-                    tabButton(icon: "archivebox", iconFill: "archivebox.fill",  title: "Archive", index: 2).frame(maxWidth: .infinity)
+                    tabButton(icon: "numbers.rectangle", iconFill: "numbers.rectangle.fill",  title: "Numbers", index: 2).frame(maxWidth: .infinity)
                     tabButton(icon: "person", iconFill: "person.fill",  title: "Account", index: 3).frame(maxWidth: .infinity)
                 }
                 .frame(maxWidth: .infinity)

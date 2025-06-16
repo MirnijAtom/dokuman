@@ -23,6 +23,7 @@ struct DocumentScanner: UIViewControllerRepresentable {
         Coordinator(onScanComplete: onScanComplete)
     }
 
+    @MainActor
     class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
         var onScanComplete: ([UIImage]) -> Void
 
@@ -30,21 +31,28 @@ struct DocumentScanner: UIViewControllerRepresentable {
             self.onScanComplete = onScanComplete
         }
 
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
+        nonisolated func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFinishWith scan: VNDocumentCameraScan) {
             var images: [UIImage] = []
             for i in 0..<scan.pageCount {
                 images.append(scan.imageOfPage(at: i))
             }
-            controller.dismiss(animated: true)
-            onScanComplete(images)
+            Task { @MainActor in
+                controller.dismiss(animated: true)
+                onScanComplete(images)
+            }
         }
 
-        func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
-            controller.dismiss(animated: true)
+        nonisolated func documentCameraViewControllerDidCancel(_ controller: VNDocumentCameraViewController) {
+            Task { @MainActor in
+                controller.dismiss(animated: true)
+            }
         }
 
-        func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
-            controller.dismiss(animated: true)
+        nonisolated func documentCameraViewController(_ controller: VNDocumentCameraViewController, didFailWithError error: Error) {
+            print("Document scanning failed with error: \(error.localizedDescription)")
+            Task { @MainActor in
+                controller.dismiss(animated: true)
+            }
         }
     }
 }
