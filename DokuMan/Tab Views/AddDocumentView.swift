@@ -8,10 +8,17 @@
 import SwiftData
 import SwiftUI
 
+extension View {
+    func addDocumentButtonStyle() -> some View {
+        self
+            .frame(width: 30)
+            .padding(.trailing, 5)
+    }
+}
+
 struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
-    @Binding var selectedTab: Int
     
     @State private var name: String = ""
     @State private var date: Date = Date()
@@ -19,126 +26,159 @@ struct AddDocumentView: View {
     @State private var data: Data = Data()
     @State private var showPhotoPicker = false
     @State private var showFileImporter = false
+    @State private var showScanner = false
+    @State private var showNumbersEdit = false
     
     @State private var allCategories = ["Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"]
-    @State private var filtereSuggestions: [String] = []
+//    @State private var filteredSuggestions: [String] = []
     
-    @State private var showScanner = false
+
     
     var body: some View {
         NavigationStack {
-            List {
-                Button {
-                    showFileImporter.toggle()
-                } label: {
-                    Label("Import PDF from files", systemImage: "doc.fill")
-                }
-                Button {
-                    showScanner.toggle()
-                } label: {
-                    Label("Scan document", systemImage: "document.viewfinder")
-                }
-                Button {
-                    showPhotoPicker.toggle()
-                } label: {
-                    Label("Upload from Photos", systemImage: "photo.on.rectangle")
-                }
-            }
-            Form {
-                Section {
-                    TextField("Document name", text: $name)
-                    Menu {
-                        ForEach(DocumentCategory.allCases, id: \.self) { cat in
-                            Button {
-                                category = cat
-                            } label: {
-                                HStack {
-                                    Label(cat.label, systemImage: cat.icon)
-                                    Text(cat.label)
-                                }
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Text(category.label)
-                                .foregroundColor(.primary)
-                            ZStack {
-                                Circle()
-                                    .fill(category.color)
-                                    .frame(width: 30, height: 30)
-                                Image(systemName: category.icon)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                    }
-                }
-                Section {
-                    Button("Save") {
-                        saveDocument()
-                    }
-                }
-                Section {
-                    if !data.isEmpty {
-                        Text("Document scanned and saved")
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        showScanner.toggle()
-                    } label: {
-                        Label("Scan", systemImage: "document.viewfinder")
-                    }
-                    
-                    Button {
-                        showPhotoPicker.toggle()
-                    } label: {
-                        Label("Photos", systemImage: "photo.on.rectangle")
-                    }
-
+            if data.isEmpty {
+                List {
                     Button {
                         showFileImporter.toggle()
                     } label: {
-                        Label("Import PDF", systemImage: "doc.fill")
-                    }
-                }
-            }
-            .fullScreenCover(isPresented: $showScanner) {
-                DocumentScanner { images in
-                    if let image = images.first {
-                        data = imageToPDF(image: image)
-                    }
-                }
-            }
-            .sheet(isPresented: $showPhotoPicker) {
-                PhotoPicker { images in
-                    if let first = images.first {
-                        data = imageToPDF(image: first)
-                    }
-                }
-            }
-            .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
-                switch result {
-                case .success(let url):
-                    guard url.startAccessingSecurityScopedResource() else {
-                        print("No permission to access file")
-                        return
+                        HStack {
+                            Image(systemName: "doc")
+                                .addDocumentButtonStyle()
+                                .foregroundColor(.blue)
+                            Text("Import from Files")
+                                .foregroundColor(.primary)
+                                .font(.subheadline)
+                            Spacer()
+                        }
                     }
 
-                    defer { url.stopAccessingSecurityScopedResource() }
+                    Button {
+                        showScanner.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: "document.viewfinder")
+                                .addDocumentButtonStyle()
+                                .foregroundColor(.teal)
+                            Text("Scan document")
+                                .foregroundColor(.primary)
+                                .font(.subheadline)
 
-                    do {
-                        let fileData = try Data(contentsOf: url)
-                        data = fileData
-                    } catch {
-                        print("Error reading file: \(error)")
+                            Spacer()
+                        }
+
                     }
 
-                case .failure(let error):
-                    print("Failed to import PDF: \(error)")
+                    Button {
+                        showPhotoPicker.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: "photo.on.rectangle")
+                                .addDocumentButtonStyle()
+                                .foregroundColor(.orange)
+                            Text("Upload from Photos")
+                                .foregroundColor(.primary)
+                                .font(.subheadline)
+
+                            Spacer()
+                        }
+
+                    }
+
+                    Button {
+                        showNumbersEdit.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: "numbers")
+                                .addDocumentButtonStyle()
+                                .foregroundColor(.purple)
+                            Text("Add number")
+                                .foregroundColor(.primary)
+                                .font(.subheadline)
+
+                            Spacer()
+                        }
+
+                    }
+                }
+            } else {
+                Form {
+                    Section {
+                        TextField("Document name", text: $name)
+                        Menu {
+                            ForEach(DocumentCategory.allCases, id: \.self) { cat in
+                                Button {
+                                    category = cat
+                                } label: {
+                                    HStack {
+                                        Label(cat.label, systemImage: cat.icon)
+                                        Text(cat.label)
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text(category.label)
+                                    .foregroundColor(.primary)
+                                ZStack {
+                                    Circle()
+                                        .fill(category.color)
+                                        .frame(width: 30, height: 30)
+                                    Image(systemName: category.icon)
+                                        .foregroundColor(.white)
+                                }
+                            }
+                        }
+                    }
+                    Section {
+                        Button("Save") {
+                            saveDocument()
+                        }
+                    }
+                    Section {
+                        if !data.isEmpty {
+                            Text("Document scanned and saved")
+                        }
+                    }
+                }      
+            }
+        }
+        .fullScreenCover(isPresented: $showScanner) {
+            DocumentScanner { images in
+                if let image = images.first {
+                    data = imageToPDF(image: image)
                 }
             }
+        }
+        .sheet(isPresented: $showPhotoPicker) {
+            PhotoPicker { images in
+                if let first = images.first {
+                    data = imageToPDF(image: first)
+                }
+            }
+        }
+        .fileImporter(isPresented: $showFileImporter, allowedContentTypes: [.pdf]) { result in
+            switch result {
+            case .success(let url):
+                guard url.startAccessingSecurityScopedResource() else {
+                    print("No permission to access file")
+                    return
+                }
+                
+                defer { url.stopAccessingSecurityScopedResource() }
+                
+                do {
+                    let fileData = try Data(contentsOf: url)
+                    data = fileData
+                } catch {
+                    print("Error reading file: \(error)")
+                }
+                
+            case .failure(let error):
+                print("Failed to import PDF: \(error)")
+            }
+        }
+        .sheet(isPresented: $showNumbersEdit) {
+            NumbersEditView()
         }
     }
     func imageToPDF(image: UIImage) -> Data {
@@ -158,7 +198,7 @@ struct AddDocumentView: View {
         print("Saved: \(newDocument.name)")
         data = Data()
         name = ""
-        selectedTab = 0
+//        selectedTab = 0
         dismiss()
     }
 }
@@ -166,6 +206,6 @@ struct AddDocumentView: View {
 
 
 #Preview {
-    AddDocumentView(selectedTab: .constant(1))
+    AddDocumentView(/*selectedTab: .constant(1)*/)
         .modelContainer(for: Document.self)
 }

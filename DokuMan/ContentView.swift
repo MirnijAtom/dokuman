@@ -21,21 +21,21 @@ struct ContentView: View {
                 TabView(selection: $selectedTab) {
                     HomeView().tag(0)
                     FilesView().tag(1)
-                    AddDocumentView(selectedTab: $selectedTab).tag(3)
-                    ArchiveView().tag(4)
-                    Text("Item 4").tag(5)
+                    ArchiveView().tag(2)
+                    Text("Item 4").tag(3)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 
                 // Custom Tab Bar
                 HStack(spacing: 8) {
-                    tabButton(icon: "house", iconFill: "house.fill", title: "Home", index: 0)
-                    tabButton(icon: "folder", iconFill: "folder.fill",  title: "Files", index: 1)
-                    tabButton(icon: "document.viewfinder", iconFill: "document.viewfinder.fill",  title: "Scanner", index: 3)
-                    tabButton(icon: "archivebox", iconFill: "archivebox.fill",  title: "Archive", index: 4)
-                    tabButton(icon: "person", iconFill: "person.fill",  title: "Account", index: 5)
+                    tabButton(icon: "house", iconFill: "house.fill", title: "Home", index: 0).frame(maxWidth: .infinity)
+                    tabButton(icon: "folder", iconFill: "folder.fill",  title: "Files", index: 1).frame(maxWidth: .infinity)
+
+                    tabButton(icon: "archivebox", iconFill: "archivebox.fill",  title: "Archive", index: 2).frame(maxWidth: .infinity)
+                    tabButton(icon: "person", iconFill: "person.fill",  title: "Account", index: 3).frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 30)
                 .padding(.bottom, 35)
                 .padding(.top, 12)
                 .background(.ultraThinMaterial)
@@ -63,7 +63,10 @@ struct ContentView: View {
             }
         }
         .ignoresSafeArea()
-//        .sheet(isPresented: $showAddDoc, content: AddDocumentView()
+        .sheet(isPresented: $showAddDoc) {
+            AddDocumentView()
+                .presentationDetents([.large])
+        }
     }
     
     @ViewBuilder
