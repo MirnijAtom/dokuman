@@ -151,10 +151,8 @@ struct AddDocumentView: View {
         }
         .fullScreenCover(isPresented: $showScanner) {
             DocumentScanner { images in
-                if let image = images.first {
-                    data = imageToPDF(image: image)
-                    nameFieldIsFocused = true
-                }
+                data = imagesToPDF(images: images)
+                nameFieldIsFocused = true
             }
         }
         .sheet(isPresented: $showPhotoPicker) {
@@ -197,6 +195,17 @@ struct AddDocumentView: View {
         return renderer.pdfData { context in
             context.beginPage()
             image.draw(at: .zero)
+        }
+    }
+    
+    func imagesToPDF(images: [UIImage]) -> Data {
+        let format = UIGraphicsPDFRendererFormat()
+        let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: images[0].size), format: format)
+        return renderer.pdfData { context in
+            for image in images {
+                context.beginPage()
+                image.draw(at: .zero)
+            }
         }
     }
     

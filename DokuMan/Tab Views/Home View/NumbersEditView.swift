@@ -31,6 +31,8 @@ struct NumbersEditView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     
+    @State private var copiedID: UUID? = nil
+    
     var body: some View {
         List {
             if numbers.isEmpty && editingNumber == nil {
@@ -47,22 +49,40 @@ struct NumbersEditView: View {
                             
                             Divider()
                             
-                            Text(number.idNumber)
-                                .numberTextStyle()
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            ZStack {
+                                Text(number.idNumber)
+                                    .numberTextStyle()
+                                    .foregroundStyle(.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .opacity(copiedID == number.id ? 0 : 1)
+                                    .animation(.easeInOut, value: copiedID)
+                                
+                                Text("Copied!")
+                                    .numberTextStyle()
+                                    .foregroundStyle(.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .opacity(copiedID == number.id ? 1 : 0)
+                                    .animation(.easeInOut, value: copiedID)
+                            }
                             
                             Divider()
                             
                             Button {
                                 UIPasteboard.general.string = number.idNumber
+                                
+                                let generator = UIImpactFeedbackGenerator()
+                                generator.impactOccurred()
+                                
+                                copiedID = number.id
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                    copiedID = nil
+                                }
                             } label: {
                                 Image(systemName: "document.on.document")
                                     .numberTextStyle()
                                     .foregroundStyle(Color.secondary)
                                     .padding(.leading, 4)
                             }
-                            
                         }
                     }
                     .onDelete(perform: deleteNumber)
@@ -111,6 +131,7 @@ struct NumbersEditView: View {
         }
         
         .navigationBarBackButtonHidden(editingNumber != nil)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if editingNumber != nil {
                 ToolbarItem(placement: .topBarLeading) {
@@ -154,34 +175,7 @@ struct NumbersEditView: View {
                 }
             }
         }
-        
-        //        .overlay(
-        //            Group {
-        //                if let editing = editingNumber {
-        //                    Color.clear
-        //                        .contentShape(Rectangle())
-        //                        .onTapGesture {
-        //                            withAnimation {
-        //                                let nameTrimmed = nameInputText.trimmingCharacters(in: .whitespaces)
-        //                                let idTrimmed = inputText.trimmingCharacters(in: .whitespaces)
-        //
-        //                                if nameTrimmed.isEmpty && idTrimmed.isEmpty {
-        //                                    modelContext.delete(editing)
-        //                                } else {
-        //                                    editing.name = nameTrimmed
-        //                                    editing.idNumber = idTrimmed
-        //                                    editing.isCompleted = idTrimmed.isEmpty ? false : true
-        //                                    try? modelContext.save()
-        //                                }
-        //
-        //                                editingNumber = nil
-        //                                inputText = ""
-        //                                nameInputText = ""
-        //                            }
-        //                        }
-        //                }
-        //            }
-        //        )
+
         
         Text("Numbers count: \(numbers.count)")
     }

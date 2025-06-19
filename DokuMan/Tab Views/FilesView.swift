@@ -131,14 +131,13 @@ struct FilesView: View {
                         )
                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
                         .contextMenu {
-//                            Button {
-//                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-//                                    selectedDocuments = [document]
-//                                    isSharing = true
-//                                }
-//                            } label: {
-//                                Label("Share", systemImage: "square.and.arrow.up")
-//                            }
+                            Button {
+                                selectedDocuments = [document]
+                                isSharing = true
+                                print("Selected document for sharing: \(document.name)")
+                            } label: {
+                                Label("Share", systemImage: "square.and.arrow.up")
+                            }
                             if !showArchived {
                                 Button {
                                     toggleFavorites(document, modelContext: modelContext)
@@ -194,7 +193,12 @@ struct FilesView: View {
                 .appendingPathExtension("pdf")
             do {
                 try doc.versions.first!.fileData.write(to: tempURL)
-                urls.append(tempURL)
+                if FileManager.default.fileExists(atPath: tempURL.path) {
+                    urls.append(tempURL)
+                    print("Successfully wrote PDF to temp for \(doc.name) at \(tempURL)")
+                } else {
+                    print("File does not exist at \(tempURL)")
+                }
             } catch {
                 print("Failed to write PDF to temp for \(doc.name): \(error)")
             }

@@ -13,7 +13,7 @@
         @Query var numbers: [Number]
         
         @State private var isExpanded = false
-        
+        @State private var copiedID: UUID? = nil
         var body: some View {
             let visibleNumbers = isExpanded ? numbers : Array(numbers.prefix(3))
             
@@ -58,16 +58,36 @@
                                 
                                 Divider()
                                 
-                                Text(number.idNumber)
-                                    .numberTextStyle()
-                                    .foregroundStyle(.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                ZStack {
+                                    Text(number.idNumber)
+                                        .numberTextStyle()
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(copiedID == number.id ? 0 : 1)
+                                        .animation(.easeInOut, value: copiedID)
+
+                                    Text("Copied!")
+                                        .numberTextStyle()
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(copiedID == number.id ? 1 : 0)
+                                        .animation(.easeInOut, value: copiedID)
+                                }
 
                                 
                                 Divider()
                                 
                                 Button {
                                     UIPasteboard.general.string = number.idNumber
+                                    
+                                    let generator = UIImpactFeedbackGenerator()
+                                    generator.impactOccurred()
+                                    
+                                    copiedID = number.id
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        copiedID = nil
+                                    }
                                 } label: {
                                     Image(systemName: "document.on.document")
                                         .numberTextStyle()
