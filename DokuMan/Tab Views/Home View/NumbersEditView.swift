@@ -21,6 +21,8 @@ extension View {
 struct NumbersEditView: View {
     @Environment(\.modelContext) var modelContext
     @Query var numbers: [Number]
+    @EnvironmentObject var themeSettings: ThemeSettings
+
     
     @FocusState private var focusedField: UUID?
     @FocusState private var nameFocusedField: UUID?
@@ -176,6 +178,7 @@ struct NumbersEditView: View {
                     }
                 }
             }
+            .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         }
     }
     

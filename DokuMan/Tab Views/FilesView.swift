@@ -12,6 +12,8 @@ struct FilesView: View {
     @Environment(\.modelContext) var modelContext
     @Query var documents: [Document]
     
+    @EnvironmentObject var themeSettings: ThemeSettings
+    
     @FocusState private var isSearchFocused: Bool
     @State private var searchText: String = ""
     
@@ -34,6 +36,9 @@ struct FilesView: View {
         NavigationStack {
             ZStack {
                 VStack {
+//                    Text("\(themeSettings.isDarkMode)")
+//                        .background(.red)
+
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 0) {
                             ForEach(filteredDocuments) { document in
@@ -46,6 +51,7 @@ struct FilesView: View {
                     .background(Color(.systemGroupedBackground))
                 }
                 .toolbar { toolbarContent }
+                .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
                 .navigationTitle(showArchived ? " Archive" : "Documents")
                 .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
                 .focused($isSearchFocused)
@@ -60,6 +66,9 @@ struct FilesView: View {
                         Text("Error sharing documents.")
                     }
                 }
+                .toolbarBackground(Material.bar, for: .navigationBar)
+                .toolbarBackground(.visible, for: .navigationBar)
+
                 VStack {
                     Spacer()
                     HStack {

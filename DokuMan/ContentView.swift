@@ -16,7 +16,6 @@ struct ContentView: View {
     @Query(sort: \Document.name, animation: .default) var documents: [Document]
     
     @State private var isUnlocked = false
-    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
 //        if isUnlocked {
@@ -53,11 +52,11 @@ struct ContentView: View {
                         Button {
                             showAddDoc = true
                         } label: {
-                            Image(systemName: "plus")
+                            Image(systemName: "document.viewfinder")
                                 .font(.system(size: 30))
                                 .foregroundStyle(.teal)
                                 .frame(width: 60, height: 60)
-                                .background(.ultraThinMaterial)
+                                .background(Color(.systemBackground))
                                 .clipShape(Circle())
                                 .shadow(radius: 2)
                         }
@@ -72,8 +71,6 @@ struct ContentView: View {
                     .presentationDetents([.large])
             }
             .background(Color(uiColor: .systemBackground))
-            .environment(\.colorScheme, isDarkMode ? .dark : .light)
-
 
 //        } else {
 //            Text("Unlock your device")

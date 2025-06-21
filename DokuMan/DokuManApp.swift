@@ -9,11 +9,13 @@ import SwiftUI
 
 @main
 struct DokuManApp: App {
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    @StateObject private var themeSettings = ThemeSettings()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(isDarkMode ? .dark : .light)
+                .environmentObject(themeSettings)
+                .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
         }
         .modelContainer(for: [Document.self, Number.self])
     }

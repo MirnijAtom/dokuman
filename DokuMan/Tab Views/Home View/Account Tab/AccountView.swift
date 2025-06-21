@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct AccountView: View {
-    @AppStorage("isDarkMode") private var isDarkMode = false
+    @EnvironmentObject var themeSettings: ThemeSettings
     @State private var selectedLanguage = "en"
     
     @State private var showPrivacyPolicy = false
@@ -20,7 +20,7 @@ struct AccountView: View {
     var body: some View {
         List {
             Section {
-                Toggle("Dark mode", isOn: $isDarkMode)
+                Toggle("Dark mode", isOn: $themeSettings.isDarkMode)
                     .toggleStyle(.switch)
                 
                 HStack {

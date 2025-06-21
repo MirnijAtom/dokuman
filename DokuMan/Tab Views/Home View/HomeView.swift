@@ -10,6 +10,8 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.modelContext) var modelContext
+    @EnvironmentObject var themeSettings: ThemeSettings
+
     
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     
@@ -41,6 +43,10 @@ struct HomeView: View {
             }
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Home")
+            .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
+
+            .toolbarBackground(Material.bar, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
         }
     }
 }
