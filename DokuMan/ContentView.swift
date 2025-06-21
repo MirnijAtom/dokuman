@@ -53,11 +53,11 @@ struct ContentView: View {
                         Button {
                             showAddDoc = true
                         } label: {
-                            Image(systemName: "document.viewfinder")
+                            Image(systemName: "plus")
                                 .font(.system(size: 30))
                                 .foregroundStyle(.teal)
                                 .frame(width: 60, height: 60)
-                                .background(Color(.systemBackground))
+                                .background(.ultraThinMaterial)
                                 .clipShape(Circle())
                                 .shadow(radius: 2)
                         }

@@ -71,7 +71,7 @@ struct FilesView: View {
                                 .frame(height: 30)
                                 .padding()
                                 .foregroundStyle(.teal)
-                                .background(Color(.systemBackground))
+                                .background(.ultraThinMaterial)
                                 .clipShape(.capsule)
                                 .shadow(radius: 2)
                         }

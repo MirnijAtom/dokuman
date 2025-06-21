@@ -34,7 +34,7 @@ struct NumbersEditView: View {
     @State private var copiedID: UUID? = nil
     
     var body: some View {
-        NavigationStack {            
+        NavigationStack {
             List {
                 if numbers.isEmpty && editingNumber == nil {
                     Section {
@@ -177,9 +177,6 @@ struct NumbersEditView: View {
                 }
             }
         }
-
-        
-        Text("Numbers count: \(numbers.count)")
     }
     
     func deleteNumber(at offsets: IndexSet) {
