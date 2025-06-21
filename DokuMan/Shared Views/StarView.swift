@@ -13,11 +13,11 @@ struct StarView: View {
         ZStack {
             Image(systemName: "star.fill")
                 .font(.title)
-                .foregroundColor(isFavourite ? .yellow : .white)
+                .foregroundColor(isFavourite ? .yellow : Color(.systemBackground))
             Button(action: { isFavourite.toggle() }) {
                 Image(systemName: "star")
                     .font(.title)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.secondary)
 
             }
         }

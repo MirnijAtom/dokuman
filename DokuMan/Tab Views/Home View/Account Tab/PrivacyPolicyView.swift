@@ -21,7 +21,7 @@ struct PrivacyPolicyView: View {
 
                 **Data Collection:**
                 - We do not collect personal data unless you explicitly provide it (e.g., via form inputs).
-                - Documents and data stay on your device; we don’t upload or share them.
+                - Documents and data stay on your device; we don't upload or share them.
                 
                 **Data Usage:**
                 - Data is used only locally in the app.
@@ -47,6 +47,7 @@ struct PrivacyPolicyView: View {
             }
             .padding()
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle("Privacy Policy")
     }
 }

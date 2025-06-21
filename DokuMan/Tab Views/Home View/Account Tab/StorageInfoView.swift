@@ -17,6 +17,7 @@ struct StorageInfoView: View {
                 Text("Documents saved: \(documents.count)")
                 Text("Numbers saved: \(numbers.count)")
         }
+        .background(Color(.systemGroupedBackground))
     }
 }
 

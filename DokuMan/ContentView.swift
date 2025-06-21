@@ -10,14 +10,13 @@ import PDFKit
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {
-    @AppStorage("isDarkMode") private var isDarkMode = false
-    
+struct ContentView: View {    
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
     @Query(sort: \Document.name, animation: .default) var documents: [Document]
     
     @State private var isUnlocked = false
+    @AppStorage("isDarkMode") private var isDarkMode = false
     
     var body: some View {
 //        if isUnlocked {
@@ -58,7 +57,7 @@ struct ContentView: View {
                                 .font(.system(size: 30))
                                 .foregroundStyle(.teal)
                                 .frame(width: 60, height: 60)
-                                .background(.white)
+                                .background(Color(.systemBackground))
                                 .clipShape(Circle())
                                 .shadow(radius: 2)
                         }
@@ -72,7 +71,9 @@ struct ContentView: View {
                 AddDocumentView()
                     .presentationDetents([.large])
             }
-            .preferredColorScheme(isDarkMode ? .dark : .light)
+            .background(Color(uiColor: .systemBackground))
+            .environment(\.colorScheme, isDarkMode ? .dark : .light)
+
 
 //        } else {
 //            Text("Unlock your device")

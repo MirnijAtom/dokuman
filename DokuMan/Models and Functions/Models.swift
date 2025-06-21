@@ -114,7 +114,7 @@ enum DocumentCategory: String, CaseIterable, Codable {
         case .mitgliedschaft: return .brown
         case .quittungen: return .yellow
         case .behoerden: return .green
-        case .rechtliches: return .black
+        case .rechtliches: return .secondary
         case .familie: return .orange
         case .sonstiges: return .gray.opacity(0.6)
         }

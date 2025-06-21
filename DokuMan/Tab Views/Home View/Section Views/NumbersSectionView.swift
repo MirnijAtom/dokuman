@@ -133,7 +133,7 @@
             }
             .frame(maxWidth: .infinity, minHeight: 86)
             .padding(.vertical, 12)
-            .background(Color.teal.tertiary)
+            .background(Color(.secondarySystemGroupedBackground))
             .cornerRadius(0)
         }
     }

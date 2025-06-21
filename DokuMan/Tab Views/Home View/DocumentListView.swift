@@ -67,7 +67,7 @@ struct DocumentListView: View {
                                         .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
                                         .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
                                         .font(.title)
-                                        .background(Color.white.opacity(1))
+                                        .background(Color(.systemBackground))
                                         .clipShape(Circle())
                                         .padding(20)
                                 }

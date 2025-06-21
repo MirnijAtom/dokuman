@@ -14,38 +14,33 @@ struct HomeView: View {
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     
     @Binding var selectedTab: Int
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    
 
                     FavoritesSectionView()
 
-
-
                     CategoriesSectionView()
-
-
 
                     NumbersSectionView(selectedTab: $selectedTab)
 
-                    // Debug Count
-                    Text("Documents count: \(documents.count)")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
-                    
-                    // Button to add mockup files
-                    Button("Add mockup files") {
-                        addMockupFiles(using: modelContext)
-                    }
+//                    // Debug Count
+//                    Text("Documents count: \(documents.count)")
+//                        .font(.caption)
+//                        .foregroundColor(.secondary)
+//                        .padding(.horizontal)
+//                    
+//                    // Button to add mockup files
+//                    Button("Add mockup files") {
+//                        addMockupFiles(using: modelContext)
+//                    }
                 }
                 .padding(.top)
             }
+            .background(Color(.systemGroupedBackground))
             .navigationTitle("Home")
-            .background(Color.gray.opacity(0.1))
         }
     }
 }

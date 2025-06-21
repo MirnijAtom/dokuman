@@ -16,9 +16,12 @@ struct PDFPreview: UIViewRepresentable {
         pdfView.document = PDFDocument(data: data)
         pdfView.autoScales = true
         pdfView.displayMode = .singlePage
-        pdfView.backgroundColor = .white
+        pdfView.backgroundColor = UIColor.systemBackground
         return pdfView
     }
     
-    func updateUIView(_ uiView: PDFView, context: Context) {}
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        // Update background color when color scheme changes
+        uiView.backgroundColor = UIColor.systemBackground
+    }
 }

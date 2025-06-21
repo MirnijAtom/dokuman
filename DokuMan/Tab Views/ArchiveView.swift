@@ -68,6 +68,7 @@ struct ArchiveView: View {
                 }
                 .padding(.horizontal)
             }
+            .background(Color(.systemGroupedBackground))
             .navigationTitle("Archive")
 
             Button("Add mockup files") {

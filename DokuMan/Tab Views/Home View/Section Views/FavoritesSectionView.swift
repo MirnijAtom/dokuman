@@ -70,7 +70,7 @@ struct FavoritesSectionView: View {
         }
         .frame(minHeight: 226)
         .padding(.vertical, 12)
-        .background(Color.teal.tertiary)
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(0)
 
         .fullScreenCover(item: $selectedDocument) { document in

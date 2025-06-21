@@ -64,7 +64,7 @@ struct CategoriesSectionView: View {
         }
         .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
         .padding(.vertical, 12)
-        .background(Color.teal.tertiary)
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(0)
     }
 }

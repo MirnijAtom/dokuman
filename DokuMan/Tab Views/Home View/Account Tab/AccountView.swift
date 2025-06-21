@@ -22,7 +22,6 @@ struct AccountView: View {
             Section {
                 Toggle("Dark mode", isOn: $isDarkMode)
                     .toggleStyle(.switch)
-                    .preferredColorScheme(isDarkMode ? .dark : .light)
                 
                 HStack {
                     Text("Language")
@@ -88,18 +87,20 @@ struct AccountView: View {
                 }
                 .foregroundStyle(.primary)
             }
-            .sheet(isPresented: $showPrivacyPolicy) {
-                PrivacyPolicyView()
-            }
-            .sheet(isPresented: $showTermsAndConditions) {
-                TermsAndConditionsView()
-            }
-            .sheet(isPresented: $showStorageInfo) {
-                StorageInfoView()
-            }
+            
+
             Section {
                 
             }
+        }
+        .sheet(isPresented: $showPrivacyPolicy) {
+            PrivacyPolicyView()
+        }
+        .sheet(isPresented: $showTermsAndConditions) {
+            TermsAndConditionsView()
+        }
+        .sheet(isPresented: $showStorageInfo) {
+            StorageInfoView()
         }
     }
 }

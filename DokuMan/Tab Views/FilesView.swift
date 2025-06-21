@@ -71,7 +71,7 @@ struct FilesView: View {
                                 .frame(height: 30)
                                 .padding()
                                 .foregroundStyle(.teal)
-                                .background(.white)
+                                .background(Color(.systemBackground))
                                 .clipShape(.capsule)
                                 .shadow(radius: 2)
                         }
@@ -176,7 +176,7 @@ struct FilesView: View {
                     Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
                         .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
                         .font(.title)
-                        .background(Color.white.opacity(1))
+                        .background(Color(.systemBackground))
                         .clipShape(Circle())
                         .padding(15)
                 }

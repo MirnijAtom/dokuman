@@ -61,7 +61,7 @@ We reserve the right to update the Terms at any time.
 DokuMan does not collect personal data. All data is stored locally or optionally in iCloud under your Apple ID.
 
 2. **Third Parties**  
-No data is shared with third parties. The app uses system features (e.g., iCloud, Face ID) under Apple’s policies.
+No data is shared with third parties. The app uses system features (e.g., iCloud, Face ID) under Apple's policies.
 
 3. **Your Rights (GDPR)**  
 You have the right to access, correct, or delete your data at any time. Since data is local, this is under your control.
@@ -89,6 +89,7 @@ Email: aleksandrs.bertulis@gmail.com
             }
             .padding()
         }
+        .background(Color(.systemGroupedBackground))
         .navigationTitle("Legal")
     }
 }
