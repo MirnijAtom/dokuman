@@ -52,7 +52,7 @@ struct FilesView: View {
                 }
                 .toolbar { toolbarContent }
                 .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
-                .navigationTitle(showArchived ? " Archive" : "Documents")
+                .navigationTitle(showArchived ? LocalizedStringKey("Archive") : LocalizedStringKey("Documents"))
                 .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
                 .focused($isSearchFocused)
                 .fullScreenCover(item: $selectedDocument) { document in
@@ -76,7 +76,7 @@ struct FilesView: View {
                         Button {
                             showArchived.toggle()
                         } label: {
-                            Label(showArchived ? "Show documents" : " Show archive", systemImage: showArchived ? "document.on.document" : "archivebox")
+                            Label(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"), systemImage: showArchived ? "document.on.document" : "archivebox")
                                 .frame(height: 30)
                                 .padding()
                                 .foregroundStyle(.teal)
@@ -96,7 +96,7 @@ struct FilesView: View {
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+                Button(LocalizedStringKey("Cancel")) {
                     isSelectionActive = false
                     selectedDocuments = []
                 }
@@ -108,12 +108,12 @@ struct FilesView: View {
                         isSelectionActive = false
                     }
                 } label: {
-                    Label("Share", systemImage: "square.and.arrow.up")
+                    Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                 }
             }
         } else {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Select") {
+                Button(LocalizedStringKey("Select")) {
                     isSelectionActive = true
                 }
             }
@@ -145,20 +145,20 @@ struct FilesView: View {
                                 isSharing = true
                                 print("Selected document for sharing: \(document.name)")
                             } label: {
-                                Label("Share", systemImage: "square.and.arrow.up")
+                                Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                             }
                             if !showArchived {
                                 Button {
                                     toggleFavorites(document, modelContext: modelContext)
                                 } label: {
-                                    Label(document.isFavorite ? "Remove from favorites" : "Add to favorites", systemImage: document.isFavorite ? "star.slash" : "star")
+                                    Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                 }
                             }
                             
                             Button {
                                 archiveDocument(document, modelContext: modelContext)
                             } label: {
-                                Label(document.isArchived ? "Unarchive" : "Archive", systemImage: document.isArchived ? "archivebox" : "archivebox")
+                                Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                             }
                             
                             Divider()
@@ -166,7 +166,7 @@ struct FilesView: View {
                             Button(role: .destructive) {
                                 deleteDocument(document, modelContext: modelContext)
                             } label: {
-                                Label("Delete", systemImage: "trash")
+                                Label(LocalizedStringKey("Delete"), systemImage: "trash")
                             }
                         }
                     

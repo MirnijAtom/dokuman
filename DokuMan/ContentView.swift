@@ -56,7 +56,7 @@ struct ContentView: View {
                                 .font(.system(size: 30))
                                 .foregroundStyle(.teal)
                                 .frame(width: 60, height: 60)
-                                .background(Color(.systemBackground))
+                                .background(.ultraThinMaterial)
                                 .clipShape(Circle())
                                 .shadow(radius: 2)
                         }
@@ -96,7 +96,7 @@ struct ContentView: View {
                             .fill(selectedTab == index ? Color.teal : Color.clear)
                     )
                     .foregroundColor(selectedTab == index ? .white : .primary)
-                Text(title)
+                Text(LocalizedStringKey(title))
                     .font(.caption2)
                     .foregroundStyle(Color.primary)
             }

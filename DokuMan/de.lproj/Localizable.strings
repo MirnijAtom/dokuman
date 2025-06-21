@@ -1,0 +1,83 @@
+/* 
+  Localizable.strings
+  DokuMan
+
+  Created by Gemini on 20.07.25.
+*/
+
+// MARK: - General & Shared
+"Cancel" = "Abbrechen";
+"Share" = "Teilen";
+"Select" = "Auswählen";
+"Save" = "Speichern";
+"Edit" = "Bearbeiten";
+"Delete" = "Löschen";
+"OK" = "OK";
+
+// MARK: - Tab Bar
+"Home" = "Home";
+"Files" = "Dateien";
+"Numbers" = "Nummern";
+"Account" = "Konto";
+
+// MARK: - Files View
+"Documents" = "Dokumente";
+"Archive" = "Archiv";
+"Show documents" = "Dokumente anzeigen";
+"Show archive" = "Archiv anzeigen";
+"Add to favorites" = "Zu Favoriten hinzufügen";
+"Remove from favorites" = "Aus Favoriten entfernen";
+"Unarchive" = "Dearchivieren";
+"Error sharing documents." = "Fehler beim Teilen von Dokumenten.";
+
+// MARK: - Home View
+"Favorites" = "Favoriten";
+"Categories" = "Kategorien";
+"No categories yet" = "Noch keine Kategorien";
+"Add your first number" = "Füge deine erste Nummer hinzu";
+"Copied!" = "Kopiert!";
+
+// MARK: - Account View
+"Dark mode" = "Dunkelmodus";
+"Language" = "Sprache";
+"Storage Info" = "Speicherinformation";
+"Upgrade to Pro" = "Auf Pro upgraden";
+"Manage Subscription" = "Abonnement verwalten";
+"Privacy Policy" = "Datenschutz-Bestimmungen";
+"Terms & Conditions" = "Geschäftsbedingungen";
+"Documents saved: %@" = "Dokumente gespeichert: %@";
+"Numbers saved: %@" = "Nummern gespeichert: %@";
+
+// MARK: - Add Document View
+"Import from Files" = "Aus Dateien importieren";
+"Scan document" = "Dokument scannen";
+"Upload from Photos" = "Aus Fotos hochladen";
+"Add number" = "Nummer hinzufügen";
+"Document name" = "Dokumentenname";
+
+// MARK: - Numbers Edit View
+"Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc." = "Hier können Sie Ihre Nummern und IDs wie Sozialversicherungsnummer, Krankenversicherungsnummer, Steuer-ID usw. hinzufügen.";
+"Your numbers" = "Deine Nummern";
+"Name" = "Name";
+"Type ID" = "ID eingeben";
+"New number" = "Neue Nummer";
+"Name is missing" = "Name fehlt";
+"Number is missing" = "Nummer fehlt";
+
+// MARK: - Document Categories
+"Wohnung" = "Wohnung";
+"Versicherung" = "Versicherung";
+"Visa" = "Visum";
+"Konto" = "Konto";
+"Arbeit" = "Arbeit";
+"Steuern" = "Steuern";
+"Gesundheit" = "Gesundheit";
+"Studium" = "Studium";
+"Fahrzeug" = "Fahrzeug";
+"Internet & Handy" = "Internet & Handy";
+"Mitgliedschaften" = "Mitgliedschaften";
+"Rechnungen & Quittungen" = "Rechnungen & Quittungen";
+"Behörden" = "Behörden";
+"Rechtliches" = "Rechtliches";
+"Familie" = "Familie";
+"Sonstiges" = "Sonstiges";

@@ -1,0 +1,84 @@
+/* 
+  Localizable.strings
+  DokuMan
+
+  Created by Gemini on 20.07.25.
+*/
+
+// MARK: - General & Shared
+"Cancel" = "Cancel";
+"Share" = "Share";
+"Select" = "Select";
+"Save" = "Save";
+"Edit" = "Edit";
+"Delete" = "Delete";
+"OK" = "OK";
+
+// MARK: - Tab Bar
+"Home" = "Home";
+"Files" = "Files";
+"Numbers" = "Numbers";
+"Account" = "Account";
+
+// MARK: - Files View
+"Documents" = "Documents";
+"Archive" = "Archive";
+"Show documents" = "Show documents";
+"Show archive" = "Show archive";
+"Add to favorites" = "Add to favorites";
+"Remove from favorites" = "Remove from favorites";
+"Unarchive" = "Unarchive";
+"Error sharing documents." = "Error sharing documents.";
+
+// MARK: - Home View
+"Favorites" = "Favorites";
+"Categories" = "Categories";
+"No categories yet" = "No categories yet";
+"Add your first number" = "Add your first number";
+"Copied!" = "Copied!";
+
+// MARK: - Account View
+"Dark mode" = "Dark mode";
+"Language" = "Language";
+"Storage Info" = "Storage Info";
+"Upgrade to Pro" = "Upgrade to Pro";
+"Manage Subscription" = "Manage Subscription";
+"Privacy Policy" = "Privacy Policy";
+"Terms & Conditions" = "Terms & Conditions";
+"Documents saved: %@" = "Documents saved: %@";
+"Numbers saved: %@" = "Numbers saved: %@";
+
+
+// MARK: - Add Document View
+"Import from Files" = "Import from Files";
+"Scan document" = "Scan document";
+"Upload from Photos" = "Upload from Photos";
+"Add number" = "Add number";
+"Document name" = "Document name";
+
+// MARK: - Numbers Edit View
+"Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc." = "Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.";
+"Your numbers" = "Your numbers";
+"Name" = "Name";
+"Type ID" = "Type ID";
+"New number" = "New number";
+"Name is missing" = "Name is missing";
+"Number is missing" = "Number is missing";
+
+// MARK: - Document Categories
+"Wohnung" = "Apartment";
+"Versicherung" = "Insurance";
+"Visa" = "Visa";
+"Konto" = "Account";
+"Arbeit" = "Work";
+"Steuern" = "Taxes";
+"Gesundheit" = "Health";
+"Studium" = "Studies";
+"Fahrzeug" = "Vehicle";
+"Internet & Handy" = "Internet & Mobile";
+"Mitgliedschaften" = "Memberships";
+"Rechnungen & Quittungen" = "Invoices & Receipts";
+"Behörden" = "Authorities";
+"Rechtliches" = "Legal";
+"Familie" = "Family";
+"Sonstiges" = "Miscellaneous";

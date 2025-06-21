@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AccountView: View {
     @EnvironmentObject var themeSettings: ThemeSettings
-    @State private var selectedLanguage = "en"
+    @EnvironmentObject var languageSettings: LanguageSettings
     
     @State private var showPrivacyPolicy = false
     @State private var showTermsAndConditions = false
@@ -20,16 +20,16 @@ struct AccountView: View {
     var body: some View {
         List {
             Section {
-                Toggle("Dark mode", isOn: $themeSettings.isDarkMode)
+                Toggle(LocalizedStringKey("Dark mode"), isOn: $themeSettings.isDarkMode)
                     .toggleStyle(.switch)
                 
                 HStack {
-                    Text("Language")
+                    Text(LocalizedStringKey("Language"))
                     
                     Spacer()
                     
                     Button {
-                        selectedLanguage = "en"
+                        languageSettings.locale = Locale(identifier: "en")
                     } label: {
                         Image("UKFlag")
                             .resizable()
@@ -38,7 +38,7 @@ struct AccountView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .stroke(selectedLanguage == "en" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
+                                    .stroke(languageSettings.locale.identifier == "en" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
                             )
                     }
                     .contentShape(Rectangle())
@@ -47,7 +47,7 @@ struct AccountView: View {
                     Spacer().frame(width: 16)
                     
                     Button {
-                        selectedLanguage = "de"
+                        languageSettings.locale = Locale(identifier: "de")
                     } label: {
                         Image("GermanFlag")
                             .resizable()
@@ -56,14 +56,14 @@ struct AccountView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 6))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 6)
-                                    .stroke(selectedLanguage == "de" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
+                                    .stroke(languageSettings.locale.identifier == "de" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
                             )
                     }
                     .contentShape(Rectangle())
                     .buttonStyle(.plain)
                 }
                 
-                Button("Storage Info") {
+                Button(LocalizedStringKey("Storage Info")) {
                     showStorageInfo.toggle()
                 }
                 .foregroundStyle(.primary)
@@ -73,16 +73,16 @@ struct AccountView: View {
 
             
             Section {
-                Text("Upgrade to Pro")
-                Text("Manage Subscription")
+                Text(LocalizedStringKey("Upgrade to Pro"))
+                Text(LocalizedStringKey("Manage Subscription"))
             }
             
             Section {
-                Button("Privacy Policy") {
+                Button(LocalizedStringKey("Privacy Policy")) {
                     showPrivacyPolicy = true
                 }
                 .foregroundStyle(.primary)
-                Button("Terms & Conditions") {
+                Button(LocalizedStringKey("Terms & Conditions")) {
                     showTermsAndConditions = true
                 }
                 .foregroundStyle(.primary)

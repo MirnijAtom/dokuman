@@ -24,12 +24,12 @@
                 // Header
                 HStack {
                     Image(systemName: "numbers.rectangle")
-                    Text("Numbers")
+                    Text(LocalizedStringKey("Numbers"))
                         .font(.headline)
                     
                     Spacer()
                     
-                    Button("Edit") {
+                    Button(LocalizedStringKey("Edit")) {
                         selectedTab = 2
                     }
 //                    NavigationLink {
@@ -48,7 +48,7 @@
                     NavigationLink {
                         NumbersEditView()
                     } label: {
-                        Text("Add your first number")
+                        Text(LocalizedStringKey("Add your first number"))
                             .padding(.horizontal)
                             .foregroundStyle(.blue)
                     }
@@ -72,7 +72,7 @@
                                         .opacity(copiedID == number.id ? 0 : 1)
                                         .animation(.easeInOut, value: copiedID)
 
-                                    Text("Copied!")
+                                    Text(LocalizedStringKey("Copied!"))
                                         .numberTextStyle()
                                         .foregroundStyle(.primary)
                                         .frame(maxWidth: .infinity, alignment: .leading)

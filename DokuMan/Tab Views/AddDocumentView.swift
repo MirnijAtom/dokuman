@@ -19,6 +19,7 @@ extension View {
 struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var languageSettings: LanguageSettings
     
     @FocusState private var nameFieldIsFocused: Bool
     
@@ -47,7 +48,7 @@ struct AddDocumentView: View {
                             Image(systemName: "doc")
                                 .addDocumentButtonStyle()
                                 .foregroundColor(.blue)
-                            Text("Import from Files")
+                            Text(LocalizedStringKey("Import from Files"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
                             Spacer()
@@ -61,7 +62,7 @@ struct AddDocumentView: View {
                             Image(systemName: "document.viewfinder")
                                 .addDocumentButtonStyle()
                                 .foregroundColor(.teal)
-                            Text("Scan document")
+                            Text(LocalizedStringKey("Scan document"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
                             
@@ -77,7 +78,7 @@ struct AddDocumentView: View {
                             Image(systemName: "photo.on.rectangle")
                                 .addDocumentButtonStyle()
                                 .foregroundColor(.orange)
-                            Text("Upload from Photos")
+                            Text(LocalizedStringKey("Upload from Photos"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
                             
@@ -93,7 +94,7 @@ struct AddDocumentView: View {
                             Image(systemName: "numbers")
                                 .addDocumentButtonStyle()
                                 .foregroundColor(.purple)
-                            Text("Add number")
+                            Text(LocalizedStringKey("Add number"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
                             
@@ -108,7 +109,7 @@ struct AddDocumentView: View {
                 
                 Form {
                     Section {
-                        TextField("Document name", text: $name)
+                        TextField(LocalizedStringKey("Document name"), text: $name)
                             .focused($nameFieldIsFocused)
                         Menu {
                             ForEach(DocumentCategory.allCases, id: \.self) { cat in
@@ -139,7 +140,7 @@ struct AddDocumentView: View {
                         HStack {
                             Spacer()
                             
-                            Button("Save") {
+                            Button(LocalizedStringKey("Save")) {
                                 saveDocument()
                             }
                             
@@ -149,6 +150,7 @@ struct AddDocumentView: View {
                 }
             }
         }
+        .id(languageSettings.locale.identifier)
         .fullScreenCover(isPresented: $showScanner) {
             DocumentScanner { images in
                 data = imagesToPDF(images: images)

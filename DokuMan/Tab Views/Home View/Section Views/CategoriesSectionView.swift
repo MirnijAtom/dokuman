@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CategoriesSectionView: View {
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
+    @EnvironmentObject var languageSettings: LanguageSettings
     
     var body: some View {
         
@@ -17,7 +18,7 @@ struct CategoriesSectionView: View {
             
             HStack {
                 Image(systemName: "tag.fill")
-                Text("Categories")
+                Text(LocalizedStringKey("Categories"))
             }
             .font(.headline)
             .padding(.horizontal)
@@ -28,7 +29,7 @@ struct CategoriesSectionView: View {
             }
             
             if nonEmptyCategories.isEmpty {
-                Text("No categories yet")
+                Text(LocalizedStringKey("No categories yet"))
                     .padding(.horizontal)
                     .foregroundStyle(.secondary)
             } else {
@@ -66,6 +67,7 @@ struct CategoriesSectionView: View {
         .padding(.vertical, 12)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(0)
+        .id(languageSettings.locale.identifier) // Force refresh when locale changes
     }
 }
 #Preview {

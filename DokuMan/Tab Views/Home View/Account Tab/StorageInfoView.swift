@@ -14,8 +14,8 @@ struct StorageInfoView: View {
     @Query var numbers: [Number]
     var body: some View {
         List {
-                Text("Documents saved: \(documents.count)")
-                Text("Numbers saved: \(numbers.count)")
+            Text(String(format: NSLocalizedString("Documents saved: %@", comment: ""), "\(documents.count)"))
+            Text(String(format: NSLocalizedString("Numbers saved: %@", comment: ""), "\(numbers.count)"))
         }
         .background(Color(.systemGroupedBackground))
     }

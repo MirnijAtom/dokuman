@@ -43,7 +43,7 @@ struct NumbersEditView: View {
                         Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
                     }
                 } else {
-                    Section(header: Text("Your numbers").numberTextStyle()) {
+                    Section(header: Text(LocalizedStringKey("Your numbers")).numberTextStyle()) {
                         ForEach(numbers) { number in
                             HStack {
                                 Text(number.name)
@@ -60,7 +60,7 @@ struct NumbersEditView: View {
                                         .opacity(copiedID == number.id ? 0 : 1)
                                         .animation(.easeInOut, value: copiedID)
                                     
-                                    Text("Copied!")
+                                    Text(LocalizedStringKey("Copied!"))
                                         .numberTextStyle()
                                         .foregroundStyle(.primary)
                                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -93,7 +93,7 @@ struct NumbersEditView: View {
                         if let newNumber = editingNumber {
                             HStack {
                                 
-                                TextField("Name", text: $nameInputText)
+                                TextField(LocalizedStringKey("Name"), text: $nameInputText)
                                     .autocorrectionDisabled(true)
                                     .focused($nameFocusedField, equals: newNumber.id)
                                     .numberTextStyle()
@@ -102,7 +102,7 @@ struct NumbersEditView: View {
                                 
                                 Divider()
                                 
-                                TextField("Type ID", text: $numberInputText)
+                                TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
                                     .autocorrectionDisabled(true)
                                     .autocapitalization(.allCharacters)
                                     .focused($focusedField, equals: newNumber.id)
@@ -122,7 +122,7 @@ struct NumbersEditView: View {
                     }
                 }
                 
-                Button("New number") {
+                Button(LocalizedStringKey("New number")) {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
                     editingNumber = newNumber
                     nameFocusedField = newNumber.id
@@ -132,13 +132,10 @@ struct NumbersEditView: View {
                 .fontWeight(.light)
                 .fontDesign(.monospaced)
             }
-            
-            //        .navigationBarBackButtonHidden(editingNumber != nil)
-            //        .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if editingNumber != nil {
                     ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel", role: .destructive) {
+                        Button(LocalizedStringKey("Cancel"), role: .destructive) {
                             editingNumber = nil
                             nameInputText = ""
                             numberInputText = ""
@@ -146,17 +143,17 @@ struct NumbersEditView: View {
                     }
                     
                     ToolbarItem(placement: .confirmationAction) {
-                        Button("Save") {
+                        Button(LocalizedStringKey("Save")) {
                             let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
                             let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
                             
                             if trimmedName.isEmpty {
-                                alertMessage = "Name is missing"
+                                alertMessage = NSLocalizedString("Name is missing", comment: "")
                                 showAlert = true
                                 return
                             }
                             if trimmedNumber.isEmpty {
-                                alertMessage = "Number is missing"
+                                alertMessage = NSLocalizedString("Number is missing", comment: "")
                                 showAlert = true
                                 return
                             }
@@ -173,7 +170,7 @@ struct NumbersEditView: View {
                             }
                         }
                         .alert(alertMessage, isPresented: $showAlert) {
-                            Button("OK", role: .cancel) { }
+                            Button(LocalizedStringKey("OK"), role: .cancel) { }
                         }
                     }
                 }

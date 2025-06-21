@@ -28,7 +28,7 @@ struct FavoritesSectionView: View {
             
             HStack {
                 Image(systemName: "star.fill")
-                Text("Favorites")
+                Text(LocalizedStringKey("Favorites"))
             }
             .font(.headline)
             .padding(.horizontal)
