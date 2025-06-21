@@ -12,6 +12,8 @@
         
         @Query var numbers: [Number]
         
+        @Binding var selectedTab: Int
+        
         @State private var isExpanded = false
         @State private var copiedID: UUID? = nil
         var body: some View {
@@ -27,13 +29,16 @@
                     
                     Spacer()
                     
-                    NavigationLink {
-                        NumbersEditView()
-                    } label: {
-                        Text("Edit")
-                            .padding(.horizontal)
-                            .foregroundStyle(.secondary)
+                    Button("Edit") {
+                        selectedTab = 2
                     }
+//                    NavigationLink {
+//                        NumbersEditView()
+//                    } label: {
+//                        Text("Edit")
+//                            .padding(.horizontal)
+//                            .foregroundStyle(.secondary)
+//                    }
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
@@ -153,6 +158,6 @@
         }
 
         
-        return NumbersSectionView()
+        return NumbersSectionView(selectedTab: .constant(0))
             .modelContainer(container)
     }

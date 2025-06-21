@@ -11,6 +11,8 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
     @Query(sort: \Document.name, animation: .default) var documents: [Document]
@@ -23,7 +25,7 @@ struct ContentView: View {
                 VStack(spacing: 0) {
                     // Pages
                     TabView(selection: $selectedTab) {
-                        HomeView().tag(0)
+                        HomeView(selectedTab: $selectedTab).tag(0)
                         FilesView().tag(1)
                         NumbersEditView().tag(2)
                         AccountView().tag(3)
@@ -70,6 +72,8 @@ struct ContentView: View {
                 AddDocumentView()
                     .presentationDetents([.large])
             }
+            .preferredColorScheme(isDarkMode ? .dark : .light)
+
 //        } else {
 //            Text("Unlock your device")
 //                .onAppear {

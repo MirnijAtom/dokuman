@@ -13,9 +13,10 @@ struct HomeView: View {
     
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     
+    @Binding var selectedTab: Int
+    
     var body: some View {
         NavigationStack {
-            
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     
@@ -28,7 +29,7 @@ struct HomeView: View {
 
 
 
-                    NumbersSectionView()
+                    NumbersSectionView(selectedTab: $selectedTab)
 
                     // Debug Count
                     Text("Documents count: \(documents.count)")
@@ -50,6 +51,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(selectedTab: .constant(0))
         .modelContainer(for: Document.self)
 }

@@ -34,143 +34,145 @@ struct NumbersEditView: View {
     @State private var copiedID: UUID? = nil
     
     var body: some View {
-        List {
-            if numbers.isEmpty && editingNumber == nil {
-                Section {
-                    Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
-                }
-            } else {
-                Section(header: Text("Your numbers").numberTextStyle()) {
-                    ForEach(numbers) { number in
-                        HStack {
-                            Text(number.name)
-                                .numberTextStyle()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Divider()
-                            
-                            ZStack {
-                                Text(number.idNumber)
+        NavigationStack {            
+            List {
+                if numbers.isEmpty && editingNumber == nil {
+                    Section {
+                        Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
+                    }
+                } else {
+                    Section(header: Text("Your numbers").numberTextStyle()) {
+                        ForEach(numbers) { number in
+                            HStack {
+                                Text(number.name)
                                     .numberTextStyle()
-                                    .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .opacity(copiedID == number.id ? 0 : 1)
-                                    .animation(.easeInOut, value: copiedID)
                                 
-                                Text("Copied!")
-                                    .numberTextStyle()
-                                    .foregroundStyle(.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .opacity(copiedID == number.id ? 1 : 0)
-                                    .animation(.easeInOut, value: copiedID)
-                            }
-                            
-                            Divider()
-                            
-                            Button {
-                                UIPasteboard.general.string = number.idNumber
+                                Divider()
                                 
-                                let generator = UIImpactFeedbackGenerator()
-                                generator.impactOccurred()
-                                
-                                copiedID = number.id
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                    copiedID = nil
+                                ZStack {
+                                    Text(number.idNumber)
+                                        .numberTextStyle()
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(copiedID == number.id ? 0 : 1)
+                                        .animation(.easeInOut, value: copiedID)
+                                    
+                                    Text("Copied!")
+                                        .numberTextStyle()
+                                        .foregroundStyle(.primary)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .opacity(copiedID == number.id ? 1 : 0)
+                                        .animation(.easeInOut, value: copiedID)
                                 }
-                            } label: {
-                                Image(systemName: "document.on.document")
-                                    .numberTextStyle()
-                                    .foregroundStyle(Color.secondary)
-                                    .padding(.leading, 4)
+                                
+                                Divider()
+                                
+                                Button {
+                                    UIPasteboard.general.string = number.idNumber
+                                    
+                                    let generator = UIImpactFeedbackGenerator()
+                                    generator.impactOccurred()
+                                    
+                                    copiedID = number.id
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        copiedID = nil
+                                    }
+                                } label: {
+                                    Image(systemName: "document.on.document")
+                                        .numberTextStyle()
+                                        .foregroundStyle(Color.secondary)
+                                        .padding(.leading, 4)
+                                }
                             }
                         }
-                    }
-                    .onDelete(perform: deleteNumber)
-                    
-                    if let newNumber = editingNumber {
-                        HStack {
-                            
-                            TextField("Name", text: $nameInputText)
-                                .autocorrectionDisabled(true)
-                                .focused($nameFocusedField, equals: newNumber.id)
-                                .numberTextStyle()
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Divider()
-                            
-                            TextField("Type ID", text: $numberInputText)
-                                .autocorrectionDisabled(true)
-                                .autocapitalization(.allCharacters)
-                                .focused($focusedField, equals: newNumber.id)
-                                .numberTextStyle()
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            
-                            Divider()
-                            
-                            Image(systemName: "document.on.document")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.clear)
-                                .padding(.leading, 4)
-                            
+                        .onDelete(perform: deleteNumber)
+                        
+                        if let newNumber = editingNumber {
+                            HStack {
+                                
+                                TextField("Name", text: $nameInputText)
+                                    .autocorrectionDisabled(true)
+                                    .focused($nameFocusedField, equals: newNumber.id)
+                                    .numberTextStyle()
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Divider()
+                                
+                                TextField("Type ID", text: $numberInputText)
+                                    .autocorrectionDisabled(true)
+                                    .autocapitalization(.allCharacters)
+                                    .focused($focusedField, equals: newNumber.id)
+                                    .numberTextStyle()
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                Divider()
+                                
+                                Image(systemName: "document.on.document")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Color.clear)
+                                    .padding(.leading, 4)
+                                
+                            }
                         }
-                    }
-                }
-            }
-            
-            Button("New number") {
-                let newNumber = Number(name: "", idNumber: "", isCompleted: true)
-                editingNumber = newNumber
-                nameFocusedField = newNumber.id
-            }
-            .font(.subheadline)
-            .fontWidth(.compressed)
-            .fontWeight(.light)
-            .fontDesign(.monospaced)
-        }
-        
-        .navigationBarBackButtonHidden(editingNumber != nil)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            if editingNumber != nil {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel", role: .destructive) {
-                        editingNumber = nil
-                        nameInputText = ""
-                        numberInputText = ""
                     }
                 }
                 
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
-                        
-                        if trimmedName.isEmpty {
-                            alertMessage = "Name is missing"
-                            showAlert = true
-                            return
-                        }
-                        if trimmedNumber.isEmpty {
-                            alertMessage = "Number is missing"
-                            showAlert = true
-                            return
-                        }
-                        
-                        if let numberToAdd = editingNumber {
-                            numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
-                            numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
-                            numberToAdd.isCompleted = true
-                            modelContext.insert(numberToAdd)
-                            
+                Button("New number") {
+                    let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                    editingNumber = newNumber
+                    nameFocusedField = newNumber.id
+                }
+                .font(.subheadline)
+                .fontWidth(.compressed)
+                .fontWeight(.light)
+                .fontDesign(.monospaced)
+            }
+            
+            //        .navigationBarBackButtonHidden(editingNumber != nil)
+            //        .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if editingNumber != nil {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel", role: .destructive) {
                             editingNumber = nil
                             nameInputText = ""
                             numberInputText = ""
                         }
                     }
-                    .alert(alertMessage, isPresented: $showAlert) {
-                        Button("OK", role: .cancel) { }
+                    
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                            
+                            if trimmedName.isEmpty {
+                                alertMessage = "Name is missing"
+                                showAlert = true
+                                return
+                            }
+                            if trimmedNumber.isEmpty {
+                                alertMessage = "Number is missing"
+                                showAlert = true
+                                return
+                            }
+                            
+                            if let numberToAdd = editingNumber {
+                                numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
+                                numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
+                                numberToAdd.isCompleted = true
+                                modelContext.insert(numberToAdd)
+                                
+                                editingNumber = nil
+                                nameInputText = ""
+                                numberInputText = ""
+                            }
+                        }
+                        .alert(alertMessage, isPresented: $showAlert) {
+                            Button("OK", role: .cancel) { }
+                        }
                     }
                 }
             }
