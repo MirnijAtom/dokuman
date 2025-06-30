@@ -10,122 +10,59 @@ import PDFKit
 import SwiftData
 import SwiftUI
 
-struct ContentView: View {    
+struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
     @Query(sort: \Document.name, animation: .default) var documents: [Document]
     
     @State private var isUnlocked = false
-    
+
     var body: some View {
-//        if isUnlocked {
-            ZStack {
-                VStack(spacing: 0) {
-                    // Pages
-                    TabView(selection: $selectedTab) {
-                        HomeView(selectedTab: $selectedTab).tag(0)
-                        FilesView().tag(1)
-                        NumbersEditView().tag(2)
-                        AccountView().tag(3)
-                    }
-//                    .tabViewStyle(.page(indexDisplayMode: .never))
-                    
-                    // Custom Tab Bar
-                    HStack(spacing: 8) {
-                        tabButton(icon: "house", iconFill: "house.fill", title: "Home", index: 0).frame(maxWidth: .infinity)
-                        tabButton(icon: "folder", iconFill: "folder.fill",  title: "Files", index: 1).frame(maxWidth: .infinity)
-                        tabButton(icon: "numbers.rectangle", iconFill: "numbers.rectangle.fill",  title: "Numbers", index: 2).frame(maxWidth: .infinity)
-                        tabButton(icon: "person", iconFill: "person.fill",  title: "Account", index: 3).frame(maxWidth: .infinity)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.horizontal, 30)
-                    .padding(.bottom, 35)
-                    .padding(.top, 12)
-                    .background(.ultraThinMaterial)
-                    .ignoresSafeArea(.all, edges: .bottom)
+        TabView(selection: $selectedTab) {
+            HomeView(selectedTab: $selectedTab)
+                .tabItem {
+                    Label("Home", systemImage: selectedTab == 0 ? "house.fill" : "house")
                 }
-                
-                // Add New Document Button
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button {
-                            showAddDoc = true
-                        } label: {
-                            Image(systemName: "document.viewfinder")
-                                .font(.system(size: 30))
-                                .foregroundStyle(.teal)
-                                .frame(width: 60, height: 60)
-                                .background(.ultraThinMaterial)
-                                .clipShape(Circle())
-                                .shadow(radius: 2)
-                        }
-                        .padding(.bottom, 120)
-                        .padding(.trailing, 30)
-                    }
+                .tag(0)
+
+            FilesView()
+                .tabItem {
+                    Label("Files", systemImage: selectedTab == 1 ? "folder.fill" : "folder")
                 }
-            }
-            .ignoresSafeArea()
-            .sheet(isPresented: $showAddDoc) {
-                AddDocumentView()
-                    .presentationDetents([.large])
-            }
-            .background(Color(uiColor: .systemBackground).ignoresSafeArea())
-//        } else {
-//            Text("Unlock your device")
-//                .onAppear {
-//                    authenticate()
-//                }
-//        }
-    }
-    
-    @ViewBuilder
-    func tabButton(icon: String, iconFill: String, title: String, index: Int) -> some View {
-        Button {
-            withAnimation(nil) {
-                selectedTab = index
-            }
-        } label: {
-            VStack {
-                Image(systemName: selectedTab == index ? iconFill : icon)
-                    .padding(.vertical, 4)
-                    .padding(.horizontal)
-                    .background(
-                        Capsule()
-                            .fill(selectedTab == index ? Color.teal : Color.clear)
-                    )
-                    .foregroundColor(selectedTab == index ? .white : .primary)
-                Text(LocalizedStringKey(title))
-                    .font(.caption2)
-                    .foregroundStyle(Color.primary)
-            }
-            .padding(.horizontal, 6)
+                .tag(1)
+
+            NumbersEditView()
+                .tabItem {
+                    Label("Numbers", systemImage: selectedTab == 2 ? "numbers.rectangle.fill" : "numbers.rectangle")
+                }
+                .tag(2)
+
+            AccountView()
+                .tabItem {
+                    Label("Account", systemImage: selectedTab == 3 ? "person.fill" : "person")
+                }
+                .tag(3)
         }
-        .buttonStyle(.plain)
-    }
-    
-    func authenticate() {
-        print("Authenticating...")  // Debug log
-        let context = LAContext()
-        var error: NSError?
+        .tint(.teal)
 
-        // Use passcode fallback to make testing easier
-        if context.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
-            let reason = "Unlock to access your documents."
-
-            context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason) { success, authenticationError in
-                if success {
-                    DispatchQueue.main.async {
-                        print("✅ Auth succeeded")
-                        isUnlocked = true
-                    }
-                } else {
-                    print("❌ Auth failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
-                }
+        .sheet(isPresented: $showAddDoc) {
+            AddDocumentView()
+                .presentationDetents([.large])
+        }
+        .overlay(alignment: .bottomTrailing) {
+            Button {
+                showAddDoc = true
+            } label: {
+                Image(systemName: "document.viewfinder")
+                    .font(.system(size: 30))
+                    .foregroundStyle(.teal)
+                    .frame(width: 60, height: 60)
+                    .background(.ultraThinMaterial)
+                    .clipShape(Circle())
+                    .shadow(radius: 2)
             }
-        } else {
-            print("❌ Can't evaluate policy: \(error?.localizedDescription ?? "Unknown error")")
+            .padding(.bottom, 80)
+            .padding(.trailing, 24)
         }
     }
 }
