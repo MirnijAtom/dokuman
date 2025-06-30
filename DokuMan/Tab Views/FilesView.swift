@@ -18,27 +18,26 @@ struct FilesView: View {
     @State private var searchText: String = ""
     
     @State private var selectedDocument: Document? = nil
+    @State private var selectedDocumentToShare: Document? = nil
     @State private var selectedDocuments: Set<Document> = []
-    @State private var isSharing = false
     @State private var isSelectionActive = false
     
     @State private var showArchived: Bool = false
     
+    @State private var isShareSheetPresented = false
+      
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     let a4Size = CGSize(width: 148.75, height: 210.5)
-    
+
     var filteredDocuments: [Document] {
         let filtered = searchText.isEmpty ? documents : documents.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         return showArchived ? filtered.filter { $0.isArchived } : filtered.filter { !$0.isArchived }
     }
-    
+
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack {
-//                    Text("\(themeSettings.isDarkMode)")
-//                        .background(.red)
-
                     ScrollView {
                         LazyVGrid(columns: columns, spacing: 0) {
                             ForEach(filteredDocuments) { document in
@@ -58,12 +57,20 @@ struct FilesView: View {
                 .fullScreenCover(item: $selectedDocument) { document in
                     PDFFullScreenView(document: document)
                 }
-                .sheet(isPresented: $isSharing) {
+                .sheet(item: $selectedDocumentToShare) { document in
+                    let urls = exportTempURLs(from: [document])
+                    if !urls.isEmpty {
+                        ShareSheet(activityItems: urls)
+                    } else {
+                        Text("Error sharing document.")
+                    }
+                }
+                .sheet(isPresented: $isShareSheetPresented) {
                     let urls = exportTempURLs(from: selectedDocuments)
                     if !urls.isEmpty {
                         ShareSheet(activityItems: urls)
                     } else {
-                        Text("Error sharing documents.")
+                        Text("Error sharing document.")
                     }
                 }
                 .toolbarBackground(Material.bar, for: .navigationBar)
@@ -91,7 +98,7 @@ struct FilesView: View {
             }
         }
     }
-    
+
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
@@ -103,7 +110,7 @@ struct FilesView: View {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    isSharing = true
+                    isShareSheetPresented = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         isSelectionActive = false
                     }
@@ -119,7 +126,7 @@ struct FilesView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     func documentCell(_ document: Document) -> some View {
         ZStack(alignment: .topTrailing) {
@@ -141,9 +148,7 @@ struct FilesView: View {
                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
                         .contextMenu {
                             Button {
-                                selectedDocuments = [document]
-                                isSharing = true
-                                print("Selected document for sharing: \(document.name)")
+                                selectedDocumentToShare = document
                             } label: {
                                 Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                             }
@@ -154,22 +159,18 @@ struct FilesView: View {
                                     Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                 }
                             }
-                            
                             Button {
                                 archiveDocument(document, modelContext: modelContext)
                             } label: {
                                 Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                             }
-                            
                             Divider()
-                            
                             Button(role: .destructive) {
                                 deleteDocument(document, modelContext: modelContext)
                             } label: {
                                 Label(LocalizedStringKey("Delete"), systemImage: "trash")
                             }
                         }
-                    
                     Text(document.name)
                         .font(.caption)
                         .foregroundColor(.primary)
@@ -177,7 +178,7 @@ struct FilesView: View {
                 }
             }
             .padding(10)
-            
+
             if isSelectionActive {
                 Button(action: {
                     toggleSelection(of: document)
@@ -193,7 +194,7 @@ struct FilesView: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-    
+
     func exportTempURLs(from documents: Set<Document>) -> [URL] {
         var urls: [URL] = []
         for doc in documents {
@@ -214,7 +215,7 @@ struct FilesView: View {
         }
         return urls
     }
-    
+
     func toggleSelection(of document: Document) {
         if selectedDocuments.contains(document) {
             selectedDocuments.remove(document)
@@ -224,8 +225,9 @@ struct FilesView: View {
     }
 }
 
-
 #Preview {
-    FilesView()
+    let themeSettings = ThemeSettings()
+    return FilesView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
 }

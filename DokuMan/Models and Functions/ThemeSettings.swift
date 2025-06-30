@@ -6,4 +6,6 @@ class ThemeSettings: ObservableObject {
             UserDefaults.standard.set(isDarkMode, forKey: "isDarkMode")
         }
     }
-} 
+}
+
+
