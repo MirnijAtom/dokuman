@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colors</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACColorNameAppTeal</string>
+			<key>relativePath</key>
+			<string>./AppTeal.colorset</string>
+			<key>swiftSymbol</key>
+			<string>appTeal</string>
+		</dict>
+	</array>
+	<key>images</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameGermanFlag</string>
+			<key>relativePath</key>
+			<string>./GermanFlag.imageset</string>
+			<key>swiftSymbol</key>
+			<string>germanFlag</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameUKFlag</string>
+			<key>relativePath</key>
+			<string>./UKFlag.imageset</string>
+			<key>swiftSymbol</key>
+			<string>ukFlag</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameScannerIcon</string>
+			<key>relativePath</key>
+			<string>./scannerIcon.imageset</string>
+			<key>swiftSymbol</key>
+			<string>scannerIcon</string>
+		</dict>
+	</array>
+	<key>symbols</key>
+	<array/>
+</dict>
+</plist>

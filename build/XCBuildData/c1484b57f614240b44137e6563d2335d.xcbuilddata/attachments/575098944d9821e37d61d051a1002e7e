@@ -1,0 +1,145 @@
+{
+  "" : {
+    "const-values" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master.swiftconstvalues",
+    "dependencies" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master.d",
+    "diagnostics" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master.dia",
+    "emit-module-dependencies" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master-emit-module.d",
+    "emit-module-diagnostics" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master-emit-module.dia",
+    "swift-dependencies" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuMan-master.swiftdeps"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/CategoriesView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/ContentView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ContentView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/DokuManApp.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuManApp.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuManApp.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DokuManApp.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/DocumentScanner.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentScanner.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentScanner.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentScanner.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/DocumentUtils.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentUtils.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentUtils.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentUtils.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/LanguageSettings.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/LanguageSettings.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/LanguageSettings.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/LanguageSettings.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/Models.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/Models.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/Models.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/Models.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/PDFPreview.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFPreview.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFPreview.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFPreview.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/PhotoPicker.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PhotoPicker.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PhotoPicker.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PhotoPicker.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/ShareSheet.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ShareSheet.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ShareSheet.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ShareSheet.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Models and Functions/ThemeSettings.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ThemeSettings.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ThemeSettings.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ThemeSettings.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Shared Views/PDFFullScreenView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFFullScreenView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFFullScreenView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PDFFullScreenView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Shared Views/StarView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StarView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StarView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StarView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/AddDocumentView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AddDocumentView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AddDocumentView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AddDocumentView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/ArchiveView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ArchiveView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ArchiveView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/ArchiveView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/FilesView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FilesView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FilesView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FilesView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Account Tab/AccountView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AccountView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AccountView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/AccountView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Account Tab/PrivacyPolicyView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PrivacyPolicyView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PrivacyPolicyView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/PrivacyPolicyView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Account Tab/StorageInfoView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StorageInfoView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StorageInfoView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/StorageInfoView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Account Tab/TermsAndConditionsView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/TermsAndConditionsView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/TermsAndConditionsView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/TermsAndConditionsView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/DocumentListView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentListView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentListView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/DocumentListView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/HomeView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/HomeView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/NumbersEditView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersEditView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersEditView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersEditView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Section Views/CategoriesSectionView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesSectionView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesSectionView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/CategoriesSectionView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Section Views/FavoritesSectionView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FavoritesSectionView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FavoritesSectionView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/FavoritesSectionView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/DokuMan/Tab Views/Home View/Section Views/NumbersSectionView.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersSectionView.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersSectionView.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/NumbersSectionView.o"
+  },
+  "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/mirnijatom/Documents/GitHub/DokuMan/build/DokuMan.build/Release-iphoneos/DokuMan.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  }
+}

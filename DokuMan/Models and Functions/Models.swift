@@ -57,24 +57,24 @@ enum DocumentCategory: String, CaseIterable, Codable {
     case wohnung, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
     case fahrzeug, internet, mitgliedschaft, quittungen, behoerden, rechtliches, familie, sonstiges
 
-    var label: String {
+    var label: LocalizedStringKey {
         switch self {
-        case .wohnung: return NSLocalizedString("Wohnung", comment: "Category name")
-        case .versicherung: return NSLocalizedString("Versicherung", comment: "Category name")
-        case .visa: return NSLocalizedString("Visa", comment: "Category name")
-        case .konto: return NSLocalizedString("Konto", comment: "Category name")
-        case .arbeit: return NSLocalizedString("Arbeit", comment: "Category name")
-        case .steuern: return NSLocalizedString("Steuern", comment: "Category name")
-        case .gesundheit: return NSLocalizedString("Gesundheit", comment: "Category name")
-        case .studium: return NSLocalizedString("Studium", comment: "Category name")
-        case .fahrzeug: return NSLocalizedString("Fahrzeug", comment: "Category name")
-        case .internet: return NSLocalizedString("Internet & Handy", comment: "Category name")
-        case .mitgliedschaft: return NSLocalizedString("Mitgliedschaften", comment: "Category name")
-        case .quittungen: return NSLocalizedString("Rechnungen & Quittungen", comment: "Category name")
-        case .behoerden: return NSLocalizedString("Behörden", comment: "Category name")
-        case .rechtliches: return NSLocalizedString("Rechtliches", comment: "Category name")
-        case .familie: return NSLocalizedString("Familie", comment: "Category name")
-        case .sonstiges: return NSLocalizedString("Sonstiges", comment: "Category name")
+        case .wohnung: return "Wohnung"
+        case .versicherung: return "Versicherung"
+        case .visa: return "Visa"
+        case .konto: return "Konto"
+        case .arbeit: return "Arbeit"
+        case .steuern: return "Steuern"
+        case .gesundheit: return "Gesundheit"
+        case .studium: return "Studium"
+        case .fahrzeug: return "Fahrzeug"
+        case .internet: return "Internet & Handy"
+        case .mitgliedschaft: return "Mitgliedschaften"
+        case .quittungen: return "Rechnungen & Quittungen"
+        case .behoerden: return "Behörden"
+        case .rechtliches: return "Rechtliches"
+        case .familie: return "Familie"
+        case .sonstiges: return "Sonstiges"
         }
     }
 

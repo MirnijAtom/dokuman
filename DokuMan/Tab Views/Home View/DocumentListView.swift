@@ -3,7 +3,7 @@ import SwiftUI
 struct DocumentListView: View {
     @Environment(\.modelContext) var modelContext
     
-    var title: String
+    var title: LocalizedStringKey
     var documents: [Document]
     
     @State private var selectedDocument: Document? = nil
