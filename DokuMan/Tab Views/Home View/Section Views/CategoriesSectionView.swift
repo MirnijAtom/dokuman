@@ -24,10 +24,14 @@ struct CategoriesSectionView: View {
             DocumentListView(title: category.label, documents: documents.filter { $0.category == category })
         } label: {
             HStack {
-                Label(category.label, systemImage: category.icon)
-                    .padding(.horizontal)
-                    .foregroundColor(category.color)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                HStack {
+                    Image(systemName: category.icon)
+                        .frame(width: 25)
+                    Text(category.label)
+                }
+                .foregroundColor(category.color)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
             }
