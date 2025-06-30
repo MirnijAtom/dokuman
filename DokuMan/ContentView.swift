@@ -28,7 +28,7 @@ struct ContentView: View {
                         NumbersEditView().tag(2)
                         AccountView().tag(3)
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .never))
+//                    .tabViewStyle(.page(indexDisplayMode: .never))
                     
                     // Custom Tab Bar
                     HStack(spacing: 8) {
@@ -42,6 +42,7 @@ struct ContentView: View {
                     .padding(.bottom, 35)
                     .padding(.top, 12)
                     .background(.ultraThinMaterial)
+                    .ignoresSafeArea(.all, edges: .bottom)
                 }
                 
                 // Add New Document Button
@@ -70,8 +71,7 @@ struct ContentView: View {
                 AddDocumentView()
                     .presentationDetents([.large])
             }
-            .background(Color(uiColor: .systemBackground))
-
+            .background(Color(uiColor: .systemBackground).ignoresSafeArea())
 //        } else {
 //            Text("Unlock your device")
 //                .onAppear {

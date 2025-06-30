@@ -15,7 +15,9 @@ struct PDFPreview: UIViewRepresentable {
         let pdfView = PDFView()
         pdfView.document = PDFDocument(data: data)
         pdfView.autoScales = true
-        pdfView.displayMode = .singlePage
+        pdfView.displayMode = .singlePageContinuous
+        pdfView.displayDirection = .vertical
+        pdfView.usePageViewController(false)
         pdfView.backgroundColor = UIColor.systemBackground
         return pdfView
     }

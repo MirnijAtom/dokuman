@@ -153,7 +153,10 @@ struct AddDocumentView: View {
         .id(languageSettings.locale.identifier)
         .fullScreenCover(isPresented: $showScanner) {
             DocumentScanner { images in
-                data = imagesToPDF(images: images)
+                print("[Scanner] Number of images received: \(images.count)")
+                let pdfData = imagesToPDF(images: images)
+                print("[Scanner] PDF data size: \(pdfData.count) bytes")
+                data = pdfData
                 nameFieldIsFocused = true
             }
         }
@@ -204,7 +207,8 @@ struct AddDocumentView: View {
         let format = UIGraphicsPDFRendererFormat()
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: images[0].size), format: format)
         return renderer.pdfData { context in
-            for image in images {
+            for (index, image) in images.enumerated() {
+                print("[PDF] Adding page \(index + 1) with size: \(image.size)")
                 context.beginPage()
                 image.draw(at: .zero)
             }
