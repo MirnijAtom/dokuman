@@ -38,18 +38,37 @@ struct FilesView: View {
         NavigationStack {
             ZStack {
                 VStack {
-                    ScrollView {
-                        LazyVGrid(columns: columns, spacing: 0) {
-                            ForEach(filteredDocuments) { document in
-                                documentCell(document)
-                            }
-                            .animation(.default, value: filteredDocuments)
-                        }
-                        .padding(.horizontal)
-                        .padding(.bottom, 100)
+                    if documents.isEmpty {
+                        VStack {
 
+                            Image("emptyFilesIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.trailing, 30)
+                                .frame(height: 100)
+                            Text("Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera.")
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .padding(.trailing, 30)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color(.systemGroupedBackground))
+                    } else {
+                        ScrollView {
+                            LazyVGrid(columns: columns, spacing: 0) {
+                                ForEach(filteredDocuments) { document in
+                                    documentCell(document)
+                                }
+                                .animation(.default, value: filteredDocuments)
+                            }
+                            .padding(.horizontal)
+                            .padding(.bottom, 100)
+                            
+                        }
+                        .background(Color(.systemGroupedBackground))
                     }
-                    .background(Color(.systemGroupedBackground))
 
                 }
                 .toolbar { toolbarContent }
