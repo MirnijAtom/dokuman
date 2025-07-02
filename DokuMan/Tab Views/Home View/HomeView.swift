@@ -31,7 +31,7 @@ struct HomeView: View {
                 }
                 .padding(.top)
             }
-            
+            .padding(.bottom, 10)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)

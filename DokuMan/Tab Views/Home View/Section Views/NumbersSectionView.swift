@@ -28,9 +28,10 @@
                         .font(.headline)
                     
                     Spacer()
-                    
-                    Button(LocalizedStringKey("Edit")) {
-                        selectedTab = 2
+                    if !numbers.isEmpty {
+                        Button(LocalizedStringKey("Edit")) {
+                            selectedTab = 2
+                        }
                     }
                 }
                 .padding(.horizontal)
@@ -38,16 +39,16 @@
                 
                 // Content
                 if numbers.isEmpty {
-                    NavigationLink {
-                        NumbersEditView()
+                    Button {
+                        selectedTab = 2
                     } label: {
                         HStack {
                             Text(LocalizedStringKey("Add your first number"))
                                 .lineLimit(nil)
                                 .multilineTextAlignment(.center)
                                 .padding()
-                                .padding(.trailing, 30)
-                                .foregroundStyle(.secondary)
+                                .padding(.trailing, 15)
+                                .padding(.leading, 10)
                             Image("emptyNumbersIcon")
                                 .resizable()
                                 .scaledToFit()
@@ -55,6 +56,7 @@
                                 .frame(height: 100)
                         }
                         .frame(maxWidth: .infinity)
+                        .foregroundColor(.secondary)
                     }
                 } else {
                     VStack {

@@ -67,6 +67,7 @@ struct FilesView: View {
                             .padding(.bottom, 100)
                             
                         }
+                        .padding(.bottom, 10)
                         .background(Color(.systemGroupedBackground))
                     }
 

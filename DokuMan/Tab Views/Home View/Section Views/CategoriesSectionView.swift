@@ -67,6 +67,7 @@ struct CategoriesSectionView: View {
                         .frame(height: 100)
                 }
                 .frame(maxWidth: .infinity)
+                .padding(.bottom, 20)
             } else {
                 VStack(spacing: 0) {
                     ForEach(nonEmptyCategories, id: \.self) { category in

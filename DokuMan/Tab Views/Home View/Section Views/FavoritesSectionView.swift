@@ -48,6 +48,7 @@ struct FavoritesSectionView: View {
                         .frame(height: 100)
                 }
                 .frame(maxWidth: .infinity)
+                .padding(.bottom, 20)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
@@ -104,20 +105,14 @@ struct FavoritesSectionView: View {
                 }
             }
         }
-        .frame(minHeight: 226)
+
+        .frame(maxHeight: 226)
         .padding(.vertical, 12)
         .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(0)
-
         .fullScreenCover(item: $selectedDocument) { document in
             PDFFullScreenView(document: document)
         }
-        
-        //Add mockup files
-//        Button("Add mockup files") {
-//            addMockupFiles(using: modelContext)
-//        }
-//        .padding()
     }
 
     func exportTempURL(for document: Document) -> URL? {
