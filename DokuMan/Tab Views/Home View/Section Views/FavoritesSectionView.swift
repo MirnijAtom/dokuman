@@ -54,8 +54,11 @@ struct FavoritesSectionView: View {
                                     Button {
                                         // Share logic: open PDF in share sheet
                                         if let url = exportTempURL(for: document) {
-                                            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                                            UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+                                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                               let window = windowScene.windows.first {
+                                                let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                                                window.rootViewController?.present(activityVC, animated: true, completion: nil)
+                                            }
                                         }
                                     } label: {
                                         Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")

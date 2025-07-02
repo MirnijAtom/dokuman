@@ -41,9 +41,20 @@
                     NavigationLink {
                         NumbersEditView()
                     } label: {
-                        Text(LocalizedStringKey("Add your first number"))
-                            .padding(.horizontal)
-                            .foregroundStyle(.blue)
+                        HStack {
+                            Text(LocalizedStringKey("Add your first number"))
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .padding(.trailing, 30)
+                                .foregroundStyle(.secondary)
+                            Image("emptyNumbersIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.trailing, 30)
+                                .frame(height: 100)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
                 } else {
                     VStack {
@@ -144,18 +155,18 @@
         let languageSettings = LanguageSettings()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: Number.self, configurations: config)
-        let numbers = [
-            Number(name: "Sozialversicherung", idNumber: "12 123456 A 123", isCompleted: true),
-            Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true),
-            Number(name: "Insurance", idNumber: "ABVDSA4362346", isCompleted: true),
-            Number(name: "Lawyer insurance", idNumber: "436416JBI76a", isCompleted: true),
-            Number(name: "Bank insurance", idNumber: "12123123", isCompleted: true),
-            Number(name: "Renteversicherung", idNumber: "X123KHG456789", isCompleted: true),
-            Number(name: "Passport number", idNumber: "DE6598735", isCompleted: true)
-        ]
-        for number in numbers {
-            container.mainContext.insert(number)
-        }
+//        let numbers = [
+//            Number(name: "Sozialversicherung", idNumber: "12 123456 A 123", isCompleted: true),
+//            Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true),
+//            Number(name: "Insurance", idNumber: "ABVDSA4362346", isCompleted: true),
+//            Number(name: "Lawyer insurance", idNumber: "436416JBI76a", isCompleted: true),
+//            Number(name: "Bank insurance", idNumber: "12123123", isCompleted: true),
+//            Number(name: "Renteversicherung", idNumber: "X123KHG456789", isCompleted: true),
+//            Number(name: "Passport number", idNumber: "DE6598735", isCompleted: true)
+//        ]
+//        for number in numbers {
+//            container.mainContext.insert(number)
+//        }
         return NumbersSectionView(selectedTab: .constant(0))
             .modelContainer(container)
             .environmentObject(themeSettings)
