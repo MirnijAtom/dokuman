@@ -78,9 +78,12 @@ struct CategoriesSectionView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
-    
     return CategoriesSectionView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
         .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

@@ -188,20 +188,23 @@ struct NumbersEditView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Number.self, configurations: config)
-    
     let completed = Number(name: "Steuer-ID", idNumber: "12X1212345", isCompleted: true)
     let incomplete = [
         Number(name: "Sozialversicherung", idNumber: "12123456A123"),
         Number(name: "Krankenversicherung", idNumber: "X123456789")
     ]
-    
     for number in incomplete {
         container.mainContext.insert(number)
     }
     container.mainContext.insert(completed)
-    
     return NumbersEditView()
         .modelContainer(container)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

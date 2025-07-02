@@ -86,8 +86,14 @@ struct FavoritesSectionView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     FavoritesSectionView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
         .onAppear {
             // Create a mock document container
             let container = try! ModelContainer(for: Document.self)

@@ -27,20 +27,11 @@ struct HomeView: View {
                     CategoriesSectionView()
 
                     NumbersSectionView(selectedTab: $selectedTab)
-
-//                    // Debug Count
-//                    Text("Documents count: \(documents.count)")
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                        .padding(.horizontal)
-//                    
-//                    // Button to add mockup files
-//                    Button("Add mockup files") {
-//                        addMockupFiles(using: modelContext)
-//                    }
+                        .padding(.bottom, 100)
                 }
                 .padding(.top)
             }
+            
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
@@ -52,6 +43,12 @@ struct HomeView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     HomeView(selectedTab: .constant(0))
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

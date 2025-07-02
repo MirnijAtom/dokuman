@@ -110,6 +110,12 @@ struct ArchiveView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     ArchiveView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

@@ -227,9 +227,13 @@ struct AddDocumentView: View {
     }
 }
 
-
-
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     AddDocumentView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

@@ -106,5 +106,7 @@ struct AccountView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
     AccountView()
+        .environmentObject(themeSettings)
 }

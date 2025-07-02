@@ -53,13 +53,13 @@ struct ContentView: View {
             Button {
                 showAddDoc = true
             } label: {
-                Image(systemName: "document.viewfinder")
-                    .font(.system(size: 30))
+                Image(systemName: "plus")
+                    .font(.system(size: 35))
                     .foregroundStyle(.teal)
                     .frame(width: 60, height: 60)
-                    .background(.ultraThinMaterial)
+                    .background(.white)
                     .clipShape(Circle())
-                    .shadow(radius: 2)
+                    .shadow(radius: 7)
             }
             .padding(.bottom, 80)
             .padding(.trailing, 24)
@@ -68,6 +68,12 @@ struct ContentView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     ContentView()
         .modelContainer(for: Document.self)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

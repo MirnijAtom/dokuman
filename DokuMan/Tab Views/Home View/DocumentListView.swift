@@ -139,6 +139,8 @@ struct DocumentListView: View {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     DocumentListView(title: "Wohnung",
                      documents: [
                         Document(
@@ -154,4 +156,8 @@ struct DocumentListView: View {
                      ]
     )
     .modelContainer(for: Document.self)
+    .environmentObject(themeSettings)
+    .environmentObject(languageSettings)
+    .environment(\.locale, languageSettings.locale)
+    .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

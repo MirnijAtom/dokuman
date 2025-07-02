@@ -139,10 +139,10 @@
     }
 
     #Preview {
+        let themeSettings = ThemeSettings()
+        let languageSettings = LanguageSettings()
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try! ModelContainer(for: Number.self, configurations: config)
-        
-        
         let numbers = [
             Number(name: "Sozialversicherung", idNumber: "12 123456 A 123", isCompleted: true),
             Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true),
@@ -152,12 +152,13 @@
             Number(name: "Renteversicherung", idNumber: "X123KHG456789", isCompleted: true),
             Number(name: "Passport number", idNumber: "DE6598735", isCompleted: true)
         ]
-        
         for number in numbers {
             container.mainContext.insert(number)
         }
-
-        
         return NumbersSectionView(selectedTab: .constant(0))
             .modelContainer(container)
+            .environmentObject(themeSettings)
+            .environmentObject(languageSettings)
+            .environment(\.locale, languageSettings.locale)
+            .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
     }

@@ -31,5 +31,11 @@ struct CategoriesView: View {
 }
 
 #Preview {
-    CategoriesView()
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
+    return CategoriesView()
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

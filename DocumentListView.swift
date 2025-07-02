@@ -79,6 +79,8 @@ func loadPDF(named name: String) -> Data {
 }
 
 #Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     DocumentListView(title: "Wohnung",
                      documents: [
                         Document(
@@ -94,4 +96,8 @@ func loadPDF(named name: String) -> Data {
                      ]
     )
     .modelContainer(for: Document.self)
+    .environmentObject(themeSettings)
+    .environmentObject(languageSettings)
+    .environment(\.locale, languageSettings.locale)
+    .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

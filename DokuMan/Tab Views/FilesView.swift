@@ -46,8 +46,11 @@ struct FilesView: View {
                             .animation(.default, value: filteredDocuments)
                         }
                         .padding(.horizontal)
+                        .padding(.bottom, 100)
+
                     }
                     .background(Color(.systemGroupedBackground))
+
                 }
                 .toolbar { toolbarContent }
                 .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
@@ -84,14 +87,14 @@ struct FilesView: View {
                             showArchived.toggle()
                         } label: {
                             Label(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"), systemImage: showArchived ? "document.on.document" : "archivebox")
-                                .frame(height: 30)
+                                .frame(height: 15)
                                 .padding()
                                 .foregroundStyle(.teal)
-                                .background(.ultraThinMaterial)
+                                .background(.white)
                                 .clipShape(.capsule)
-                                .shadow(radius: 2)
+                                .shadow(radius: 7)
                         }
-                        .padding(.bottom, 28)
+                        .padding(.bottom, 38)
                         Spacer()
                     }
                 }
@@ -227,7 +230,11 @@ struct FilesView: View {
 
 #Preview {
     let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     return FilesView()
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }
