@@ -7,7 +7,11 @@
 
 import SwiftUI
 
+// MARK: - CategoriesView
+
+/// Displays a preview list of all document categories with their icons and colors.
 struct CategoriesView: View {
+    // MARK: - Body
     var body: some View {
         List(DocumentCategory.allCases, id: \.self) { category in
             HStack {
@@ -19,7 +23,6 @@ struct CategoriesView: View {
                         .foregroundColor(.white)
                         .font(.system(size: 14, weight: .bold))
                 }
-
                 Text(category.label)
                     .font(.body)
                     .padding(.leading, 8)

@@ -8,6 +8,9 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - View Extension
+
+/// Adds a consistent style to number-related text fields and labels.
 extension View {
     func numberTextStyle() -> some View {
         self
@@ -18,30 +21,30 @@ extension View {
     }
 }
 
+// MARK: - NumbersEditView
+
+/// A view for adding, editing, and deleting user numbers and IDs (e.g., social security, health insurance).
 struct NumbersEditView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @Query var numbers: [Number]
     @EnvironmentObject var themeSettings: ThemeSettings
-
-    
     @FocusState private var focusedField: UUID?
     @FocusState private var nameFocusedField: UUID?
     @State private var editingNumber: Number?
     @State private var nameInputText: String = ""
     @State private var numberInputText: String = ""
-    
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
     @State private var copiedID: UUID? = nil
-    
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             List {
                 if numbers.isEmpty && editingNumber == nil {
                     Section {
                         VStack {
-
                             Image("emptyNumbersIcon")
                                 .resizable()
                                 .scaledToFit()
@@ -63,9 +66,7 @@ struct NumbersEditView: View {
                                 Text(number.name)
                                     .numberTextStyle()
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
                                 Divider()
-                                
                                 ZStack {
                                     Text(number.idNumber)
                                         .numberTextStyle()
@@ -73,7 +74,6 @@ struct NumbersEditView: View {
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .opacity(copiedID == number.id ? 0 : 1)
                                         .animation(.easeInOut, value: copiedID)
-                                    
                                     Text(LocalizedStringKey("Copied!"))
                                         .numberTextStyle()
                                         .foregroundStyle(.primary)
@@ -81,15 +81,11 @@ struct NumbersEditView: View {
                                         .opacity(copiedID == number.id ? 1 : 0)
                                         .animation(.easeInOut, value: copiedID)
                                 }
-                                
                                 Divider()
-                                
                                 Button {
                                     UIPasteboard.general.string = number.idNumber
-                                    
                                     let generator = UIImpactFeedbackGenerator()
                                     generator.impactOccurred()
-                                    
                                     copiedID = number.id
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                                         copiedID = nil
@@ -103,19 +99,15 @@ struct NumbersEditView: View {
                             }
                         }
                         .onDelete(perform: deleteNumber)
-                        
                         if let newNumber = editingNumber {
                             HStack {
-                                
                                 TextField(LocalizedStringKey("Name"), text: $nameInputText)
                                     .autocorrectionDisabled(true)
                                     .focused($nameFocusedField, equals: newNumber.id)
                                     .numberTextStyle()
                                     .foregroundStyle(Color.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
                                 Divider()
-                                
                                 TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
                                     .autocorrectionDisabled(true)
                                     .autocapitalization(.allCharacters)
@@ -123,19 +115,15 @@ struct NumbersEditView: View {
                                     .numberTextStyle()
                                     .foregroundStyle(Color.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
                                 Divider()
-                                
                                 Image(systemName: "document.on.document")
                                     .font(.subheadline)
                                     .foregroundStyle(Color.clear)
                                     .padding(.leading, 4)
-                                
                             }
                         }
                     }
                 }
-                
                 Button {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
                     editingNumber = newNumber
@@ -161,12 +149,10 @@ struct NumbersEditView: View {
                             numberInputText = ""
                         }
                     }
-                    
                     ToolbarItem(placement: .confirmationAction) {
                         Button(LocalizedStringKey("Save")) {
                             let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
                             let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
-                            
                             if trimmedName.isEmpty {
                                 alertMessage = NSLocalizedString("Name is missing", comment: "")
                                 showAlert = true
@@ -177,13 +163,11 @@ struct NumbersEditView: View {
                                 showAlert = true
                                 return
                             }
-                            
                             if let numberToAdd = editingNumber {
                                 numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
                                 numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
                                 numberToAdd.isCompleted = true
                                 modelContext.insert(numberToAdd)
-                                
                                 editingNumber = nil
                                 nameInputText = ""
                                 numberInputText = ""
@@ -198,7 +182,9 @@ struct NumbersEditView: View {
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         }
     }
-    
+
+    // MARK: - Helpers
+    /// Deletes a number at the specified offsets from the model context.
     func deleteNumber(at offsets: IndexSet) {
         for index in offsets {
             let number = numbers[index]

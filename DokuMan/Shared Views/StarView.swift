@@ -7,8 +7,14 @@
 
 import SwiftUI
 
+// MARK: - StarView
+
+/// A simple interactive star icon for toggling favorite state (for demo or preview purposes).
 struct StarView: View {
+    // MARK: - State
     @State private var isFavourite: Bool = false
+
+    // MARK: - Body
     var body: some View {
         ZStack {
             Image(systemName: "star.fill")
@@ -18,7 +24,6 @@ struct StarView: View {
                 Image(systemName: "star")
                     .font(.title)
                     .foregroundColor(.secondary)
-
             }
         }
     }

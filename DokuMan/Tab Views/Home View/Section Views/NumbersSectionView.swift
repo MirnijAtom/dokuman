@@ -8,14 +8,19 @@
     import SwiftData
     import SwiftUI
 
+    // MARK: - NumbersSectionView
+
+    /// Displays a summary of user numbers/IDs, with quick copy and expand/collapse functionality.
     struct NumbersSectionView: View {
-        
+        // MARK: - Query & State
+        /// All numbers/IDs in the database.
         @Query var numbers: [Number]
-        
+        /// The selected tab index (bound to parent TabView).
         @Binding var selectedTab: Int
-        
         @State private var isExpanded = false
         @State private var copiedID: UUID? = nil
+
+        // MARK: - Body
         var body: some View {
             let visibleNumbers = isExpanded ? numbers : Array(numbers.prefix(3))
             

@@ -8,17 +8,21 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - AccountView
+
+/// Displays user account settings, including theme, language, legal, and storage info.
 struct AccountView: View {
+    // MARK: - Environment & State
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var languageSettings: LanguageSettings
-    
     @State private var showPrivacyPolicy = false
     @State private var showTermsAndConditions = false
     @State private var showStorageInfo = false
 
-    
+    // MARK: - Body
     var body: some View {
         List {
+            // MARK: - Appearance & Language
             Section {
                 Toggle(LocalizedStringKey("Dark mode"), isOn: $themeSettings.isDarkMode)
                     .toggleStyle(.switch)
@@ -26,12 +30,9 @@ struct AccountView: View {
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
                     }
-                
                 HStack {
                     Text(LocalizedStringKey("Language"))
-                    
                     Spacer()
-                    
                     Button {
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
@@ -49,9 +50,7 @@ struct AccountView: View {
                     }
                     .contentShape(Rectangle())
                     .buttonStyle(.plain)
-
                     Spacer().frame(width: 16)
-                    
                     Button {
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
@@ -70,23 +69,19 @@ struct AccountView: View {
                     .contentShape(Rectangle())
                     .buttonStyle(.plain)
                 }
-                
                 Button(LocalizedStringKey("Storage Info")) {
                     let generator = UIImpactFeedbackGenerator(style: .medium)
                     generator.impactOccurred()
                     withAnimation { showStorageInfo.toggle() }
                 }
                 .foregroundStyle(.primary)
-
             }
-            
-
-            
+            // MARK: - Subscription
             Section {
                 Text(LocalizedStringKey("Upgrade to Pro"))
                 Text(LocalizedStringKey("Manage Subscription"))
             }
-            
+            // MARK: - Legal
             Section {
                 Button(LocalizedStringKey("Privacy Policy")) {
                     let generator = UIImpactFeedbackGenerator(style: .medium)
@@ -101,10 +96,9 @@ struct AccountView: View {
                 }
                 .foregroundStyle(.primary)
             }
-            
-
+            // MARK: - Placeholder Section
             Section {
-                
+                // Reserved for future settings
             }
         }
         .sheet(isPresented: $showPrivacyPolicy) {

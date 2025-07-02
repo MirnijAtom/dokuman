@@ -8,24 +8,25 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - HomeView
+
+/// The main home screen, showing favorites, categories, and numbers sections.
 struct HomeView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var themeSettings: ThemeSettings
-
-    
+    /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
-    
+    /// The selected tab index (bound to parent TabView).
     @Binding var selectedTab: Int
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-
                     FavoritesSectionView()
-
                     CategoriesSectionView()
-
                     NumbersSectionView(selectedTab: $selectedTab)
                         .padding(.bottom, 100)
                 }
@@ -35,7 +36,6 @@ struct HomeView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
-
             .toolbarBackground(Material.bar, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
         }

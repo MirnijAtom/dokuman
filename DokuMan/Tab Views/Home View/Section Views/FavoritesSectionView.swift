@@ -8,31 +8,29 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - FavoritesSectionView
+
+/// Displays a horizontal scrollable list of favorite documents, with context menu actions for sharing, archiving, and deleting.
 struct FavoritesSectionView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
-    
-    // A4 size in points (595 x 842)
+    /// A4 size in points (scaled for preview)
     let a4Size = CGSize(width: 132, height: 187)
-    
     @State private var selectedDocument: Document? = nil
-    @State private var fullScreenIsPresented = false
-    
+    @State private var fullScreenIsPresented = false // (Unused, could be removed)
+    /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
 
-    
+    // MARK: - Body
     var body: some View {
-        
         let favorites = documents.filter { $0.isFavorite }
-        
         VStack(alignment: .leading, spacing: 8) {
-            
             HStack {
                 Image(systemName: "star.fill")
                 Text(LocalizedStringKey("Favorites"))
             }
             .font(.headline)
             .padding(.horizontal)
-            
             if favorites.isEmpty {
                 HStack {
                     Text(LocalizedStringKey("Add your first number"))
@@ -115,7 +113,6 @@ struct FavoritesSectionView: View {
                 }
             }
         }
-
         .frame(maxHeight: 226)
         .padding(.vertical, 12)
         .background(Color(.secondarySystemGroupedBackground))
@@ -125,6 +122,8 @@ struct FavoritesSectionView: View {
         }
     }
 
+    // MARK: - Helpers
+    /// Exports a single document as a temporary PDF URL for sharing.
     func exportTempURL(for document: Document) -> URL? {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(document.name).appendingPathExtension("pdf")
         do {

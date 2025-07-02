@@ -8,10 +8,13 @@
 import Testing
 @testable import DokuMan
 
-struct DokuManTests {
+// MARK: - DokuManTests
 
+/// Unit tests for the DokuMan app.
+struct DokuManTests {
+    // MARK: - Example Test
+    /// Example async test. Add your test logic and expectations here.
     @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
-
 }

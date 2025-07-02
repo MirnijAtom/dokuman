@@ -8,15 +8,25 @@
 import SwiftUI
 import SwiftData
 
+// MARK: - Document Model
+
+/// Represents a document with versions, category, and metadata.
 @Model
 class Document: Identifiable {
-    var id: UUID = UUID() // 👈 SwiftUI needs this
+    /// Unique identifier for the document (required by SwiftUI)
+    var id: UUID = UUID()
+    /// The display name of the document
     var name: String
+    /// The category of the document
     var category: DocumentCategory
+    /// Whether the document is marked as favorite
     var isFavorite: Bool = false
+    /// Whether the document is archived
     var isArchived: Bool = false
+    /// All versions of the document (PDF data, etc.)
     var versions: [DocumentVersion] = []
 
+    /// Initializes a new Document
     init(name: String, isFavorite: Bool = false, isArchived: Bool = false, category: DocumentCategory, versions: [DocumentVersion]) {
         self.name = name
         self.isFavorite = isFavorite
@@ -26,12 +36,19 @@ class Document: Identifiable {
     }
 }
 
+// MARK: - DocumentVersion Model
+
+/// Represents a single version of a document (e.g., a PDF file)
 @Model
 class DocumentVersion {
+    /// The PDF or file data
     var fileData: Data
+    /// The date this version was added
     var dateAdded: Date
+    /// Optional note for this version
     var note: String?
     
+    /// Initializes a new DocumentVersion
     init(fileData: Data, dateAdded: Date, note: String? = nil) {
         self.fileData = fileData
         self.dateAdded = dateAdded
@@ -39,13 +56,21 @@ class DocumentVersion {
     }
 }
 
+// MARK: - Number Model
+
+/// Represents a number/ID (e.g., insurance number, tax ID)
 @Model
 class Number {
+    /// Unique identifier for the number
     var id: UUID = UUID()
+    /// The display name of the number
     var name: String
+    /// The actual number or ID string
     var idNumber: String
+    /// Whether the number is marked as completed
     var isCompleted: Bool
     
+    /// Initializes a new Number
     init(name: String, idNumber: String, isCompleted: Bool = false) {
         self.name = name
         self.idNumber = idNumber
@@ -53,10 +78,16 @@ class Number {
     }
 }
 
+// MARK: - DocumentCategory Enum
+
+/// All possible categories for a document
+/// Provides label, icon, and color for each category
+/// (Extend as needed for new categories)
 enum DocumentCategory: String, CaseIterable, Codable {
     case wohnung, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
     case fahrzeug, internet, mitgliedschaft, quittungen, behoerden, rechtliches, familie, sonstiges
 
+    /// Localized label for display
     var label: LocalizedStringKey {
         switch self {
         case .wohnung: return "Wohnung"
@@ -78,6 +109,7 @@ enum DocumentCategory: String, CaseIterable, Codable {
         }
     }
 
+    /// SF Symbol icon for the category
     var icon: String {
         switch self {
         case .wohnung: return "house.fill"
@@ -99,6 +131,7 @@ enum DocumentCategory: String, CaseIterable, Codable {
         }
     }
 
+    /// Color for the category (used in UI)
     var color: Color {
         switch self {
         case .wohnung: return .blue

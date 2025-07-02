@@ -1,26 +1,29 @@
 import SwiftUI
 
+// MARK: - DocumentListView
+
+/// Displays a grid of documents for a given category or filter, with support for selection, sharing, and context menu actions.
 struct DocumentListView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
-    
+    /// The title for the navigation bar.
     var title: LocalizedStringKey
+    /// The documents to display in the grid.
     var documents: [Document]
-    
     @State private var selectedDocument: Document? = nil
-    @State private var fullScreenIsPresented = false
+    @State private var fullScreenIsPresented = false // (Unused, could be removed)
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSharing = false
     @State private var isSelectionActive = false
-
-    
+    /// Two-column flexible grid layout for document previews.
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
-    // A4 size in points (595 x 842)
+    /// A4 size in points (approx. 595 x 842, scaled for preview)
     let a4Size = CGSize(width: 148.75, height: 210.5)
-    
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -35,9 +38,9 @@ struct DocumentListView: View {
                             }) {
                                 VStack(spacing: 8) {
                                     PDFPreview(data: document.versions.first!.fileData)
-                                        .scaleEffect(1.03) // Adjust the scale factor for zooming in (1.0 is normal size, 1.2 is 20% zoomed in)
+                                        .scaleEffect(1.03)
                                         .frame(width: a4Size.width, height: a4Size.height)
-                                        .clipped() // Ensure that the overflow content is clipped (cut off)
+                                        .clipped()
                                         .cornerRadius(5)
                                         .shadow(radius: 3)
                                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
@@ -58,7 +61,6 @@ struct DocumentListView: View {
                                                 deleteDocument(document, modelContext: modelContext)
                                             }
                                         }
-                                    
                                     Text(document.name)
                                         .font(.caption)
                                         .foregroundColor(.primary)
@@ -66,7 +68,6 @@ struct DocumentListView: View {
                                 }
                             }
                             .padding()
-                            
                             if isSelectionActive {
                                 Button(action: {
                                     let generator = UIImpactFeedbackGenerator(style: .light)
@@ -124,7 +125,9 @@ struct DocumentListView: View {
             }
         }
     }
-    
+
+    // MARK: - Helpers
+    /// Exports the selected documents as temporary PDF URLs for sharing.
     func exportTempURLs(from documents: Set<Document>) -> [URL] {
         var urls: [URL] = []
         for doc in documents {
@@ -140,7 +143,7 @@ struct DocumentListView: View {
         }
         return urls
     }
-    
+    /// Toggles the selection state of a document in selection mode.
     func toggleSelection(of document: Document) {
         if selectedDocuments.contains(document) {
             selectedDocuments.remove(document)

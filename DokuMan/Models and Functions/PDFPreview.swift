@@ -8,9 +8,14 @@
 import PDFKit
 import SwiftUI
 
+// MARK: - PDFPreview
+
+/// A SwiftUI view that displays a PDF from Data using PDFKit.
 struct PDFPreview: UIViewRepresentable {
+    /// The PDF data to display.
     let data: Data
     
+    /// Creates the PDFView and loads the PDF data.
     func makeUIView(context: Context) -> PDFView {
         let pdfView = PDFView()
         pdfView.document = PDFDocument(data: data)
@@ -22,6 +27,7 @@ struct PDFPreview: UIViewRepresentable {
         return pdfView
     }
     
+    /// Updates the PDFView when the environment changes (e.g., color scheme).
     func updateUIView(_ uiView: PDFView, context: Context) {
         // Update background color when color scheme changes
         uiView.backgroundColor = UIColor.systemBackground

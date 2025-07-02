@@ -7,7 +7,11 @@
 
 import SwiftUI
 
+// MARK: - PrivacyPolicyView
+
+/// Displays the app's privacy policy in a scrollable view.
 struct PrivacyPolicyView: View {
+    // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {

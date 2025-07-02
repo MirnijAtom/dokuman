@@ -1,5 +1,5 @@
 //
-//  addDocumentView.swift
+//  AddDocumentView.swift
 //  DokuMan
 //
 //  Created by Aleksandrs Bertulis on 14.04.25.
@@ -8,6 +8,9 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - View Extension
+
+/// Adds a consistent style to document-related buttons.
 extension View {
     func addDocumentButtonStyle() -> some View {
         self
@@ -16,13 +19,15 @@ extension View {
     }
 }
 
+// MARK: - AddDocumentView
+
+/// A view for adding a new document, including import, scan, photo, and manual entry.
 struct AddDocumentView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var languageSettings: LanguageSettings
-    
     @FocusState private var nameFieldIsFocused: Bool
-    
     @State private var name: String = ""
     @State private var date: Date = Date()
     @State private var category: DocumentCategory = .wohnung
@@ -31,12 +36,12 @@ struct AddDocumentView: View {
     @State private var showFileImporter = false
     @State private var showScanner = false
     @State private var showNumbersEdit = false
-    
-    @State private var allCategories = ["Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"]
+    @State private var allCategories = [
+        "Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"
+    ]
     //    @State private var filteredSuggestions: [String] = []
-    
-    
-    
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             if data.isEmpty {
@@ -56,7 +61,6 @@ struct AddDocumentView: View {
                             Spacer()
                         }
                     }
-                    
                     Button {
                         showScanner.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
@@ -69,12 +73,9 @@ struct AddDocumentView: View {
                             Text(LocalizedStringKey("Scan document"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-                            
                             Spacer()
                         }
-                        
                     }
-                    
                     Button {
                         showPhotoPicker.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
@@ -87,12 +88,9 @@ struct AddDocumentView: View {
                             Text(LocalizedStringKey("Upload from Photos"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-                            
                             Spacer()
                         }
-                        
                     }
-                    
                     Button {
                         showNumbersEdit.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
@@ -105,16 +103,12 @@ struct AddDocumentView: View {
                             Text(LocalizedStringKey("Add number"))
                                 .foregroundColor(.primary)
                                 .font(.subheadline)
-                            
                             Spacer()
                         }
-                        
                     }
                 }
             } else {
-                
                 // Edit name, category and save
-                
                 Form {
                     Section {
                         TextField(LocalizedStringKey("Document name"), text: $name)
@@ -147,13 +141,11 @@ struct AddDocumentView: View {
                     Section {
                         HStack {
                             Spacer()
-                            
                             Button(LocalizedStringKey("Save")) {
                                 let generator = UINotificationFeedbackGenerator()
                                 generator.notificationOccurred(.success)
                                 saveDocument()
                             }
-                            
                             Spacer()
                         }
                     }
@@ -185,9 +177,7 @@ struct AddDocumentView: View {
                     print("No permission to access file")
                     return
                 }
-                
                 defer { url.stopAccessingSecurityScopedResource() }
-                
                 do {
                     let fileData = try Data(contentsOf: url)
                     data = fileData
@@ -197,7 +187,6 @@ struct AddDocumentView: View {
                     let errorGenerator = UINotificationFeedbackGenerator()
                     errorGenerator.notificationOccurred(.error)
                 }
-                
             case .failure(let error):
                 print("Failed to import PDF: \(error)")
                 let errorGenerator = UINotificationFeedbackGenerator()
@@ -208,6 +197,9 @@ struct AddDocumentView: View {
             NumbersEditView()
         }
     }
+
+    // MARK: - PDF Helpers
+    /// Converts a single UIImage to PDF data.
     func imageToPDF(image: UIImage) -> Data {
         let format = UIGraphicsPDFRendererFormat()
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: image.size), format: format)
@@ -216,7 +208,7 @@ struct AddDocumentView: View {
             image.draw(at: .zero)
         }
     }
-    
+    /// Converts an array of UIImages to a single PDF data.
     func imagesToPDF(images: [UIImage]) -> Data {
         let format = UIGraphicsPDFRendererFormat()
         let renderer = UIGraphicsPDFRenderer(bounds: CGRect(origin: .zero, size: images[0].size), format: format)
@@ -228,7 +220,7 @@ struct AddDocumentView: View {
             }
         }
     }
-    
+    /// Saves the current document to the model context.
     func saveDocument() {
         let newDocumentVersion = DocumentVersion(fileData: data, dateAdded: Date())
         let newDocument = Document(name: name, category: category, versions: [newDocumentVersion])

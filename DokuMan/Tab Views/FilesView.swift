@@ -8,39 +8,41 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - FilesView
+
+/// Displays a grid of documents, with support for search, selection, sharing, and archiving.
 struct FilesView: View {
+    // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @Query var documents: [Document]
-    
     @EnvironmentObject var themeSettings: ThemeSettings
-    
     @FocusState private var isSearchFocused: Bool
     @State private var searchText: String = ""
-    
     @State private var selectedDocument: Document? = nil
     @State private var selectedDocumentToShare: Document? = nil
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSelectionActive = false
-    
     @State private var showArchived: Bool = false
-    
     @State private var isShareSheetPresented = false
-      
+
+    // MARK: - Layout
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
     let a4Size = CGSize(width: 148.75, height: 210.5)
 
+    // MARK: - Computed Properties
+    /// Returns the filtered documents based on search and archive state.
     var filteredDocuments: [Document] {
         let filtered = searchText.isEmpty ? documents : documents.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         return showArchived ? filtered.filter { $0.isArchived } : filtered.filter { !$0.isArchived }
     }
 
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack {
                     if documents.isEmpty {
                         VStack {
-
                             Image("emptyFilesIcon")
                                 .resizable()
                                 .scaledToFit()
@@ -65,12 +67,10 @@ struct FilesView: View {
                             }
                             .padding(.horizontal)
                             .padding(.bottom, 100)
-                            
                         }
                         .padding(.bottom, 10)
                         .background(Color(.systemGroupedBackground))
                     }
-
                 }
                 .toolbar { toolbarContent }
                 .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
@@ -99,6 +99,7 @@ struct FilesView: View {
                 .toolbarBackground(Material.bar, for: .navigationBar)
                 .toolbarBackground(.visible, for: .navigationBar)
 
+                // Archive toggle floating button
                 VStack {
                     Spacer()
                     HStack {
@@ -124,6 +125,7 @@ struct FilesView: View {
         }
     }
 
+    // MARK: - Toolbar
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
@@ -160,6 +162,8 @@ struct FilesView: View {
         }
     }
 
+    // MARK: - Document Cell
+    /// Renders a single document cell in the grid, with context menu and selection support.
     @ViewBuilder
     func documentCell(_ document: Document) -> some View {
         ZStack(alignment: .topTrailing) {
@@ -236,6 +240,8 @@ struct FilesView: View {
         .buttonStyle(PlainButtonStyle())
     }
 
+    // MARK: - Helpers
+    /// Exports the selected documents as temporary PDF URLs for sharing.
     func exportTempURLs(from documents: Set<Document>) -> [URL] {
         var urls: [URL] = []
         for doc in documents {
@@ -257,6 +263,7 @@ struct FilesView: View {
         return urls
     }
 
+    /// Toggles the selection state of a document in selection mode.
     func toggleSelection(of document: Document) {
         if selectedDocuments.contains(document) {
             selectedDocuments.remove(document)

@@ -8,9 +8,14 @@
 import SwiftUI
 import PhotosUI
 
+// MARK: - PhotoPicker
+
+/// A SwiftUI view that presents a photo picker and returns selected images.
 struct PhotoPicker: UIViewControllerRepresentable {
+    /// Called when the user finishes picking images.
     var onComplete: ([UIImage]) -> Void
 
+    /// Creates the PHPickerViewController.
     func makeUIViewController(context: Context) -> PHPickerViewController {
         var config = PHPickerConfiguration()
         config.selectionLimit = 3
@@ -22,10 +27,13 @@ struct PhotoPicker: UIViewControllerRepresentable {
 
     func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
 
+    /// Creates the coordinator for handling picker events.
     func makeCoordinator() -> Coordinator {
         Coordinator(onComplete: onComplete)
     }
 
+    // MARK: - Coordinator
+    /// Handles PHPickerViewControllerDelegate events.
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
         var onComplete: ([UIImage]) -> Void
 
@@ -33,6 +41,7 @@ struct PhotoPicker: UIViewControllerRepresentable {
             self.onComplete = onComplete
         }
 
+        /// Called when the user finishes picking images.
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             picker.dismiss(animated: true)
 

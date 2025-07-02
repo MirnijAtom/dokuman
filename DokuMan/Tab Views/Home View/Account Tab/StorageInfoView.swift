@@ -8,10 +8,15 @@
 import SwiftData
 import SwiftUI
 
+// MARK: - StorageInfoView
 
+/// Displays a summary of the number of documents and numbers saved in the app.
 struct StorageInfoView: View {
+    // MARK: - Queries
     @Query var documents: [Document]
     @Query var numbers: [Number]
+
+    // MARK: - Body
     var body: some View {
         List {
             Text(String(format: NSLocalizedString("Documents saved: %@", comment: ""), "\(documents.count)"))

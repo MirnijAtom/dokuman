@@ -7,15 +7,17 @@
 
 import SwiftUI
 
+// MARK: - TermsAndConditionsView
+
+/// Displays the app's terms, privacy policy, and legal information in a scrollable view.
 struct TermsAndConditionsView: View {
+    // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                
                 Text("Terms and Privacy")
                     .font(.largeTitle)
                     .bold()
-                
                 Text("Summary")
                     .font(.title2)
                     .bold()
@@ -26,9 +28,7 @@ You are responsible for your content. We provide no warranty for lost or corrupt
 
 For full details, see below.
 """)
-
                 Divider()
-                
                 Text("Terms and Conditions")
                     .font(.title2)
                     .bold()
@@ -50,9 +50,7 @@ We are not liable for any data loss or damages arising from use of the app.
 5. **Modifications**  
 We reserve the right to update the Terms at any time.
 """)
-                
                 Divider()
-                
                 Text("Privacy Policy")
                     .font(.title2)
                     .bold()
@@ -72,9 +70,7 @@ For privacy-related questions, contact: dokumanapp@gmail.com
 5. **Changes**  
 This policy may be updated. You will be informed in the app if necessary.
 """)
-                
                 Divider()
-                
                 Text("Impressum")
                     .font(.title2)
                     .bold()

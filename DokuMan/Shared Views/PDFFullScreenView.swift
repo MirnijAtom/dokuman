@@ -7,10 +7,17 @@
 
 import SwiftUI
 
+// MARK: - PDFFullScreenView
+
+/// Displays a PDF document in full screen, with sharing and dismiss options.
 struct PDFFullScreenView: View {
+    // MARK: - Environment & State
     @Environment(\.dismiss) var dismiss
+    /// The document to display in full screen.
     var document: Document
     @State private var isSharing = false
+
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             ZStack {
@@ -42,6 +49,9 @@ struct PDFFullScreenView: View {
             }
         }
     }
+
+    // MARK: - Helpers
+    /// Exports the current document as a temporary PDF URL for sharing.
     func exportTempURL() -> URL? {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(document.name).appendingPathExtension("pdf")
         do {
