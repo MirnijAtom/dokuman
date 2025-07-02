@@ -55,17 +55,19 @@
                             Text(LocalizedStringKey("Add your first number"))
                                 .lineLimit(nil)
                                 .multilineTextAlignment(.center)
+                                .frame(maxWidth: 150)
                                 .padding()
                                 .padding(.trailing, 15)
                                 .padding(.leading, 10)
                             Image("emptyNumbersIcon")
                                 .resizable()
                                 .scaledToFit()
-                                .padding(.trailing, 30)
-                                .frame(height: 100)
+                                .padding()
+                                .padding(.trailing, 10)
+                                .frame(width: 180, height: 100)
                         }
                         .frame(maxWidth: .infinity)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                     }
                 } else {
                     VStack {

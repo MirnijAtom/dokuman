@@ -45,10 +45,11 @@ struct NumbersEditView: View {
                 if numbers.isEmpty && editingNumber == nil {
                     Section {
                         VStack {
-                            Image("emptyNumbersIcon")
+                            Image("emptyNumbersIconLong")
                                 .resizable()
                                 .scaledToFit()
-                                .padding(.trailing, 30)
+                                .padding(.top, 15)
+                                .padding(.horizontal)
                                 .frame(height: 100)
                             Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
                                 .lineLimit(nil)
