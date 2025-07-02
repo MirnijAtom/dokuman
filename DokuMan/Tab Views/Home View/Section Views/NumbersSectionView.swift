@@ -32,13 +32,6 @@
                     Button(LocalizedStringKey("Edit")) {
                         selectedTab = 2
                     }
-//                    NavigationLink {
-//                        NumbersEditView()
-//                    } label: {
-//                        Text("Edit")
-//                            .padding(.horizontal)
-//                            .foregroundStyle(.secondary)
-//                    }
                 }
                 .padding(.horizontal)
                 .padding(.vertical, 5)
@@ -71,7 +64,15 @@
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .opacity(copiedID == number.id ? 0 : 1)
                                         .animation(.easeInOut, value: copiedID)
-
+                                        .onTapGesture {
+                                            UIPasteboard.general.string = number.idNumber
+                                            let generator = UIImpactFeedbackGenerator()
+                                            generator.impactOccurred()
+                                            copiedID = number.id
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                                copiedID = nil
+                                            }
+                                        }
                                     Text(LocalizedStringKey("Copied!"))
                                         .numberTextStyle()
                                         .foregroundStyle(.primary)

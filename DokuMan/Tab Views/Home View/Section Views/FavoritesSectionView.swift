@@ -51,14 +51,30 @@ struct FavoritesSectionView: View {
                                 )
                                 .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                 .contextMenu {
-                                    Button("Favorites toggle") {
+                                    Button {
+                                        // Share logic: open PDF in share sheet
+                                        if let url = exportTempURL(for: document) {
+                                            let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                                            UIApplication.shared.windows.first?.rootViewController?.present(activityVC, animated: true, completion: nil)
+                                        }
+                                    } label: {
+                                        Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
+                                    }
+                                    Button {
                                         toggleFavorites(document, modelContext: modelContext)
+                                    } label: {
+                                        Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                     }
-                                    Button("Archive toggle") {
+                                    Button {
                                         archiveDocument(document, modelContext: modelContext)
+                                    } label: {
+                                        Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                                     }
-                                    Button("Delete", role: .destructive) {
+                                    Divider()
+                                    Button(role: .destructive) {
                                         deleteDocument(document, modelContext: modelContext)
+                                    } label: {
+                                        Label(LocalizedStringKey("Delete"), systemImage: "trash")
                                     }
                                 }
                         }
@@ -82,6 +98,17 @@ struct FavoritesSectionView: View {
 //            addMockupFiles(using: modelContext)
 //        }
 //        .padding()
+    }
+
+    func exportTempURL(for document: Document) -> URL? {
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(document.name).appendingPathExtension("pdf")
+        do {
+            try document.versions.first!.fileData.write(to: tempURL)
+            return tempURL
+        } catch {
+            print("Failed to write PDF to temp: \(error)")
+            return nil
+        }
     }
 }
 
