@@ -18,7 +18,7 @@ struct ContentView: View {
     @State private var isUnlocked = false
 
     var body: some View {
-        NavigationStack {
+
             TabView(selection: $selectedTab) {
                 HomeView(selectedTab: $selectedTab)
                     .tabItem {
@@ -44,7 +44,7 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
-            .navigationTitle("DokuMan")
+
             .tint(.teal)
             
             .sheet(isPresented: $showAddDoc) {
@@ -66,7 +66,7 @@ struct ContentView: View {
                 .padding(.bottom, 80)
                 .padding(.trailing, 24)
             }
-        }
+        
     }
 }
 
