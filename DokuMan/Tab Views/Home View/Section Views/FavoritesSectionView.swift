@@ -54,6 +54,8 @@ struct FavoritesSectionView: View {
                     HStack {
                         ForEach(favorites) { document in
                             Button {
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
                                 selectedDocument = document
                                 fullScreenIsPresented = true
                             } label: {
@@ -69,6 +71,8 @@ struct FavoritesSectionView: View {
                                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                     .contextMenu {
                                         Button {
+                                            let generator = UINotificationFeedbackGenerator()
+                                            generator.notificationOccurred(.success)
                                             // Share logic: open PDF in share sheet
                                             if let url = exportTempURL(for: document) {
                                                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -81,17 +85,23 @@ struct FavoritesSectionView: View {
                                             Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                                         }
                                         Button {
+                                            let generator = UIImpactFeedbackGenerator(style: .light)
+                                            generator.impactOccurred()
                                             toggleFavorites(document, modelContext: modelContext)
                                         } label: {
                                             Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                         }
                                         Button {
+                                            let generator = UIImpactFeedbackGenerator(style: .light)
+                                            generator.impactOccurred()
                                             archiveDocument(document, modelContext: modelContext)
                                         } label: {
                                             Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                                         }
                                         Divider()
                                         Button(role: .destructive) {
+                                            let generator = UIImpactFeedbackGenerator(style: .rigid)
+                                            generator.impactOccurred()
                                             deleteDocument(document, modelContext: modelContext)
                                         } label: {
                                             Label(LocalizedStringKey("Delete"), systemImage: "trash")

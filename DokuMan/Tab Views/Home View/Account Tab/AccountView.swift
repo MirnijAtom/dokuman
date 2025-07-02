@@ -22,6 +22,10 @@ struct AccountView: View {
             Section {
                 Toggle(LocalizedStringKey("Dark mode"), isOn: $themeSettings.isDarkMode)
                     .toggleStyle(.switch)
+                    .onChange(of: themeSettings.isDarkMode) { _, _ in
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                    }
                 
                 HStack {
                     Text(LocalizedStringKey("Language"))
@@ -29,6 +33,8 @@ struct AccountView: View {
                     Spacer()
                     
                     Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                         languageSettings.locale = Locale(identifier: "en")
                     } label: {
                         Image("UKFlag")
@@ -47,6 +53,8 @@ struct AccountView: View {
                     Spacer().frame(width: 16)
                     
                     Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                         languageSettings.locale = Locale(identifier: "de")
                     } label: {
                         Image("GermanFlag")
@@ -64,7 +72,9 @@ struct AccountView: View {
                 }
                 
                 Button(LocalizedStringKey("Storage Info")) {
-                    showStorageInfo.toggle()
+                    let generator = UIImpactFeedbackGenerator(style: .medium)
+                    generator.impactOccurred()
+                    withAnimation { showStorageInfo.toggle() }
                 }
                 .foregroundStyle(.primary)
 
@@ -79,11 +89,15 @@ struct AccountView: View {
             
             Section {
                 Button(LocalizedStringKey("Privacy Policy")) {
-                    showPrivacyPolicy = true
+                    let generator = UIImpactFeedbackGenerator(style: .medium)
+                    generator.impactOccurred()
+                    withAnimation { showPrivacyPolicy = true }
                 }
                 .foregroundStyle(.primary)
                 Button(LocalizedStringKey("Terms & Conditions")) {
-                    showTermsAndConditions = true
+                    let generator = UIImpactFeedbackGenerator(style: .medium)
+                    generator.impactOccurred()
+                    withAnimation { showTermsAndConditions = true }
                 }
                 .foregroundStyle(.primary)
             }

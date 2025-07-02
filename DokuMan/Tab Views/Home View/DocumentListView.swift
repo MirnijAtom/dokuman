@@ -28,6 +28,8 @@ struct DocumentListView: View {
                     ForEach(documents) { document in
                         ZStack(alignment: .topTrailing) {
                             Button(action: {
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
                                 selectedDocument = document
                                 fullScreenIsPresented = true
                             }) {
@@ -41,12 +43,18 @@ struct DocumentListView: View {
                                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
                                         .contextMenu {
                                             Button("Favorites toggle") {
+                                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                                generator.impactOccurred()
                                                 toggleFavorites(document, modelContext: modelContext)
                                             }
                                             Button("Archive toggle") {
+                                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                                generator.impactOccurred()
                                                 archiveDocument(document, modelContext: modelContext)
                                             }
                                             Button("Delete", role: .destructive) {
+                                                let generator = UIImpactFeedbackGenerator(style: .rigid)
+                                                generator.impactOccurred()
                                                 deleteDocument(document, modelContext: modelContext)
                                             }
                                         }
@@ -61,6 +69,8 @@ struct DocumentListView: View {
                             
                             if isSelectionActive {
                                 Button(action: {
+                                    let generator = UIImpactFeedbackGenerator(style: .light)
+                                    generator.impactOccurred()
                                     toggleSelection(of: document)
                                 }) {
                                     Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
@@ -93,7 +103,9 @@ struct DocumentListView: View {
                 } else {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Select") {
-                            isSelectionActive = true
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            withAnimation { isSelectionActive = true }
                         }
                     }
                 }

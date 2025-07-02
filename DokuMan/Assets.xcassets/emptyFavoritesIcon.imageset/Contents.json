@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "emptyFavoritesIcon.png",
+      "filename" : "emptyFavoritesIcon.svg",
       "idiom" : "universal",
       "scale" : "1x"
     },

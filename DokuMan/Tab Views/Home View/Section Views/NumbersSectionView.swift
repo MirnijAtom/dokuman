@@ -30,6 +30,8 @@
                     Spacer()
                     if !numbers.isEmpty {
                         Button(LocalizedStringKey("Edit")) {
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
                             selectedTab = 2
                         }
                     }
@@ -40,6 +42,8 @@
                 // Content
                 if numbers.isEmpty {
                     Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                         selectedTab = 2
                     } label: {
                         HStack {
@@ -98,10 +102,9 @@
                                 Divider()
                                 
                                 Button {
-                                    UIPasteboard.general.string = number.idNumber
-                                    
-                                    let generator = UIImpactFeedbackGenerator()
+                                    let generator = UIImpactFeedbackGenerator(style: .light)
                                     generator.impactOccurred()
+                                    UIPasteboard.general.string = number.idNumber
                                     
                                     copiedID = number.id
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
@@ -128,6 +131,8 @@
                     .padding(.horizontal)
                 }
                 Button {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
                     withAnimation {
                         isExpanded.toggle()
                     }

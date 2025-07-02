@@ -39,6 +39,10 @@ struct CategoriesSectionView: View {
             .padding(.horizontal)
             .padding(.vertical, 0)
         }
+        .simultaneousGesture(TapGesture().onEnded {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+        })
     }
     
     var body: some View {

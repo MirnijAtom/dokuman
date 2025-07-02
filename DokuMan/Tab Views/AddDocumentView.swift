@@ -43,6 +43,8 @@ struct AddDocumentView: View {
                 List {
                     Button {
                         showFileImporter.toggle()
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                     } label: {
                         HStack {
                             Image(systemName: "doc")
@@ -57,6 +59,8 @@ struct AddDocumentView: View {
                     
                     Button {
                         showScanner.toggle()
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                     } label: {
                         HStack {
                             Image(systemName: "document.viewfinder")
@@ -73,6 +77,8 @@ struct AddDocumentView: View {
                     
                     Button {
                         showPhotoPicker.toggle()
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                     } label: {
                         HStack {
                             Image(systemName: "photo.on.rectangle")
@@ -89,6 +95,8 @@ struct AddDocumentView: View {
                     
                     Button {
                         showNumbersEdit.toggle()
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
                     } label: {
                         HStack {
                             Image(systemName: "numbers")
@@ -141,6 +149,8 @@ struct AddDocumentView: View {
                             Spacer()
                             
                             Button(LocalizedStringKey("Save")) {
+                                let generator = UINotificationFeedbackGenerator()
+                                generator.notificationOccurred(.success)
                                 saveDocument()
                             }
                             
@@ -184,10 +194,14 @@ struct AddDocumentView: View {
                     nameFieldIsFocused = true
                 } catch {
                     print("Error reading file: \(error)")
+                    let errorGenerator = UINotificationFeedbackGenerator()
+                    errorGenerator.notificationOccurred(.error)
                 }
                 
             case .failure(let error):
                 print("Failed to import PDF: \(error)")
+                let errorGenerator = UINotificationFeedbackGenerator()
+                errorGenerator.notificationOccurred(.error)
             }
         }
         .sheet(isPresented: $showNumbersEdit) {

@@ -104,7 +104,9 @@ struct FilesView: View {
                     HStack {
                         Spacer()
                         Button {
-                            showArchived.toggle()
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            withAnimation { showArchived.toggle() }
                         } label: {
                             Label(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"), systemImage: showArchived ? "document.on.document" : "archivebox")
                                 .frame(height: 15)
@@ -127,15 +129,21 @@ struct FilesView: View {
         if isSelectionActive {
             ToolbarItem(placement: .topBarLeading) {
                 Button(LocalizedStringKey("Cancel")) {
-                    isSelectionActive = false
-                    selectedDocuments = []
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation {
+                        isSelectionActive = false
+                        selectedDocuments = []
+                    }
                 }
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
                     isShareSheetPresented = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        isSelectionActive = false
+                        withAnimation { isSelectionActive = false }
                     }
                 } label: {
                     Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
@@ -144,7 +152,9 @@ struct FilesView: View {
         } else {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(LocalizedStringKey("Select")) {
-                    isSelectionActive = true
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation { isSelectionActive = true }
                 }
             }
         }
@@ -171,24 +181,32 @@ struct FilesView: View {
                         .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
                         .contextMenu {
                             Button {
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
                                 selectedDocumentToShare = document
                             } label: {
                                 Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                             }
                             if !showArchived {
                                 Button {
+                                    let generator = UIImpactFeedbackGenerator(style: .light)
+                                    generator.impactOccurred()
                                     toggleFavorites(document, modelContext: modelContext)
                                 } label: {
                                     Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                 }
                             }
                             Button {
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
                                 archiveDocument(document, modelContext: modelContext)
                             } label: {
                                 Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                             }
                             Divider()
                             Button(role: .destructive) {
+                                let generator = UIImpactFeedbackGenerator(style: .rigid)
+                                generator.impactOccurred()
                                 deleteDocument(document, modelContext: modelContext)
                             } label: {
                                 Label(LocalizedStringKey("Delete"), systemImage: "trash")
