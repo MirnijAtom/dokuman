@@ -40,7 +40,21 @@ struct NumbersEditView: View {
             List {
                 if numbers.isEmpty && editingNumber == nil {
                     Section {
-                        Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
+                        VStack {
+
+                            Image("emptyNumbersIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .padding(.trailing, 30)
+                                .frame(height: 100)
+                            Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .padding(.trailing, 30)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
                     }
                 } else {
                     Section(header: Text(LocalizedStringKey("Your numbers")).numberTextStyle()) {
@@ -122,10 +136,16 @@ struct NumbersEditView: View {
                     }
                 }
                 
-                Button(LocalizedStringKey("New number")) {
+                Button {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
                     editingNumber = newNumber
                     nameFocusedField = newNumber.id
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(LocalizedStringKey("New number"))
+                        Spacer()
+                    }
                 }
                 .font(.subheadline)
                 .fontWidth(.compressed)

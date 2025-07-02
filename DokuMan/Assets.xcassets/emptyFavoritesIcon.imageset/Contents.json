@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "emptyCategoriesIcon.png",
+      "filename" : "emptyFavoritesIcon.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

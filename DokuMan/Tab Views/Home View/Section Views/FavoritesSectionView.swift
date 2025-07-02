@@ -33,58 +33,75 @@ struct FavoritesSectionView: View {
             .font(.headline)
             .padding(.horizontal)
             
-            ScrollView(.horizontal, showsIndicators: false) {
+            if favorites.isEmpty {
                 HStack {
-                    ForEach(favorites) { document in
-                        Button {
-                            selectedDocument = document
-                            fullScreenIsPresented = true
-                        } label: {
-                            PDFPreview(data: document.versions.first!.fileData)
-                                .scaleEffect(1.03)
-                                .frame(width: a4Size.width, height: a4Size.height)
-                                .clipped()
-                                .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
-                                )
-                                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
-                                .contextMenu {
-                                    Button {
-                                        // Share logic: open PDF in share sheet
-                                        if let url = exportTempURL(for: document) {
-                                            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                                               let window = windowScene.windows.first {
-                                                let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
-                                                window.rootViewController?.present(activityVC, animated: true, completion: nil)
-                                            }
-                                        }
-                                    } label: {
-                                        Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
-                                    }
-                                    Button {
-                                        toggleFavorites(document, modelContext: modelContext)
-                                    } label: {
-                                        Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
-                                    }
-                                    Button {
-                                        archiveDocument(document, modelContext: modelContext)
-                                    } label: {
-                                        Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
-                                    }
-                                    Divider()
-                                    Button(role: .destructive) {
-                                        deleteDocument(document, modelContext: modelContext)
-                                    } label: {
-                                        Label(LocalizedStringKey("Delete"), systemImage: "trash")
-                                    }
-                                }
-                        }
-                    }
-                    .padding(5)
+                    Text(LocalizedStringKey("Add your first number"))
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .padding(.trailing, 30)
+                        .foregroundStyle(.secondary)
+                    Image("emptyFavoritesIcon")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.trailing, 30)
+                        .frame(height: 100)
                 }
-                .padding(.horizontal)
+                .frame(maxWidth: .infinity)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        ForEach(favorites) { document in
+                            Button {
+                                selectedDocument = document
+                                fullScreenIsPresented = true
+                            } label: {
+                                PDFPreview(data: document.versions.first!.fileData)
+                                    .scaleEffect(1.03)
+                                    .frame(width: a4Size.width, height: a4Size.height)
+                                    .clipped()
+                                    .cornerRadius(5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .stroke(Color.gray.opacity(0.5), lineWidth: 0.5)
+                                    )
+                                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
+                                    .contextMenu {
+                                        Button {
+                                            // Share logic: open PDF in share sheet
+                                            if let url = exportTempURL(for: document) {
+                                                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                                                   let window = windowScene.windows.first {
+                                                    let activityVC = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+                                                    window.rootViewController?.present(activityVC, animated: true, completion: nil)
+                                                }
+                                            }
+                                        } label: {
+                                            Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
+                                        }
+                                        Button {
+                                            toggleFavorites(document, modelContext: modelContext)
+                                        } label: {
+                                            Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
+                                        }
+                                        Button {
+                                            archiveDocument(document, modelContext: modelContext)
+                                        } label: {
+                                            Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
+                                        }
+                                        Divider()
+                                        Button(role: .destructive) {
+                                            deleteDocument(document, modelContext: modelContext)
+                                        } label: {
+                                            Label(LocalizedStringKey("Delete"), systemImage: "trash")
+                                        }
+                                    }
+                            }
+                        }
+                        .padding(5)
+                    }
+                    .padding(.horizontal)
+                }
             }
         }
         .frame(minHeight: 226)
@@ -124,28 +141,28 @@ struct FavoritesSectionView: View {
         .environmentObject(languageSettings)
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
-        .onAppear {
-            // Create a mock document container
-            let container = try! ModelContainer(for: Document.self)
-            let context = container.mainContext
-
-            // Add mock documents to the container for preview
-            let filenames = [
-                "krankenversicherung",
-                "lebenslauf",
-                "meldebeschainigung",
-                "portfolio",
-                "versicherung"
-            ]
-
-            // Insert mock documents
-            for name in filenames {
-                if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
-                   let data = try? Data(contentsOf: url) {
-                    let version = DocumentVersion(fileData: data, dateAdded: Date())
-                    let doc = Document(name: name.capitalized, isFavorite: true, isArchived: false, category: .wohnung, versions: [version])
-                    context.insert(doc)
-                }
-            }
-        }
+//        .onAppear {
+//            // Create a mock document container
+//            let container = try! ModelContainer(for: Document.self)
+//            let context = container.mainContext
+//
+//            // Add mock documents to the container for preview
+//            let filenames = [
+//                "krankenversicherung",
+//                "lebenslauf",
+//                "meldebeschainigung",
+//                "portfolio",
+//                "versicherung"
+//            ]
+//
+//            // Insert mock documents
+//            for name in filenames {
+//                if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
+//                   let data = try? Data(contentsOf: url) {
+//                    let version = DocumentVersion(fileData: data, dateAdded: Date())
+//                    let doc = Document(name: name.capitalized, isFavorite: true, isArchived: false, category: .wohnung, versions: [version])
+//                    context.insert(doc)
+//                }
+//            }
+//        }
 }

@@ -52,9 +52,21 @@ struct CategoriesSectionView: View {
             .padding(.vertical, 5)
             
             if nonEmptyCategories.isEmpty {
-                Text(LocalizedStringKey("No categories yet"))
-                    .padding(.horizontal)
-                    .foregroundStyle(.secondary)
+
+                HStack {
+                    Text(LocalizedStringKey("No categories yet"))
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                        .padding(.trailing, 30)
+                        .foregroundStyle(.secondary)
+                    Image("emptyCategoriesIcon")
+                        .resizable()
+                        .scaledToFit()
+                        .padding(.trailing, 30)
+                        .frame(height: 100)
+                }
+                .frame(maxWidth: .infinity)
             } else {
                 VStack(spacing: 0) {
                     ForEach(nonEmptyCategories, id: \.self) { category in
