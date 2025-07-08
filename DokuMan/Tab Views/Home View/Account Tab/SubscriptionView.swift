@@ -16,11 +16,28 @@ struct SubscriptionView: View {
     @State private var showTerms = false
 
     var body: some View {
+        ZStack {
+            Color(.systemBackground)
+
+            Circle()
+                .fill(Color.teal.opacity(0.3))
+                .frame(width: 300, height: 300)
+                .offset(x: -150, y: -200)
+                .blur(radius: 60)
+
+            Circle()
+                .fill(Color.teal.opacity(0.2))
+                .frame(width: 250, height: 250)
+                .offset(x: 120, y: 300)
+                .blur(radius: 40)
+
         VStack {
             VStack(spacing: 24) {
                 Image("vault")
                     .resizable()
                     .scaledToFit()
+                    .padding(.top, 40)
+                    .padding(.horizontal, 20)
                 Text("Get DokuMan Pro")
                     .font(.largeTitle).bold()
 
@@ -38,20 +55,20 @@ struct SubscriptionView: View {
 //                        selectedPlan = "Free"
                     } label: {
                         VStack(spacing: 8) {
-                            Text("Free")
+                            Text("Basic")
                                 .font(.headline)
                             Text("Basic usage")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text("0 €")
+                            Text("Free")
                                 .font(.title3).bold()
                             Text("")
                                 .font(.caption)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 160)
-                        .padding()
+                        .padding(.vertical)
                         .background(Color.gray.opacity(0.2))
                         .cornerRadius(12)
                     }
@@ -69,13 +86,13 @@ struct SubscriptionView: View {
                             Spacer()
                             Text("1.49 €")
                                 .font(.title3).bold()
-                            Text("Monthly")
-                                .font(.caption)
+                            Text("Monthly payment")
+                                .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 160)
-                        .padding()
+                        .padding(.vertical)
                         .background(Color.teal.opacity(0.2))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -91,18 +108,19 @@ struct SubscriptionView: View {
                         VStack(spacing: 8) {
                             Text("Lifetime")
                                 .font(.headline)
-                            Text("One-time purchase")
+                            Text("All features")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("9.99 €")
                                 .font(.title3).bold()
-                            Text("")
-                                .font(.caption)
+                            Text("One-time purchase")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: 160)
-                        .padding()
+                        .padding(.vertical)
                         .background(Color.blue.opacity(0.2))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
@@ -112,7 +130,7 @@ struct SubscriptionView: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(.bottom, 15)
+                .padding(.bottom, 10)
 
                 Button("Subscribe") {
                     // Final purchase trigger
@@ -151,6 +169,8 @@ struct SubscriptionView: View {
                 }
             }
         }
+        }
+        .ignoresSafeArea()
     }
 }
 

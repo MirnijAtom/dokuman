@@ -79,13 +79,17 @@ struct AccountView: View {
             }
             // MARK: - Subscription
             Section {
-                Button {
+                Button(LocalizedStringKey("Upgrade to Pro")) {
                     showUpgradeToPro = true
-                } label: {
-                    Text(LocalizedStringKey("Upgrade to Pro"))
                 }
                 .foregroundStyle(.primary)
-                Text(LocalizedStringKey("Manage Subscription"))
+                
+                Button(LocalizedStringKey("Manage Subscription")) {
+                    if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                .foregroundStyle(.primary)
             }
             // MARK: - Legal
             Section {
