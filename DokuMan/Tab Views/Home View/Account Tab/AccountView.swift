@@ -18,6 +18,7 @@ struct AccountView: View {
     @State private var showPrivacyPolicy = false
     @State private var showTermsAndConditions = false
     @State private var showStorageInfo = false
+    @State private var showUpgradeToPro = false
 
     // MARK: - Body
     var body: some View {
@@ -78,7 +79,12 @@ struct AccountView: View {
             }
             // MARK: - Subscription
             Section {
-                Text(LocalizedStringKey("Upgrade to Pro"))
+                Button {
+                    showUpgradeToPro = true
+                } label: {
+                    Text(LocalizedStringKey("Upgrade to Pro"))
+                }
+                .foregroundStyle(.primary)
                 Text(LocalizedStringKey("Manage Subscription"))
             }
             // MARK: - Legal
@@ -110,11 +116,18 @@ struct AccountView: View {
         .sheet(isPresented: $showStorageInfo) {
             StorageInfoView()
         }
+        .fullScreenCover(isPresented: $showUpgradeToPro) {
+            NavigationStack {
+                SubscriptionView()
+            }
+        }
     }
 }
 
 #Preview {
     let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
     AccountView()
         .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
 }

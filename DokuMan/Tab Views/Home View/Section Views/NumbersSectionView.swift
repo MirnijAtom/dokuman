@@ -137,22 +137,24 @@
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .padding(.horizontal)
                 }
-                Button {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                    withAnimation {
-                        isExpanded.toggle()
-                    }
-                } label: {
-                    HStack {
-                        Spacer ()
-                        VStack {
-                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                .padding(.top, 6)
+                if numbers.count > 3 {
+                    Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        withAnimation {
+                            isExpanded.toggle()
                         }
-                        Spacer()
+                    } label: {
+                        HStack {
+                            Spacer ()
+                            VStack {
+                                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                                    .padding(.top, 6)
+                            }
+                            Spacer()
+                        }
+                        .foregroundStyle(.teal)
                     }
-                    .foregroundStyle(.secondary)
                 }
 
                 
