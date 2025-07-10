@@ -44,7 +44,7 @@
     "_applicationInternalID" : "6748360659",
     "_developerTeamID" : "MY555LRB32",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 773845576.79495096,
+    "_lastSynchronizedDate" : 773868085.83147705,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [
@@ -101,7 +101,7 @@
       "localizations" : [
 
       ],
-      "name" : "DokuMan Monthly Pro",
+      "name" : "DokuMan Pro",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -130,6 +130,39 @@
           "productID" : "MirnijAtom.DokuMan.monthly.pro",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "DokuMan Monthly Pro",
+          "subscriptionGroupID" : "21728528",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "8.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6748467673",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Annual access to all features",
+              "displayName" : "DokuMan Pro – Annual",
+              "locale" : "en_US"
+            },
+            {
+              "description" : "Pro-Features im Jahresabo",
+              "displayName" : "DokuMan Pro – Jährlich",
+              "locale" : "de"
+            }
+          ],
+          "productID" : "MirnijAtom.DokuMan.yearly.pro",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "DokuMan Yearly Pro",
           "subscriptionGroupID" : "21728528",
           "type" : "RecurringSubscription",
           "winbackOffers" : [

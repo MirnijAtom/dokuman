@@ -10,6 +10,7 @@ import StoreKit
 
 struct SubscriptionView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var purchaseManager: PurchaseManager
     
     @State private var selectedPlan: String? = nil
     
@@ -19,7 +20,7 @@ struct SubscriptionView: View {
     @State private var showPrivacyPolicy = false
     @State private var showTerms = false
     
-    let productIDs = ["MirnijAtom.DokuMan.monthly.pro", "MirnijAtom.DokuMan.pro.lifetime"]
+    let productIDs = ["MirnijAtom.DokuMan.monthly.pro", "MirnijAtom.DokuMan.yearly.pro"]
 
     var body: some View {
         ZStack {
@@ -110,11 +111,11 @@ struct SubscriptionView: View {
                     .buttonStyle(.plain)
 
                     Button {
-                        selectedPlan = "Lifetime"
-                        selectedProduct = products.first { $0.id == "MirnijAtom.DokuMan.pro.lifetime" }
+                        selectedPlan = "Annual"
+                        selectedProduct = products.first { $0.id == "MirnijAtom.DokuMan.yearly.pro" }
                     } label: {
                         VStack(spacing: 8) {
-                            Text("Lifetime")
+                            Text("Annual")
                                 .font(.headline)
                             Text("All features")
                                 .font(.caption)
@@ -122,7 +123,7 @@ struct SubscriptionView: View {
                             Spacer()
                             Text("9.99 €")
                                 .font(.title3).bold()
-                            Text("One-time purchase")
+                            Text("Annual payment")
                                 .font(.caption2)
                                 .foregroundStyle(.secondary)
                         }
@@ -132,7 +133,7 @@ struct SubscriptionView: View {
                         .background(Color.blue.opacity(0.2))
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(selectedPlan == "Lifetime" ? Color.teal : Color.clear, lineWidth: 2)
+                                .stroke(selectedPlan == "Annual" ? Color.teal : Color.clear, lineWidth: 2)
                         )
                         .cornerRadius(12)
                     }
@@ -197,7 +198,11 @@ struct SubscriptionView: View {
                case .verified(let transaction) = verification {
                 await transaction.finish()
                 print("✅ Purchase successful: \(transaction.productID)")
-                // Unlock features here
+                
+                await MainActor.run {
+                    purchaseManager.hasProAccess = true
+                }
+                
             } else {
                 print("❌ Purchase not verified or cancelled.")
             }
@@ -210,7 +215,7 @@ struct SubscriptionView: View {
     func loadProducts() async throws -> [Product] {
         let productIDs = [
             "MirnijAtom.DokuMan.monthly.pro",
-            "MirnijAtom.DokuMan.pro.lifetime"
+            "MirnijAtom.DokuMan.yearly.pro"
         ]
         return try await Product.products(for: productIDs)
     }

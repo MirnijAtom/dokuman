@@ -15,12 +15,13 @@ class PurchaseManager: ObservableObject {
     
     private let productIDs = [
         "MirnijAtom.DokuMan.monthly.pro",
-        "MirnijAtom.DokuMan.pro.lifetime"
+        "MirnijAtom.DokuMan.yearly.pro"
     ]
 
     init() {
         Task {
             await checkEntitlements()
+            await listenForTransactions()
         }
     }
 
