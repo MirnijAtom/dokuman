@@ -15,6 +15,7 @@ struct HomeView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var themeSettings: ThemeSettings
+    @EnvironmentObject var purchaseManager: PurchaseManager
     /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     /// The selected tab index (bound to parent TabView).
@@ -25,6 +26,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
+                    Text("\(purchaseManager.hasProAccess)")
                     FavoritesSectionView()
                     CategoriesSectionView()
                     NumbersSectionView(selectedTab: $selectedTab)
@@ -39,6 +41,7 @@ struct HomeView: View {
             .toolbarBackground(Material.bar, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
         }
+        .id(purchaseManager.hasProAccess)
     }
 }
 

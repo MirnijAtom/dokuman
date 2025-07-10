@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 // MARK: - DokuManApp
 
@@ -15,6 +16,7 @@ struct DokuManApp: App {
     // MARK: - State Objects
     @StateObject private var themeSettings = ThemeSettings()
     @StateObject private var languageSettings = LanguageSettings()
+    @StateObject private var purchaseManager = PurchaseManager()
     
     // MARK: - Body
     var body: some Scene {
@@ -24,6 +26,10 @@ struct DokuManApp: App {
                 .environmentObject(languageSettings)
                 .environment(\.locale, languageSettings.locale)
                 .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
+                .environmentObject(purchaseManager)
+                .task {
+                    await purchaseManager.listenForTransactions()
+                }
         }
         .modelContainer(for: [Document.self, Number.self])
     }

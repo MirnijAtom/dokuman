@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4A4A67E82DAE55EE00AC8BDF /* CategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */; };
+		4AF8E1D72E1EB9150083F676 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF8E1D62E1EB9150083F676 /* StoreKit.framework */; };
+		4AF8E1D92E1FEDCA0083F676 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 4AF8E1D82E1FEDCA0083F676 /* StoreKitConfig.storekit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		4A4A67B32DAD0A7900AC8BDF /* DokuManTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DokuManTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4A67BD2DAD0A7900AC8BDF /* DokuManUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DokuManUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesView.swift; sourceTree = "<group>"; };
+		4AF8E1D62E1EB9150083F676 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		4AF8E1D82E1FEDCA0083F676 /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -57,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AF8E1D72E1EB9150083F676 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,9 +86,11 @@
 			isa = PBXGroup;
 			children = (
 				4A4A67E72DAE55EE00AC8BDF /* CategoriesView.swift */,
+				4AF8E1D82E1FEDCA0083F676 /* StoreKitConfig.storekit */,
 				4A4A67A82DAD0A7600AC8BDF /* DokuMan */,
 				4A4A67B62DAD0A7900AC8BDF /* DokuManTests */,
 				4A4A67C02DAD0A7900AC8BDF /* DokuManUITests */,
+				4AF8E1D52E1EB9150083F676 /* Frameworks */,
 				4A4A67A72DAD0A7600AC8BDF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +103,14 @@
 				4A4A67BD2DAD0A7900AC8BDF /* DokuManUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		4AF8E1D52E1EB9150083F676 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4AF8E1D62E1EB9150083F676 /* StoreKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AF8E1D92E1FEDCA0083F676 /* StoreKitConfig.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -408,6 +424,7 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to unlock your data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -438,6 +455,7 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to unlock your data.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

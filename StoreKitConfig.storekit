@@ -1,0 +1,146 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "36EEEB36",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "8.99",
+      "familyShareable" : false,
+      "internalID" : "6748403818",
+      "localizations" : [
+        {
+          "description" : "Lifetime access to all features",
+          "displayName" : "DokuMan Pro - Lifetime",
+          "locale" : "en_GB"
+        },
+        {
+          "description" : "Lifetime access to all features",
+          "displayName" : "DokuMan Pro - Lifetime",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "Lebenslanger Zugang",
+          "displayName" : "DokuMan Pro - Lifetime",
+          "locale" : "de"
+        }
+      ],
+      "productID" : "MirnijAtom.DokuMan.pro.lifetime",
+      "referenceName" : "Lifetime Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6748360659",
+    "_developerTeamID" : "MY555LRB32",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 773845576.79495096,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21728528",
+      "localizations" : [
+
+      ],
+      "name" : "DokuMan Monthly Pro",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6748403984",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Pro-Features im Monatsabo",
+              "displayName" : "DokuMan Pro – Monatlich",
+              "locale" : "de"
+            },
+            {
+              "description" : "Monthly access to all features",
+              "displayName" : "DokuMan Pro – Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "MirnijAtom.DokuMan.monthly.pro",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "DokuMan Monthly Pro",
+          "subscriptionGroupID" : "21728528",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

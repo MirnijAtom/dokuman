@@ -6,14 +6,20 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct SubscriptionView: View {
     @Environment(\.dismiss) var dismiss
     
     @State private var selectedPlan: String? = nil
     
+    @State private var selectedProduct: Product? = nil
+    @State private var products: [Product] = []
+    
     @State private var showPrivacyPolicy = false
     @State private var showTerms = false
+    
+    let productIDs = ["MirnijAtom.DokuMan.monthly.pro", "MirnijAtom.DokuMan.pro.lifetime"]
 
     var body: some View {
         ZStack {
@@ -76,6 +82,7 @@ struct SubscriptionView: View {
 
                     Button {
                         selectedPlan = "Monthly"
+                        selectedProduct = products.first { $0.id == "MirnijAtom.DokuMan.monthly.pro" }
                     } label: {
                         VStack(spacing: 8) {
                             Text("Monthly")
@@ -84,7 +91,7 @@ struct SubscriptionView: View {
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             Spacer()
-                            Text("1.49 €")
+                            Text("0.99 €")
                                 .font(.title3).bold()
                             Text("Monthly payment")
                                 .font(.caption2)
@@ -104,6 +111,7 @@ struct SubscriptionView: View {
 
                     Button {
                         selectedPlan = "Lifetime"
+                        selectedProduct = products.first { $0.id == "MirnijAtom.DokuMan.pro.lifetime" }
                     } label: {
                         VStack(spacing: 8) {
                             Text("Lifetime")
@@ -133,8 +141,10 @@ struct SubscriptionView: View {
                 .padding(.bottom, 10)
 
                 Button("Subscribe") {
-                    // Final purchase trigger
-                }
+                    guard let product = selectedProduct else { return }
+                    Task {
+                        await purchase(product)
+                    }                }
                 .font(.title3)
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -171,6 +181,38 @@ struct SubscriptionView: View {
         }
         }
         .ignoresSafeArea()
+        .task {
+            do {
+                products = try await Product.products(for: productIDs)
+            } catch {
+                print("❌ Failed to load products: \(error)")
+            }
+        }
+    }
+    
+    func purchase(_ product: Product) async {
+        do {
+            let result = try await product.purchase()
+            if case .success(let verification) = result,
+               case .verified(let transaction) = verification {
+                await transaction.finish()
+                print("✅ Purchase successful: \(transaction.productID)")
+                // Unlock features here
+            } else {
+                print("❌ Purchase not verified or cancelled.")
+            }
+        } catch {
+            print("❌ Purchase failed: \(error)")
+        }
+    }
+    
+    @MainActor
+    func loadProducts() async throws -> [Product] {
+        let productIDs = [
+            "MirnijAtom.DokuMan.monthly.pro",
+            "MirnijAtom.DokuMan.pro.lifetime"
+        ]
+        return try await Product.products(for: productIDs)
     }
 }
 
