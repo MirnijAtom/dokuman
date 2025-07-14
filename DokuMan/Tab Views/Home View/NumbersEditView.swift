@@ -30,6 +30,7 @@ struct NumbersEditView: View {
     @Query var numbers: [Number]
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var languageSettings: LanguageSettings
     @FocusState private var focusedField: UUID?
     @FocusState private var nameFocusedField: UUID?
     @State private var editingNumber: Number?
@@ -39,160 +40,161 @@ struct NumbersEditView: View {
     @State private var showSubscription = false
     @State private var alertMessage = ""
     @State private var copiedID: UUID? = nil
-
+    
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            List {
-                if numbers.isEmpty && editingNumber == nil {
-                    Section {
-                        VStack {
-                            Image("emptyNumbersIconLong")
-                                .resizable()
-                                .scaledToFit()
-                                .padding(.top, 15)
-                                .padding(.horizontal)
-                                .frame(height: 100)
-                            Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.center)
-                                .padding()
-                                .padding(.trailing, 30)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(maxWidth: .infinity)
+        List {
+            if numbers.isEmpty && editingNumber == nil {
+                Section {
+                    VStack {
+                        Image("emptyNumbersIconLong")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.top, 15)
+                            .padding(.horizontal)
+                            .frame(height: 100)
+                        Text("Here you can add your numbers and IDs such as social security number, health insurance number, tax ID etc.")
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .padding(.trailing, 30)
+                            .foregroundStyle(.secondary)
                     }
-                } else {
-                    Section(header: Text(LocalizedStringKey("Your numbers")).numberTextStyle()) {
-                        ForEach(numbers) { number in
-                            HStack {
-                                Text(number.name)
+                    .frame(maxWidth: .infinity)
+                }
+            } else {
+                Section(header: Text(LocalizedStringKey("Your numbers")).numberTextStyle()) {
+                    ForEach(numbers) { number in
+                        HStack {
+                            Text(number.name)
+                                .numberTextStyle()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Divider()
+                            ZStack {
+                                Text(number.idNumber)
                                     .numberTextStyle()
+                                    .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                Divider()
-                                ZStack {
-                                    Text(number.idNumber)
-                                        .numberTextStyle()
-                                        .foregroundStyle(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .opacity(copiedID == number.id ? 0 : 1)
-                                        .animation(.easeInOut, value: copiedID)
-                                    Text(LocalizedStringKey("Copied!"))
-                                        .numberTextStyle()
-                                        .foregroundStyle(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .opacity(copiedID == number.id ? 1 : 0)
-                                        .animation(.easeInOut, value: copiedID)
-                                }
-                                Divider()
-                                Button {
-                                    UIPasteboard.general.string = number.idNumber
-                                    let generator = UIImpactFeedbackGenerator()
-                                    generator.impactOccurred()
-                                    copiedID = number.id
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                        copiedID = nil
-                                    }
-                                } label: {
-                                    Image(systemName: "document.on.document")
-                                        .numberTextStyle()
-                                        .foregroundStyle(Color.secondary)
-                                        .padding(.leading, 4)
-                                }
+                                    .opacity(copiedID == number.id ? 0 : 1)
+                                    .animation(.easeInOut, value: copiedID)
+                                Text(LocalizedStringKey("Copied!"))
+                                    .numberTextStyle()
+                                    .foregroundStyle(.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .opacity(copiedID == number.id ? 1 : 0)
+                                    .animation(.easeInOut, value: copiedID)
                             }
-                        }
-                        .onDelete(perform: deleteNumber)
-                        if let newNumber = editingNumber {
-                            HStack {
-                                TextField(LocalizedStringKey("Name"), text: $nameInputText)
-                                    .autocorrectionDisabled(true)
-                                    .focused($nameFocusedField, equals: newNumber.id)
-                                    .numberTextStyle()
-                                    .foregroundStyle(Color.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Divider()
-                                TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
-                                    .autocorrectionDisabled(true)
-                                    .autocapitalization(.allCharacters)
-                                    .focused($focusedField, equals: newNumber.id)
-                                    .numberTextStyle()
-                                    .foregroundStyle(Color.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                Divider()
+                            Divider()
+                            Button {
+                                UIPasteboard.general.string = number.idNumber
+                                let generator = UIImpactFeedbackGenerator()
+                                generator.impactOccurred()
+                                copiedID = number.id
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                    copiedID = nil
+                                }
+                            } label: {
                                 Image(systemName: "document.on.document")
-                                    .font(.subheadline)
-                                    .foregroundStyle(Color.clear)
+                                    .numberTextStyle()
+                                    .foregroundStyle(Color.secondary)
                                     .padding(.leading, 4)
                             }
                         }
                     }
-                }
-                Button {
-                    if numbers.count < 5 || purchaseManager.hasProAccess {
-                        let newNumber = Number(name: "", idNumber: "", isCompleted: true)
-                        editingNumber = newNumber
-                        nameFocusedField = newNumber.id
-                    } else {
-                        showSubscription = true
+                    .onDelete(perform: deleteNumber)
+                    if let newNumber = editingNumber {
+                        HStack {
+                            TextField(LocalizedStringKey("Name"), text: $nameInputText)
+                                .autocorrectionDisabled(true)
+                                .focused($nameFocusedField, equals: newNumber.id)
+                                .numberTextStyle()
+                                .foregroundStyle(Color.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Divider()
+                            TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
+                                .autocorrectionDisabled(true)
+                                .autocapitalization(.allCharacters)
+                                .focused($focusedField, equals: newNumber.id)
+                                .numberTextStyle()
+                                .foregroundStyle(Color.primary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Divider()
+                            Image(systemName: "document.on.document")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.clear)
+                                .padding(.leading, 4)
+                        }
                     }
-                } label: {
-                    HStack {
-                        Spacer()
-                        Text(LocalizedStringKey("New number"))
-                        Spacer()
-                    }
-                }
-                .font(.subheadline)
-                .fontWidth(.compressed)
-                .fontWeight(.light)
-                .fontDesign(.monospaced)
-                .sheet(isPresented: $showSubscription) {
-                    SubscriptionView()
                 }
             }
-            .toolbar {
-                if editingNumber != nil {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(LocalizedStringKey("Cancel"), role: .destructive) {
+            Button {
+                if numbers.count < 5 || purchaseManager.hasProAccess {
+                    let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                    editingNumber = newNumber
+                    nameFocusedField = newNumber.id
+                } else {
+                    showSubscription = true
+                }
+            } label: {
+                HStack {
+                    Spacer()
+                    Text(LocalizedStringKey("New number"))
+                    Spacer()
+                }
+            }
+            .font(.subheadline)
+            .fontWidth(.compressed)
+            .fontWeight(.light)
+            .fontDesign(.monospaced)
+            .sheet(isPresented: $showSubscription) {
+                SubscriptionView()
+            }
+        }
+        .toolbar {
+            if editingNumber != nil {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(LocalizedStringKey("Cancel"), role: .destructive) {
+                        editingNumber = nil
+                        nameInputText = ""
+                        numberInputText = ""
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(LocalizedStringKey("Save")) {
+                        let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
+                        if trimmedName.isEmpty {
+                            alertMessage = NSLocalizedString("Name is missing", comment: "")
+                            showAlert = true
+                            return
+                        }
+                        if trimmedNumber.isEmpty {
+                            alertMessage = NSLocalizedString("Number is missing", comment: "")
+                            showAlert = true
+                            return
+                        }
+                        if let numberToAdd = editingNumber {
+                            numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
+                            numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
+                            numberToAdd.isCompleted = true
+                            modelContext.insert(numberToAdd)
                             editingNumber = nil
                             nameInputText = ""
                             numberInputText = ""
                         }
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button(LocalizedStringKey("Save")) {
-                            let trimmedName = nameInputText.trimmingCharacters(in: .whitespacesAndNewlines)
-                            let trimmedNumber = numberInputText.trimmingCharacters(in: .whitespacesAndNewlines)
-                            if trimmedName.isEmpty {
-                                alertMessage = NSLocalizedString("Name is missing", comment: "")
-                                showAlert = true
-                                return
-                            }
-                            if trimmedNumber.isEmpty {
-                                alertMessage = NSLocalizedString("Number is missing", comment: "")
-                                showAlert = true
-                                return
-                            }
-                            if let numberToAdd = editingNumber {
-                                numberToAdd.name = nameInputText.trimmingCharacters(in: .whitespaces)
-                                numberToAdd.idNumber = numberInputText.trimmingCharacters(in: .whitespaces)
-                                numberToAdd.isCompleted = true
-                                modelContext.insert(numberToAdd)
-                                editingNumber = nil
-                                nameInputText = ""
-                                numberInputText = ""
-                            }
-                        }
-                        .alert(alertMessage, isPresented: $showAlert) {
-                            Button(LocalizedStringKey("OK"), role: .cancel) { }
-                        }
+                    .alert(alertMessage, isPresented: $showAlert) {
+                        Button(LocalizedStringKey("OK"), role: .cancel) { }
                     }
                 }
             }
-            .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         }
+        .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
+        .navigationTitle(LocalizedStringKey("Numbers"))
+        //        .id(languageSettings.locale.identifier)
     }
-
+}
     // MARK: - Helpers
     /// Deletes a number at the specified offsets from the model context.
     func deleteNumber(at offsets: IndexSet) {

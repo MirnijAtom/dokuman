@@ -22,108 +22,112 @@ struct AccountView: View {
 
     // MARK: - Body
     var body: some View {
-        List {
-            // MARK: - Appearance & Language
-            Section {
-                Toggle(LocalizedStringKey("Dark mode"), isOn: $themeSettings.isDarkMode)
-                    .toggleStyle(.switch)
-                    .onChange(of: themeSettings.isDarkMode) { _, _ in
-                        let generator = UIImpactFeedbackGenerator(style: .light)
+        NavigationStack {
+            List {
+                // MARK: - Appearance & Language
+                Section {
+                    Toggle(LocalizedStringKey("Dark mode"), isOn: $themeSettings.isDarkMode)
+                        .toggleStyle(.switch)
+                        .onChange(of: themeSettings.isDarkMode) { _, _ in
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                        }
+                    HStack {
+                        Text(LocalizedStringKey("Language"))
+                        Spacer()
+                        Button {
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            languageSettings.locale = Locale(identifier: "en")
+                        } label: {
+                            Image("UKFlag")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 26)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .stroke(languageSettings.locale.identifier == "en" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
+                                )
+                        }
+                        .contentShape(Rectangle())
+                        .buttonStyle(.plain)
+                        Spacer().frame(width: 16)
+                        Button {
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            languageSettings.locale = Locale(identifier: "de")
+                        } label: {
+                            Image("GermanFlag")
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 26)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 6)
+                                        .stroke(languageSettings.locale.identifier == "de" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
+                                )
+                        }
+                        .contentShape(Rectangle())
+                        .buttonStyle(.plain)
+                    }
+                    Button(LocalizedStringKey("Storage Info")) {
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
+                        withAnimation { showStorageInfo.toggle() }
                     }
-                HStack {
-                    Text(LocalizedStringKey("Language"))
-                    Spacer()
-                    Button {
-                        let generator = UIImpactFeedbackGenerator(style: .light)
+                    .foregroundStyle(.primary)
+                }
+                // MARK: - Subscription
+                Section {
+                    Button(LocalizedStringKey("Upgrade to Pro")) {
+                        showUpgradeToPro = true
+                    }
+                    .foregroundStyle(.primary)
+                    
+                    Button(LocalizedStringKey("Manage Subscription")) {
+                        if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
+                            UIApplication.shared.open(url)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                }
+                // MARK: - Legal
+                Section {
+                    Button(LocalizedStringKey("Privacy Policy")) {
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
-                        languageSettings.locale = Locale(identifier: "en")
-                    } label: {
-                        Image("UKFlag")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 26)
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(languageSettings.locale.identifier == "en" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
-                            )
+                        withAnimation { showPrivacyPolicy = true }
                     }
-                    .contentShape(Rectangle())
-                    .buttonStyle(.plain)
-                    Spacer().frame(width: 16)
-                    Button {
-                        let generator = UIImpactFeedbackGenerator(style: .light)
+                    .foregroundStyle(.primary)
+                    Button(LocalizedStringKey("Terms & Conditions")) {
+                        let generator = UIImpactFeedbackGenerator(style: .medium)
                         generator.impactOccurred()
-                        languageSettings.locale = Locale(identifier: "de")
-                    } label: {
-                        Image("GermanFlag")
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 26)
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(languageSettings.locale.identifier == "de" ? Color.teal.secondary : Color.clear.secondary, lineWidth: 1)
-                            )
+                        withAnimation { showTermsAndConditions = true }
                     }
-                    .contentShape(Rectangle())
-                    .buttonStyle(.plain)
+                    .foregroundStyle(.primary)
                 }
-                Button(LocalizedStringKey("Storage Info")) {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
-                    withAnimation { showStorageInfo.toggle() }
+                // MARK: - Placeholder Section
+                Section {
+                    // Reserved for future settings
                 }
-                .foregroundStyle(.primary)
             }
-            // MARK: - Subscription
-            Section {
-                Button(LocalizedStringKey("Upgrade to Pro")) {
-                    showUpgradeToPro = true
-                }
-                .foregroundStyle(.primary)
-                
-                Button(LocalizedStringKey("Manage Subscription")) {
-                    if let url = URL(string: "https://apps.apple.com/account/subscriptions") {
-                        UIApplication.shared.open(url)
-                    }
-                }
-                .foregroundStyle(.primary)
+            .sheet(isPresented: $showPrivacyPolicy) {
+                PrivacyPolicyView()
             }
-            // MARK: - Legal
-            Section {
-                Button(LocalizedStringKey("Privacy Policy")) {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
-                    withAnimation { showPrivacyPolicy = true }
+            .sheet(isPresented: $showTermsAndConditions) {
+                TermsAndConditionsView()
+            }
+            .sheet(isPresented: $showStorageInfo) {
+                StorageInfoView()
+            }
+            .fullScreenCover(isPresented: $showUpgradeToPro) {
+                NavigationStack {
+                    SubscriptionView()
                 }
-                .foregroundStyle(.primary)
-                Button(LocalizedStringKey("Terms & Conditions")) {
-                    let generator = UIImpactFeedbackGenerator(style: .medium)
-                    generator.impactOccurred()
-                    withAnimation { showTermsAndConditions = true }
-                }
-                .foregroundStyle(.primary)
             }
-            // MARK: - Placeholder Section
-            Section {
-                // Reserved for future settings
-            }
-        }
-        .sheet(isPresented: $showPrivacyPolicy) {
-            PrivacyPolicyView()
-        }
-        .sheet(isPresented: $showTermsAndConditions) {
-            TermsAndConditionsView()
-        }
-        .sheet(isPresented: $showStorageInfo) {
-            StorageInfoView()
-        }
-        .fullScreenCover(isPresented: $showUpgradeToPro) {
-            NavigationStack {
-                SubscriptionView()
-            }
+            .id(languageSettings.locale.identifier)
+            .navigationTitle(LocalizedStringKey("Account"))
         }
     }
 }

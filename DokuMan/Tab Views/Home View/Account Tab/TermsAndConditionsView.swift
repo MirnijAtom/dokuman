@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TermsAndConditionsView: View {
-    // MARK: - Body
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -22,6 +21,8 @@ struct TermsAndConditionsView: View {
 
                 Text("""
 DokuMan is designed to securely store and manage sensitive personal documents, including identification numbers, certificates, and contracts. Your data is stored locally on your device and optionally synced via your personal iCloud account. We do not collect, process, or transmit any personal information to our servers.
+
+Face ID authentication is available in the free version of the app to help protect access. This uses Apple’s secure biometric system and no biometric data is ever stored by the app.
 
 By using this app, you accept full responsibility for the data you store. We disclaim liability for any data loss or misuse. Use is at your own risk.
 """)
@@ -39,25 +40,26 @@ Last updated: July 10, 2025
 These Terms govern your use of the DokuMan application provided by Aleksandrs Bertulis ("Developer").
 
 2. **License**  
-Subject to your compliance with these Terms, the Developer grants you a non-transferable, non-exclusive license to use the app on Apple-branded products you own or control. The license is for personal, non-commercial use only.
+You are granted a non-transferable, non-exclusive license to use the app on Apple-branded devices you own. Use is personal and non-commercial.
 
 3. **Storage of Sensitive Data**  
-DokuMan is designed for the local storage of sensitive documents. You are responsible for ensuring the safety and legality of the content you upload. Enabling iCloud sync is optional and subject to Apple's policies.
+You are responsible for ensuring that any sensitive content stored in the app complies with applicable laws. Syncing with iCloud is optional and governed by Apple's terms.
 
 4. **No Access by Developer**  
-The Developer does not access, store, or transmit any of your documents or personal data. Your data remains on your device or in your personal iCloud account.
+The Developer does not access or store your data. All files and information remain on your device or in your personal iCloud account.
 
 5. **Security**  
-While local device encryption and iCloud offer a secure storage environment, the Developer disclaims all warranties related to data security, loss, or unauthorized access.
+DokuMan supports Face ID for device-level access protection. This uses Apple’s secure biometric system. The app does not collect or store biometric data. Despite precautions, no security system is foolproof and use is at your own risk.
 
 6. **Limitation of Liability**  
-To the fullest extent permitted by law, the Developer shall not be liable for any loss of data, damages, or misuse arising from your use of the app.
+The Developer shall not be liable for data loss, misuse, or damages resulting from use of the app.
 
 7. **Modifications**  
-These Terms may be updated occasionally. Continued use after changes implies acceptance of the revised Terms.
+These Terms may change. Continued use of the app after changes means you accept the new Terms.
 
 8. **Apple EULA**  
-These Terms incorporate Apple’s standard End User License Agreement (EULA), which governs your relationship with Apple. See: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+These Terms incorporate Apple's standard EULA:  
+https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 """)
 
                 Divider()
@@ -66,10 +68,7 @@ These Terms incorporate Apple’s standard End User License Agreement (EULA), wh
                     .font(.title2)
                     .bold()
 
-                
-                Text("""
-                To understand how we handle your personal data, please refer to our separate Privacy Policy available in the app or on our website.
-                """)
+                Text("To understand how we handle your personal data, see the separate Privacy Policy available in the app.")
 
                 Divider()
 

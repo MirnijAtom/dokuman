@@ -41,15 +41,17 @@ class Document: Identifiable {
 /// Represents a single version of a document (e.g., a PDF file)
 @Model
 class DocumentVersion {
-    /// The PDF or file data
     var fileData: Data
-    /// The date this version was added
     var dateAdded: Date
-    /// Optional note for this version
     var note: String?
-    
-    /// Initializes a new DocumentVersion
-    init(fileData: Data, dateAdded: Date, note: String? = nil) {
+
+    var dateFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        return formatter.string(from: dateAdded)
+    }
+
+    init(fileData: Data, dateAdded: Date = Date(), note: String? = nil) {
         self.fileData = fileData
         self.dateAdded = dateAdded
         self.note = note

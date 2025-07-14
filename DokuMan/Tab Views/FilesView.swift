@@ -16,6 +16,7 @@ struct FilesView: View {
     @Environment(\.modelContext) var modelContext
     @Query var documents: [Document]
     @EnvironmentObject var themeSettings: ThemeSettings
+    @EnvironmentObject var languageSettings: LanguageSettings
     @FocusState private var isSearchFocused: Bool
     @State private var searchText: String = ""
     @State private var selectedDocument: Document? = nil
@@ -178,7 +179,7 @@ struct FilesView: View {
             Button(action: {
                 selectedDocument = document
             }) {
-                VStack(spacing: 16) {
+                VStack {
                     PDFPreview(data: document.versions.first!.fileData)
                         .scaleEffect(1.03)
                         .frame(width: a4Size.width, height: a4Size.height)
@@ -224,6 +225,12 @@ struct FilesView: View {
                                 Label(LocalizedStringKey("Delete"), systemImage: "trash")
                             }
                         }
+                    if let firstVersion = document.versions.first {
+                        Text(firstVersion.dateFormatted)
+                            .font(.caption)
+                            .foregroundColor(.primary)
+                            .padding(.top, 6)
+                    }
                     Text(document.name)
                         .font(.caption)
                         .foregroundColor(.primary)
