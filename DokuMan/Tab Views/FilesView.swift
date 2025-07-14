@@ -107,15 +107,23 @@ struct FilesView: View {
                         Button {
                             let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
-                            withAnimation { showArchived.toggle() }
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                                showArchived.toggle()
+                            }
                         } label: {
-                            Label(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"), systemImage: showArchived ? "document.on.document" : "archivebox")
-                                .frame(height: 15)
-                                .padding()
-                                .foregroundStyle(.teal)
-                                .background(.white)
-                                .clipShape(.capsule)
-                                .shadow(radius: 7)
+                            HStack {
+                                Image(systemName: showArchived ? "document.on.document" : "archivebox")
+                                Text(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"))
+                            }
+                            .font(.callout)
+                            .foregroundStyle(.teal)
+                            .frame(height: 15)
+                            .padding()
+                            .background(.white)
+                            .clipShape(Capsule())
+                            .shadow(radius: 5)
+                            .transition(.blurReplace)
+                            .id(showArchived) // key for animating between states
                         }
                         .padding(.bottom, 38)
                         Spacer()

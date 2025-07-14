@@ -27,6 +27,9 @@ struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var languageSettings: LanguageSettings
+    @EnvironmentObject var purchaseManager: PurchaseManager
+    @Query var documents: [Document]
+    @Query var numbers: [Number]
     @FocusState private var nameFieldIsFocused: Bool
     @State private var name: String = ""
     @State private var date: Date = Date()
@@ -36,10 +39,10 @@ struct AddDocumentView: View {
     @State private var showFileImporter = false
     @State private var showScanner = false
     @State private var showNumbersEdit = false
+    @State private var showSubscription = false
     @State private var allCategories = [
         "Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"
     ]
-    //    @State private var filteredSuggestions: [String] = []
 
     // MARK: - Body
     var body: some View {
@@ -47,9 +50,13 @@ struct AddDocumentView: View {
             if data.isEmpty {
                 List {
                     Button {
-                        showFileImporter.toggle()
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
+                        if documents.count < 5 || purchaseManager.hasProAccess {
+                            showFileImporter.toggle()
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                        } else {
+                            showSubscription = true
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "doc")
@@ -62,9 +69,13 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
+                        if documents.count < 5 || purchaseManager.hasProAccess {
                         showScanner.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
+                        } else {
+                            showSubscription = true
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "document.viewfinder")
@@ -77,9 +88,13 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
+                        if documents.count < 5 || purchaseManager.hasProAccess {
                         showPhotoPicker.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
+                        } else {
+                            showSubscription = true
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "photo.on.rectangle")
@@ -92,9 +107,13 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
+                        if numbers.count < 5 || purchaseManager.hasProAccess {
                         showNumbersEdit.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
+                        } else {
+                            showSubscription = true
+                        }
                     } label: {
                         HStack {
                             Image(systemName: "numbers")
@@ -105,6 +124,9 @@ struct AddDocumentView: View {
                                 .font(.subheadline)
                             Spacer()
                         }
+                    }
+                    .sheet(isPresented: $showSubscription) {
+                        SubscriptionView()
                     }
                 }
             } else {

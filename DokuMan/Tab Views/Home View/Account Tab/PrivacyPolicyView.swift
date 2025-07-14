@@ -21,29 +21,36 @@ struct PrivacyPolicyView: View {
                     .padding(.bottom)
                 
                 Text("""
-                Your privacy is important to us. This app collects and uses personal data only to provide its features and improve user experience.
+                Your privacy is important to us. DokuMan is designed with a local-first approach and does not collect, store, or share your personal data unless explicitly required and initiated by you.
 
-                **Data Collection:**
-                - We do not collect personal data unless you explicitly provide it (e.g., via form inputs).
-                - Documents and data stay on your device; we don't upload or share them.
-                
-                **Data Usage:**
-                - Data is used only locally in the app.
-                - No tracking, no third-party analytics.
+                **What data we handle:**
+                - You may store sensitive personal documents and ID numbers inside the app.
+                - All data remains solely on your device.
+                - If you choose to enable iCloud sync, your data is securely stored in your personal iCloud account, managed by Apple.
 
-                **Security:**
-                - We implement reasonable measures to protect your data.
-                - You can enable Face ID / passcode lock for additional security.
+                **We do not:**
+                - Collect analytics or track your usage.
+                - Share data with third parties.
+                - Access your documents or personal data in any way.
 
-                **Your Rights:**
-                - You can delete your data anytime.
-                - You can contact us at [your email].
+                **Security Measures:**
+                - You may enable Face ID for additional protection.
+                - The app does not transmit your data externally.
+
+                **Your Rights (GDPR & CCPA):**
+                - You can access, modify, or delete your stored data at any time.
+                - As data is stored locally, deletion is fully in your control.
+                - You are the sole data controller for your stored content.
 
                 **Legal Basis:**
-                - Processing your data is based on your consent and necessity to provide app services.
+                - Processing is based on your explicit consent and is necessary to provide app functionality.
 
-                **Changes:**
-                - We may update this policy; please review regularly.
+                **Contact:**
+                If you have privacy-related concerns, contact:  
+                dokumanapp [at] gmail [dot] com
+
+                **Changes to this Policy:**
+                We may update this privacy policy. Substantial changes will be reflected in-app.
                 """)
                 .font(.body)
                 

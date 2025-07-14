@@ -73,10 +73,12 @@ struct ContentView: View {
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
+    let purchaseManager = PurchaseManager()
     ContentView()
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
+        .environmentObject(purchaseManager)
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

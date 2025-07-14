@@ -29,12 +29,14 @@ struct NumbersEditView: View {
     @Environment(\.modelContext) var modelContext
     @Query var numbers: [Number]
     @EnvironmentObject var themeSettings: ThemeSettings
+    @EnvironmentObject var purchaseManager: PurchaseManager
     @FocusState private var focusedField: UUID?
     @FocusState private var nameFocusedField: UUID?
     @State private var editingNumber: Number?
     @State private var nameInputText: String = ""
     @State private var numberInputText: String = ""
     @State private var showAlert = false
+    @State private var showSubscription = false
     @State private var alertMessage = ""
     @State private var copiedID: UUID? = nil
 
@@ -126,9 +128,13 @@ struct NumbersEditView: View {
                     }
                 }
                 Button {
-                    let newNumber = Number(name: "", idNumber: "", isCompleted: true)
-                    editingNumber = newNumber
-                    nameFocusedField = newNumber.id
+                    if numbers.count < 5 || purchaseManager.hasProAccess {
+                        let newNumber = Number(name: "", idNumber: "", isCompleted: true)
+                        editingNumber = newNumber
+                        nameFocusedField = newNumber.id
+                    } else {
+                        showSubscription = true
+                    }
                 } label: {
                     HStack {
                         Spacer()
@@ -140,6 +146,9 @@ struct NumbersEditView: View {
                 .fontWidth(.compressed)
                 .fontWeight(.light)
                 .fontDesign(.monospaced)
+                .sheet(isPresented: $showSubscription) {
+                    SubscriptionView()
+                }
             }
             .toolbar {
                 if editingNumber != nil {

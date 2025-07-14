@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-// MARK: - TermsAndConditionsView
-
-/// Displays the app's terms, privacy policy, and legal information in a scrollable view.
 struct TermsAndConditionsView: View {
     // MARK: - Body
     var body: some View {
@@ -18,77 +15,68 @@ struct TermsAndConditionsView: View {
                 Text("Terms and Privacy")
                     .font(.largeTitle)
                     .bold()
-                
+
                 Text("Summary")
                     .font(.title2)
                     .bold()
-                
+
                 Text("""
-DokuMan stores your documents and personal data (such as ID numbers) exclusively on your device. If iCloud sync is enabled, your data is securely stored in your personal iCloud account. We do not collect, track, or share your information.
+DokuMan is designed to securely store and manage sensitive personal documents, including identification numbers, certificates, and contracts. Your data is stored locally on your device and optionally synced via your personal iCloud account. We do not collect, process, or transmit any personal information to our servers.
 
-You are fully responsible for your stored content. We provide no warranty regarding data loss or corruption.
-
-See full details below.
+By using this app, you accept full responsibility for the data you store. We disclaim liability for any data loss or misuse. Use is at your own risk.
 """)
-                
+
                 Divider()
-                
+
                 Text("Terms and Conditions")
                     .font(.title2)
                     .bold()
-                
+
                 Text("""
-Last updated: June 17, 2025
+Last updated: July 10, 2025
 
 1. **Scope**  
-These Terms govern your use of the DokuMan app.
+These Terms govern your use of the DokuMan application provided by Aleksandrs Bertulis ("Developer").
 
 2. **License**  
-You may use the app for personal purposes only. Redistribution, resale, or commercial use is prohibited.
+Subject to your compliance with these Terms, the Developer grants you a non-transferable, non-exclusive license to use the app on Apple-branded products you own or control. The license is for personal, non-commercial use only.
 
-3. **User Responsibilities**  
-You are responsible for the accuracy, legality, and safety of your stored content. We do not access or monitor your data.
+3. **Storage of Sensitive Data**  
+DokuMan is designed for the local storage of sensitive documents. You are responsible for ensuring the safety and legality of the content you upload. Enabling iCloud sync is optional and subject to Apple's policies.
 
-4. **Limitation of Liability**  
-DokuMan and its developers are not liable for any data loss, damage, or other issues resulting from app use.
+4. **No Access by Developer**  
+The Developer does not access, store, or transmit any of your documents or personal data. Your data remains on your device or in your personal iCloud account.
 
-5. **Modifications**  
-We may update these Terms at any time. Continued use of the app implies acceptance of the updated Terms.
+5. **Security**  
+While local device encryption and iCloud offer a secure storage environment, the Developer disclaims all warranties related to data security, loss, or unauthorized access.
+
+6. **Limitation of Liability**  
+To the fullest extent permitted by law, the Developer shall not be liable for any loss of data, damages, or misuse arising from your use of the app.
+
+7. **Modifications**  
+These Terms may be updated occasionally. Continued use after changes implies acceptance of the revised Terms.
+
+8. **Apple EULA**  
+These Terms incorporate Apple’s standard End User License Agreement (EULA), which governs your relationship with Apple. See: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 """)
-                
+
                 Divider()
-                
+
                 Text("Privacy Policy")
                     .font(.title2)
                     .bold()
+
                 
                 Text("""
-1. **Data Collection**  
-DokuMan does not collect personal data. All documents and personal information are stored locally on your device or optionally in your iCloud account.
+                To understand how we handle your personal data, please refer to our separate Privacy Policy available in the app or on our website.
+                """)
 
-2. **Third-Party Services**  
-The app uses system services such as iCloud and Face ID according to Apple's privacy policies. No personal data is shared with third parties.
-
-3. **Your Rights (GDPR)**  
-You have full control over your data, including rights to access, correct, or delete it, as data is stored locally or in your personal iCloud.
-
-4. **Contact**  
-For privacy questions, please email:  
-dokumanapp at gmail dot com
-
-5. **Policy Changes**  
-We may update this policy occasionally. Important changes will be communicated within the app.
-
-6. **Lifetime Access**  
-If you purchase a lifetime access subscription, you are granted unlimited use of the app's features for the duration of the app's availability. However, this does not guarantee indefinite availability of the app or its services. The developer reserves the right to modify, suspend, or terminate the app or services at any time without prior notice. No refunds will be issued in such cases.
-""")
-                
                 Divider()
-                
+
                 Text("Impressum")
                     .font(.title2)
                     .bold()
-                
+
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Aleksandrs Bertulis")
                     Text("Dehnhaide 153")
@@ -98,8 +86,7 @@ If you purchase a lifetime access subscription, you are granted unlimited use of
                 }
                 .font(.body)
                 .foregroundColor(.primary)
-                .textSelection(.enabled) // Optional: allow copy without link
-                
+                .textSelection(.enabled)
             }
             .padding()
         }
