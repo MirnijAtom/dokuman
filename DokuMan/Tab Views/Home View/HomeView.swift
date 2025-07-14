@@ -26,7 +26,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("\(purchaseManager.hasProAccess)")
+//                    Text("\(purchaseManager.hasProAccess)")
                     FavoritesSectionView()
                     CategoriesSectionView()
                     NumbersSectionView(selectedTab: $selectedTab)

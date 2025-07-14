@@ -81,3 +81,26 @@
 "Rechtliches" = "Rechtliches";
 "Familie" = "Familie";
 "Sonstiges" = "Sonstiges";
+
+// MARK: - Welcome Sheet
+"welcome_title" = "Warum DokuMan?";
+"welcome_subtitle" = "Dein persönlicher Tresor für Dokumente, Nummern und wichtige Unterlagen – immer griffbereit.";
+"welcome_nav_title" = "Willkommen bei DokuMan";
+
+"feature_allinone_title" = "Alles-in-einem Organizer";
+"feature_allinone_desc" = "Speichere Ausweise, Verträge, Versicherungspolicen, Zertifikate und Notizen – alles in einer App. Kein PDF-Chaos mehr.";
+
+"feature_secure_title" = "Sicher & Privat";
+"feature_secure_desc" = "Alles bleibt auf deinem Gerät oder in deiner iCloud – niemals auf fremden Servern. Mit Face ID bleiben deine Daten geschützt.";
+
+"feature_scan_title" = "Scannen & Speichern";
+"feature_scan_desc" = "Mit dem integrierten Scanner digitalisierst du Papierdokumente mit nur einem Tipp – direkt als durchsuchbare PDFs.";
+
+"feature_favorites_title" = "Favoriten & Archiv";
+"feature_favorites_desc" = "Wichtige Dokumente immer schnell erreichbar. Oder archiviere, was du später noch brauchen könntest.";
+
+"feature_simple_title" = "Einfach. Schnell. Klar.";
+"feature_simple_desc" = "Intuitive Bedienung, sauberes Design, keine Ablenkung. Genau wie eine gute App sein sollte.";
+
+"feature_personal_title" = "Ganz nach deinem Stil";
+"feature_personal_desc" = "Kategorien anpassen, Sprache wählen, deine Arbeitsweise optimieren.";

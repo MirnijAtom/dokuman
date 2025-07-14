@@ -192,7 +192,7 @@ struct NumbersEditView: View {
         }
         .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         .navigationTitle(LocalizedStringKey("Numbers"))
-        //        .id(languageSettings.locale.identifier)
+        .id(languageSettings.locale.identifier)
     }
 }
     // MARK: - Helpers

@@ -20,6 +20,9 @@ struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
     @State private var isAppLocked = true
+    
+    @State private var showWelcomeSheet = false
+    @AppStorage("welcomeSheetNotShownYet") private var welcomeSheetNotShownYet = true
 
     @Query(sort: \Document.name, animation: .default) var documents: [Document]
 
@@ -87,6 +90,10 @@ struct ContentView: View {
         }
         .onAppear {
             authenticate()
+            welcomeSheet()
+        }
+        .sheet(isPresented: $showWelcomeSheet) {
+            WelcomeSheet()
         }
     }
 
@@ -106,6 +113,13 @@ struct ContentView: View {
         } else {
             // If no biometrics available, unlock by default (or you can add passcode fallback)
             isAppLocked = false
+        }
+    }
+    
+    private func welcomeSheet() {
+        if welcomeSheetNotShownYet {
+            showWelcomeSheet = true
+            welcomeSheetNotShownYet = false
         }
     }
 }

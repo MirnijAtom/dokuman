@@ -68,6 +68,7 @@
                         }
                         .frame(maxWidth: .infinity)
                         .foregroundColor(.primary)
+
                     }
                 } else {
                     VStack {
@@ -159,10 +160,11 @@
 
                 
             }
-            .frame(maxWidth: .infinity, minHeight: 86)
+            .frame(maxWidth: .infinity, minHeight: 126)
             .padding(.vertical, 12)
+//            .background(.teal)
             .background(Color(.secondarySystemGroupedBackground))
-            .cornerRadius(0)
+            .cornerRadius(27)
         }
     }
 

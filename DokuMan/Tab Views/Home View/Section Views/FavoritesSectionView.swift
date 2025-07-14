@@ -118,7 +118,7 @@ struct FavoritesSectionView: View {
         .frame(maxHeight: 226)
         .padding(.vertical, 12)
         .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(0)
+        .cornerRadius(27)
         .fullScreenCover(item: $selectedDocument) { document in
             PDFFullScreenView(document: document)
         }

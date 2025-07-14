@@ -98,7 +98,7 @@ struct CategoriesSectionView: View {
         .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
         .padding(.vertical, 12)
         .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(0)
+        .cornerRadius(27)
         .id(languageSettings.locale.identifier) // Force refresh when locale changes
     }
 }

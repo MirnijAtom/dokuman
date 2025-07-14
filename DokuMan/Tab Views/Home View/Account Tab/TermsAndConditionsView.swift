@@ -8,18 +8,38 @@
 import SwiftUI
 
 struct TermsAndConditionsView: View {
+    @Environment(\.locale) private var locale
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("Terms and Privacy")
-                    .font(.largeTitle)
-                    .bold()
+                if locale.identifier.starts(with: "de") {
+                    germanContent
+                } else {
+                    englishContent
+                }
+            }
+            .padding()
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(localizedTitle)
+    }
 
-                Text("Summary")
-                    .font(.title2)
-                    .bold()
+    private var localizedTitle: LocalizedStringKey {
+        locale.identifier.starts(with: "de") ? "Rechtliches" : "Legal"
+    }
 
-                Text("""
+    private var englishContent: some View {
+        Group {
+            Text("Terms and Privacy")
+                .font(.largeTitle)
+                .bold()
+
+            Text("Summary")
+                .font(.title2)
+                .bold()
+
+            Text("""
 DokuMan is designed to securely store and manage sensitive personal documents, including identification numbers, certificates, and contracts. Your data is stored locally on your device and optionally synced via your personal iCloud account. We do not collect, process, or transmit any personal information to our servers.
 
 Face ID authentication is available in the free version of the app to help protect access. This uses Apple’s secure biometric system and no biometric data is ever stored by the app.
@@ -27,13 +47,13 @@ Face ID authentication is available in the free version of the app to help prote
 By using this app, you accept full responsibility for the data you store. We disclaim liability for any data loss or misuse. Use is at your own risk.
 """)
 
-                Divider()
+            Divider()
 
-                Text("Terms and Conditions")
-                    .font(.title2)
-                    .bold()
+            Text("Terms and Conditions")
+                .font(.title2)
+                .bold()
 
-                Text("""
+            Text("""
 Last updated: July 10, 2025
 
 1. **Scope**  
@@ -62,35 +82,111 @@ These Terms incorporate Apple's standard EULA:
 https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
 """)
 
-                Divider()
+            Divider()
 
-                Text("Privacy Policy")
-                    .font(.title2)
-                    .bold()
+            Text("Privacy Policy")
+                .font(.title2)
+                .bold()
 
-                Text("To understand how we handle your personal data, see the separate Privacy Policy available in the app.")
+            Text("To understand how we handle your personal data, see the separate Privacy Policy available in the app.")
 
-                Divider()
+            Divider()
 
-                Text("Impressum")
-                    .font(.title2)
-                    .bold()
+            Text("Impressum")
+                .font(.title2)
+                .bold()
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Aleksandrs Bertulis")
-                    Text("Dehnhaide 153")
-                    Text("22081 Hamburg")
-                    Text("Germany")
-                    Text("Email: aleksandrs dot bertulis at gmail dot com")
-                }
-                .font(.body)
-                .foregroundColor(.primary)
-                .textSelection(.enabled)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Aleksandrs Bertulis")
+                Text("Dehnhaide 153")
+                Text("22081 Hamburg")
+                Text("Germany")
+                Text("Email: aleksandrs dot bertulis at gmail dot com")
             }
-            .padding()
+            .font(.body)
+            .foregroundColor(.primary)
+            .textSelection(.enabled)
         }
-        .background(Color(.systemGroupedBackground))
-        .navigationTitle("Legal")
+    }
+
+    private var germanContent: some View {
+        Group {
+            Text("Nutzungsbedingungen und Datenschutz")
+                .font(.largeTitle)
+                .bold()
+
+            Text("Zusammenfassung")
+                .font(.title2)
+                .bold()
+
+            Text("""
+DokuMan ist dafür entwickelt, sensible persönliche Dokumente sicher zu speichern und zu verwalten, einschließlich Identifikationsnummern, Bescheinigungen und Verträgen. Ihre Daten werden lokal auf Ihrem Gerät gespeichert und optional über Ihr persönliches iCloud-Konto synchronisiert. Wir sammeln, verarbeiten oder übertragen keine personenbezogenen Daten an unsere Server.
+
+Face ID-Authentifizierung ist in der kostenlosen Version der App verfügbar, um den Zugriff zu schützen. Dabei wird Apples sicheres biometrisches System verwendet, und keine biometrischen Daten werden von der App gespeichert.
+
+Durch die Nutzung dieser App übernehmen Sie die volle Verantwortung für die gespeicherten Daten. Wir schließen jegliche Haftung für Datenverlust oder Missbrauch aus. Die Nutzung erfolgt auf eigenes Risiko.
+""")
+
+            Divider()
+
+            Text("Nutzungsbedingungen")
+                .font(.title2)
+                .bold()
+
+            Text("""
+Zuletzt aktualisiert: 10. Juli 2025
+
+1. **Geltungsbereich**  
+Diese Bedingungen regeln Ihre Nutzung der von Aleksandrs Bertulis ("Entwickler") bereitgestellten DokuMan-Anwendung.
+
+2. **Lizenz**  
+Sie erhalten eine nicht übertragbare, nicht exklusive Lizenz zur Nutzung der App auf Apple-Geräten, die Sie besitzen. Die Nutzung ist persönlich und nicht kommerziell.
+
+3. **Speicherung sensibler Daten**  
+Sie sind verantwortlich dafür, dass alle in der App gespeicherten sensiblen Inhalte den geltenden Gesetzen entsprechen. Die Synchronisierung mit iCloud ist optional und unterliegt Apples Bedingungen.
+
+4. **Kein Zugriff durch den Entwickler**  
+Der Entwickler hat keinen Zugriff auf Ihre Daten und speichert diese nicht. Alle Dateien und Informationen verbleiben auf Ihrem Gerät oder in Ihrem persönlichen iCloud-Konto.
+
+5. **Sicherheit**  
+DokuMan unterstützt Face ID zum Schutz des Gerätezugriffs. Dabei wird Apples sicheres biometrisches System verwendet. Die App speichert keine biometrischen Daten. Trotz aller Vorsichtsmaßnahmen ist kein Sicherheitssystem unfehlbar; die Nutzung erfolgt auf eigenes Risiko.
+
+6. **Haftungsbeschränkung**  
+Der Entwickler haftet nicht für Datenverlust, Missbrauch oder Schäden, die aus der Nutzung der App entstehen.
+
+7. **Änderungen**  
+Diese Bedingungen können sich ändern. Die fortgesetzte Nutzung der App nach Änderungen bedeutet Ihre Zustimmung zu den neuen Bedingungen.
+
+8. **Apple EULA**  
+Diese Bedingungen schließen Apples Standard-EULA ein:  
+https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+""")
+
+            Divider()
+
+            Text("Datenschutzerklärung")
+                .font(.title2)
+                .bold()
+
+            Text("Um zu verstehen, wie wir Ihre persönlichen Daten behandeln, lesen Sie bitte die separate Datenschutzerklärung, die in der App verfügbar ist.")
+
+            Divider()
+
+            Text("Impressum")
+                .font(.title2)
+                .bold()
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Aleksandrs Bertulis")
+                Text("Dehnhaide 153")
+                Text("22081 Hamburg")
+                Text("Deutschland")
+                Text("Email: aleksandrs punkt bertulis at gmail punkt com")
+            }
+            .font(.body)
+            .foregroundColor(.primary)
+            .textSelection(.enabled)
+        }
     }
 }
 

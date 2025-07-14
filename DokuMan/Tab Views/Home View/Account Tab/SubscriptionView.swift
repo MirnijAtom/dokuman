@@ -45,13 +45,18 @@ struct SubscriptionView: View {
                     .scaledToFit()
                     .padding(.top, 40)
                     .padding(.horizontal, 20)
-                Text("Get DokuMan Pro")
-                    .font(.largeTitle).bold()
+                if purchaseManager.hasProAccess {
+                    Text("Thank you for getting Pro!")
+                        .font(.largeTitle).bold()
+                } else {
+                    Text("Get DokuMan Pro")
+                        .font(.largeTitle).bold()
+                }
 
                 VStack(alignment: .leading, spacing: 12) {
                     Label("Unlimited Documents", systemImage: "doc.on.doc")
-                    Label("Secure Backup", systemImage: "lock.shield")
-                    Label("Face ID Lock", systemImage: "faceid")
+                    Label("Archive Your Files", systemImage: "archivebox")
+                    Label("Mark Favorites", systemImage: "star.fill")
                 }
                 .font(.headline)
                 
@@ -222,7 +227,9 @@ struct SubscriptionView: View {
 }
 
 #Preview {
+    let purchaseManager = PurchaseManager()
     NavigationStack {
         SubscriptionView()
+            .environmentObject(purchaseManager)
     }
 }
