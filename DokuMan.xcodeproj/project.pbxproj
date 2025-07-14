@@ -38,9 +38,22 @@
 		4AF8E1D82E1FEDCA0083F676 /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4AF8E1E12E2551AF0083F676 /* Exceptions for "DokuMan" folder in "DokuMan" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4A4A67A52DAD0A7600AC8BDF /* DokuMan */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4A4A67A82DAD0A7600AC8BDF /* DokuMan */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4AF8E1E12E2551AF0083F676 /* Exceptions for "DokuMan" folder in "DokuMan" target */,
+			);
 			path = DokuMan;
 			sourceTree = "<group>";
 		};
@@ -424,9 +437,12 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DokuMan/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to unlock your data.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "To let you add documents from your photo library.\n";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.\nUsed to unlock the app and protect your documents.\n";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "To access and import your files into DokuMan.\n";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To let you add documents from your photo library.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -455,9 +471,12 @@
 				DEVELOPMENT_TEAM = MY555LRB32;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DokuMan/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Need access to scan the document";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to unlock your data.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "To let you add documents from your photo library.\n";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.\nUsed to unlock the app and protect your documents.\n";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "To access and import your files into DokuMan.\n";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To let you add documents from your photo library.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

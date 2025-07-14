@@ -51,22 +51,29 @@
                         generator.impactOccurred()
                         selectedTab = 2
                     } label: {
-                        HStack {
-                            Text(LocalizedStringKey("Add your first number"))
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: 150)
-                                .padding()
-                                .padding(.trailing, 15)
-                                .padding(.leading, 10)
-                            Image("emptyNumbersIcon")
-                                .resizable()
-                                .scaledToFit()
-                                .padding()
-                                .padding(.trailing, 10)
-                                .frame(width: 180, height: 100)
+                        GeometryReader { geometry in
+                            HStack {
+                                VStack {
+                                    Text(LocalizedStringKey("No numbers yet. Add your important IDs like tax, health insurance, or social security numbers."))
+                                        .lineLimit(nil)
+                                        .multilineTextAlignment(.center)
+                                        .frame(width: geometry.size.width * 0.5)
+                                        .padding(.horizontal)
+                                        .padding(.leading, 26)
+                                }
+                                .frame(width: geometry.size.width * 0.5, alignment: .center)
+
+                                VStack {
+                                    Image("emptyNumbersIcon")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: geometry.size.width * 0.4, height: 70)
+                                        .padding()
+                                }
+                                .frame(width: geometry.size.width * 0.5, alignment: .center)
+                            }
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(height: 110)
                         .foregroundColor(.primary)
 
                     }

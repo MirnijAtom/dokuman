@@ -64,22 +64,29 @@ struct CategoriesSectionView: View {
             .padding(.horizontal)
             .padding(.vertical, 5)
             if nonEmptyCategories.isEmpty {
-                HStack {
-                    Text(LocalizedStringKey("No categories yet"))
-                        .lineLimit(nil)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 150)
-                        .padding()
-                        .padding(.trailing, 15)
-                        .padding(.leading, 10)
-                    Image("emptyCategoriesIcon")
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                        .padding(.trailing, 10)
-                        .frame(width: 180, height: 100)
+                GeometryReader { geometry in
+                    HStack {
+                        VStack {
+                            Text(LocalizedStringKey("No documents yet. Add files from Photos, Files, or scan them with your camera."))
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.center)
+                                .frame(width: geometry.size.width * 0.6)
+                                .padding(.horizontal)
+                                .padding(.leading, 26) // extra left padding
+                        }
+                        .frame(width: geometry.size.width * 0.6, alignment: .center)
+
+                        VStack {
+                            Image("emptyCategoriesIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.25, height: 70)
+                                .padding()
+                        }
+                        .frame(width: geometry.size.width * 0.4, alignment: .center)
+                    }
                 }
-                .frame(maxWidth: .infinity)
+                .frame(height: 110)
                 .padding(.bottom, 20)
             } else {
                 VStack(spacing: 0) {

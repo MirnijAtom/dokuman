@@ -56,7 +56,7 @@ struct SubscriptionView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     Label("Unlimited Documents", systemImage: "doc.on.doc")
                     Label("Archive Your Files", systemImage: "archivebox")
-                    Label("Mark Favorites", systemImage: "star.fill")
+//                    Label("Mark Favorites", systemImage: "star.fill")
                 }
                 .font(.headline)
                 

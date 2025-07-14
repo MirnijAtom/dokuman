@@ -83,7 +83,7 @@
 "Sonstiges" = "Sonstiges";
 
 // MARK: - Welcome Sheet
-"welcome_title" = "Warum DokuMan?";
+"welcome_title" = "Willkommen bei DokuMan";
 "welcome_subtitle" = "Dein persönlicher Tresor für Dokumente, Nummern und wichtige Unterlagen – immer griffbereit.";
 "welcome_nav_title" = "Willkommen bei DokuMan";
 
@@ -104,3 +104,8 @@
 
 "feature_personal_title" = "Ganz nach deinem Stil";
 "feature_personal_desc" = "Kategorien anpassen, Sprache wählen, deine Arbeitsweise optimieren.";
+
+
+"Your favorite documents will appear here. Mark important files to access them quickly." = "Deine Favoriten erscheinen hier. Markiere wichtige Dokumente für schnellen Zugriff.";
+"No documents yet. Add files from Photos, Files, or scan them with your camera." = "Noch keine Dokumente. Füge Dateien aus Fotos, Dateien oder per Kamera-Scan hinzu.";
+"No numbers yet. Add your important IDs like tax, health insurance, or social security numbers." = "Noch keine Nummern. Füge deine wichtigen Nummern wie Steuer-ID, Krankenversicherung oder Sozialversicherung hinzu.";

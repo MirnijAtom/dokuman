@@ -32,23 +32,29 @@ struct FavoritesSectionView: View {
             .font(.headline)
             .padding(.horizontal)
             if favorites.isEmpty {
-                HStack {
-                    Text(LocalizedStringKey("Add your first number"))
-                        .lineLimit(nil)
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: 150)
-                        .padding()
-                        .padding(.trailing, 15)
-                        .padding(.leading, 10)
-                    Image("emptyFavoritesIcon")
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                        .padding(.trailing, 10)
-                        .frame(width: 180, height: 100)
+                GeometryReader { geometry in
+                    HStack {
+                        VStack {
+                            Text(LocalizedStringKey("Your favorite documents will appear here. Mark important files to access them quickly."))
+                                .lineLimit(nil)
+                                .multilineTextAlignment(.center)
+                                .frame(width: geometry.size.width * 0.5)
+                                .padding(.horizontal)
+                                .padding(.leading, 26)
+                        }
+                        .frame(width: geometry.size.width * 0.5, alignment: .center)
+
+                        VStack {
+                            Image("emptyFavoritesIcon")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: geometry.size.width * 0.25, height: 70)
+                                .padding()
+                        }
+                        .frame(width: geometry.size.width * 0.5, alignment: .center)
+                    }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 20)
+                .frame(height: 110)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
@@ -147,28 +153,5 @@ struct FavoritesSectionView: View {
         .environmentObject(languageSettings)
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
-//        .onAppear {
-//            // Create a mock document container
-//            let container = try! ModelContainer(for: Document.self)
-//            let context = container.mainContext
-//
-//            // Add mock documents to the container for preview
-//            let filenames = [
-//                "krankenversicherung",
-//                "lebenslauf",
-//                "meldebeschainigung",
-//                "portfolio",
-//                "versicherung"
-//            ]
-//
-//            // Insert mock documents
-//            for name in filenames {
-//                if let url = Bundle.main.url(forResource: name, withExtension: "pdf"),
-//                   let data = try? Data(contentsOf: url) {
-//                    let version = DocumentVersion(fileData: data, dateAdded: Date())
-//                    let doc = Document(name: name.capitalized, isFavorite: true, isArchived: false, category: .wohnung, versions: [version])
-//                    context.insert(doc)
-//                }
-//            }
-//        }
+
 }

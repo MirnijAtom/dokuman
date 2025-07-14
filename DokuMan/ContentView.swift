@@ -30,15 +30,15 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             if isAppLocked {
-                Color.black.opacity(0.95)
+                Color.white.opacity(0.95)
                     .ignoresSafeArea()
                     .overlay(
                         VStack(spacing: 16) {
                             Image(systemName: "lock.fill")
                                 .font(.system(size: 50))
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                             Text("Authenticating...")
-                                .foregroundColor(.white)
+                                .foregroundColor(.black)
                                 .font(.headline)
                         }
                     )
@@ -89,7 +89,9 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            authenticate()
+                authenticate()
+        }
+        .onChange(of: isAppLocked) {
             welcomeSheet()
         }
         .sheet(isPresented: $showWelcomeSheet) {

@@ -17,6 +17,7 @@ struct FilesView: View {
     @Query var documents: [Document]
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var languageSettings: LanguageSettings
+    @EnvironmentObject var purchaseManager: PurchaseManager
     @FocusState private var isSearchFocused: Bool
     @State private var searchText: String = ""
     @State private var selectedDocument: Document? = nil
@@ -101,33 +102,35 @@ struct FilesView: View {
                 .toolbarBackground(.visible, for: .navigationBar)
 
                 // Archive toggle floating button
-                VStack {
-                    Spacer()
-                    HStack {
+                if purchaseManager.hasProAccess {
+                    VStack {
                         Spacer()
-                        Button {
-                            let generator = UIImpactFeedbackGenerator(style: .light)
-                            generator.impactOccurred()
-                            withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
-                                showArchived.toggle()
+                        HStack {
+                            Spacer()
+                            Button {
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                                    showArchived.toggle()
+                                }
+                            } label: {
+                                HStack {
+                                    Image(systemName: showArchived ? "document.on.document" : "archivebox")
+                                    Text(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"))
+                                }
+                                .font(.callout)
+                                .foregroundStyle(.teal)
+                                .frame(height: 15)
+                                .padding()
+                                .background(.white)
+                                .clipShape(Capsule())
+                                .shadow(radius: 5)
+                                .transition(.blurReplace)
+                                .id(showArchived) // key for animating between states
                             }
-                        } label: {
-                            HStack {
-                                Image(systemName: showArchived ? "document.on.document" : "archivebox")
-                                Text(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"))
-                            }
-                            .font(.callout)
-                            .foregroundStyle(.teal)
-                            .frame(height: 15)
-                            .padding()
-                            .background(.white)
-                            .clipShape(Capsule())
-                            .shadow(radius: 5)
-                            .transition(.blurReplace)
-                            .id(showArchived) // key for animating between states
+                            .padding(.bottom, 38)
+                            Spacer()
                         }
-                        .padding(.bottom, 38)
-                        Spacer()
                     }
                 }
             }
@@ -209,6 +212,7 @@ struct FilesView: View {
                                     Label(LocalizedStringKey(document.isFavorite ? "Remove from favorites" : "Add to favorites"), systemImage: document.isFavorite ? "star.slash" : "star")
                                 }
                             }
+
                             Button {
                                 let generator = UIImpactFeedbackGenerator(style: .light)
                                 generator.impactOccurred()
@@ -216,6 +220,8 @@ struct FilesView: View {
                             } label: {
                                 Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                             }
+                            .disabled(!purchaseManager.hasProAccess)
+                            .opacity(purchaseManager.hasProAccess ? 1 : 0.4)
                             Divider()
                             Button(role: .destructive) {
                                 let generator = UIImpactFeedbackGenerator(style: .rigid)
