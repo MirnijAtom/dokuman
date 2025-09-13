@@ -165,12 +165,17 @@ struct FilesView: View {
             }
         } else {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(LocalizedStringKey("Select")) {
+                Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                     withAnimation { isSelectionActive = true }
+                } label: {
+                    Text(LocalizedStringKey("Select"))
+                    .disabled(!purchaseManager.hasProAccess)
+                    .opacity(purchaseManager.hasProAccess ? 1 : 0.4)
                 }
             }
+
         }
     }
 
@@ -297,8 +302,11 @@ struct FilesView: View {
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
+    let purchaseManager = PurchaseManager()
+
     return FilesView()
         .modelContainer(for: Document.self)
+        .environmentObject(purchaseManager)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
         .environment(\.locale, languageSettings.locale)

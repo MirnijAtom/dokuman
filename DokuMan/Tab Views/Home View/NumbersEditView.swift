@@ -27,7 +27,7 @@ extension View {
 struct NumbersEditView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
-    @Query var numbers: [Number]
+    @Query(sort: \Number.date) var numbers: [Number]
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var purchaseManager: PurchaseManager
     @EnvironmentObject var languageSettings: LanguageSettings
@@ -140,6 +140,7 @@ struct NumbersEditView: View {
                 HStack {
                     Spacer()
                     Text(LocalizedStringKey("New number"))
+                        .font(.headline)
                     Spacer()
                 }
             }

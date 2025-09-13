@@ -46,8 +46,9 @@ struct SubscriptionView: View {
                     .padding(.top, 40)
                     .padding(.horizontal, 20)
                 if purchaseManager.hasProAccess {
-                    Text("Thank you for getting Pro!")
+                    Text("You have DokuMan Pro")
                         .font(.largeTitle).bold()
+//                        .alignment(.center)
                 } else {
                     Text("Get DokuMan Pro")
                         .font(.largeTitle).bold()
@@ -146,17 +147,21 @@ struct SubscriptionView: View {
                 }
                 .padding(.bottom, 10)
 
-                Button("Subscribe") {
+                Button {
                     guard let product = selectedProduct else { return }
                     Task {
                         await purchase(product)
-                    }                }
-                .font(.title3)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.teal)
-                .foregroundColor(.white)
-                .cornerRadius(12)
+                    }
+                } label: {
+                    Text("Subscribe")
+                    .font(.title3)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.teal)
+                    .foregroundColor(.white)
+                    .clipShape(Capsule())
+                    .cornerRadius(12)
+                }
 
                 HStack {
                     Button("Privacy Policy") { showPrivacyPolicy = true }

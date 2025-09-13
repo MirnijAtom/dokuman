@@ -71,6 +71,7 @@ class Number {
     var idNumber: String
     /// Whether the number is marked as completed
     var isCompleted: Bool
+    var date: Date = Date()
     
     /// Initializes a new Number
     init(name: String, idNumber: String, isCompleted: Bool = false) {

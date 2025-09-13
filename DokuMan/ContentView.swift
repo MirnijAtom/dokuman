@@ -20,7 +20,7 @@ struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
     @State private var isAppLocked = true
-    
+        
     @State private var showWelcomeSheet = false
     @AppStorage("welcomeSheetNotShownYet") private var welcomeSheetNotShownYet = true
 
@@ -28,23 +28,10 @@ struct ContentView: View {
 
     // MARK: - Body
     var body: some View {
-        ZStack {
-            if isAppLocked {
-                Color.white.opacity(0.95)
-                    .ignoresSafeArea()
-                    .overlay(
-                        VStack(spacing: 16) {
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 50))
-                                .foregroundColor(.black)
-                            Text("Authenticating...")
-                                .foregroundColor(.black)
-                                .font(.headline)
-                        }
-                    )
-            } else {
+              
                 TabView(selection: $selectedTab) {
                     HomeView(selectedTab: $selectedTab)
+                        .ignoresSafeArea()
                         .tabItem {
                             Label("Home", systemImage: selectedTab == 0 ? "house.fill" : "house")
                         }
@@ -59,6 +46,9 @@ struct ContentView: View {
                             Label("Numbers", systemImage: selectedTab == 2 ? "numbers.rectangle.fill" : "numbers.rectangle")
                         }
                         .tag(2)
+                    
+                
+                    
                     AccountView()
                         .tabItem {
                             Label("Account", systemImage: selectedTab == 3 ? "person.fill" : "person")
@@ -69,7 +59,7 @@ struct ContentView: View {
                 .tint(.teal)
                 .sheet(isPresented: $showAddDoc) {
                     AddDocumentView()
-                        .presentationDetents([.large])
+                        .presentationDetents([.height(250)])
                 }
                 .overlay(alignment: .bottomTrailing) {
                     Button {
@@ -78,16 +68,31 @@ struct ContentView: View {
                         Image(systemName: "plus")
                             .font(.system(size: 35))
                             .foregroundStyle(.teal)
-                            .frame(width: 60, height: 60)
-                            .background(.white)
-                            .clipShape(Circle())
-                            .shadow(radius: 7)
+                            .padding()
+                            .glassEffect()
+
                     }
-                    .padding(.bottom, 80)
-                    .padding(.trailing, 24)
+                    .padding(.bottom, 70)
+                    .padding(.trailing, 35)
                 }
-            }
-        }
+                .overlay {
+                    if isAppLocked {
+                        Color.white.opacity(0.95)
+                            .ignoresSafeArea()
+                            .overlay(
+                                VStack(spacing: 16) {
+                                    Image(systemName: "lock.fill")
+                                        .font(.system(size: 50))
+                                        .foregroundColor(.black)
+                                    Text("Authenticating...")
+                                        .foregroundColor(.black)
+                                        .font(.headline)
+                                }
+                            )
+                    }
+                }
+            
+        
         .onAppear {
                 authenticate()
         }

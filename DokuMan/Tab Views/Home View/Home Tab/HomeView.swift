@@ -38,8 +38,8 @@ struct HomeView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle(purchaseManager.hasProAccess ? "DokuMan Pro" : "Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
-            .toolbarBackground(Material.bar, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
+            .ignoresSafeArea(edges: .bottom)
         }
         .id(purchaseManager.hasProAccess)
     }
@@ -52,6 +52,7 @@ struct HomeView: View {
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
+        .environmentObject(PurchaseManager())
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }
