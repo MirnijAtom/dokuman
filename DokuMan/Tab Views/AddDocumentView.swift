@@ -27,7 +27,7 @@ struct AddDocumentView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var languageSettings: LanguageSettings
-    @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var store: StoreKitManager
     @Query var documents: [Document]
     @Query var numbers: [Number]
     @FocusState private var nameFieldIsFocused: Bool
@@ -50,7 +50,7 @@ struct AddDocumentView: View {
             if data.isEmpty {
                 List {
                     Button {
-                        if documents.count < 5 || purchaseManager.hasProAccess {
+                        if documents.count < 5 || store.isPro {
                             showFileImporter.toggle()
                             let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
@@ -69,7 +69,7 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
-                        if documents.count < 5 || purchaseManager.hasProAccess {
+                        if documents.count < 5 || store.isPro {
                         showScanner.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
@@ -88,7 +88,7 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
-                        if documents.count < 5 || purchaseManager.hasProAccess {
+                        if documents.count < 5 || store.isPro {
                         showPhotoPicker.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()
@@ -107,7 +107,7 @@ struct AddDocumentView: View {
                         }
                     }
                     Button {
-                        if numbers.count < 5 || purchaseManager.hasProAccess {
+                        if numbers.count < 5 || store.isPro {
                         showNumbersEdit.toggle()
                         let generator = UIImpactFeedbackGenerator(style: .light)
                         generator.impactOccurred()

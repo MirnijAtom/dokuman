@@ -15,7 +15,7 @@ import SwiftUI
 /// The main tab view for the DokuMan app, containing Home, Files, Numbers, and Account tabs, plus a floating add button.
 struct ContentView: View {
     // MARK: - State & Queries
-    @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var store: StoreKitManager
 
     @State private var selectedTab: Int = 0
     @State private var showAddDoc = false
@@ -55,7 +55,7 @@ struct ContentView: View {
                         }
                         .tag(3)
                 }
-                .id(purchaseManager.hasProAccess)
+                .id(store.isPro)
                 .tint(.teal)
                 .sheet(isPresented: $showAddDoc) {
                     AddDocumentView()
@@ -135,12 +135,12 @@ struct ContentView: View {
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
-    let purchaseManager = PurchaseManager()
+    let store = StoreKitManager()
     ContentView()
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
-        .environmentObject(purchaseManager)
+        .environmentObject(store)
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

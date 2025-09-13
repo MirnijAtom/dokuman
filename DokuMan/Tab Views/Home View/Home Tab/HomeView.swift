@@ -15,7 +15,7 @@ struct HomeView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var themeSettings: ThemeSettings
-    @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var store: StoreKitManager
     /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     /// The selected tab index (bound to parent TabView).
@@ -36,12 +36,12 @@ struct HomeView: View {
             }
             .padding(.bottom, 10)
             .background(Color(.systemGroupedBackground))
-            .navigationTitle(purchaseManager.hasProAccess ? "DokuMan Pro" : "Home")
+            .navigationTitle(store.isPro ? "DokuMan Pro" : "Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
             .toolbarBackground(.visible, for: .navigationBar)
             .ignoresSafeArea(edges: .bottom)
         }
-        .id(purchaseManager.hasProAccess)
+        .id(store.isPro)
     }
 }
 
@@ -52,7 +52,7 @@ struct HomeView: View {
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
-        .environmentObject(PurchaseManager())
+        .environmentObject(StoreKitManager())
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

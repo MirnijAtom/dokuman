@@ -29,7 +29,7 @@ struct NumbersEditView: View {
     @Environment(\.modelContext) var modelContext
     @Query(sort: \Number.date) var numbers: [Number]
     @EnvironmentObject var themeSettings: ThemeSettings
-    @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var store: StoreKitManager
     @EnvironmentObject var languageSettings: LanguageSettings
     @FocusState private var focusedField: UUID?
     @FocusState private var nameFocusedField: UUID?
@@ -129,7 +129,7 @@ struct NumbersEditView: View {
                 }
             }
             Button {
-                if numbers.count < 5 || purchaseManager.hasProAccess {
+                if numbers.count < 5 || store.isPro {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
                     editingNumber = newNumber
                     nameFocusedField = newNumber.id
@@ -208,6 +208,7 @@ struct NumbersEditView: View {
 
 #Preview {
     let themeSettings = ThemeSettings()
+    let store = StoreKitManager()
     let languageSettings = LanguageSettings()
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Number.self, configurations: config)
@@ -223,6 +224,7 @@ struct NumbersEditView: View {
     return NumbersEditView()
         .modelContainer(container)
         .environmentObject(themeSettings)
+        .environmentObject(store)
         .environmentObject(languageSettings)
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)

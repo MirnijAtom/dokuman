@@ -17,7 +17,7 @@ struct FilesView: View {
     @Query var documents: [Document]
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var languageSettings: LanguageSettings
-    @EnvironmentObject var purchaseManager: PurchaseManager
+    @EnvironmentObject var store: StoreKitManager
     @FocusState private var isSearchFocused: Bool
     @State private var searchText: String = ""
     @State private var selectedDocument: Document? = nil
@@ -58,7 +58,6 @@ struct FilesView: View {
                                 .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .background(Color(.systemGroupedBackground))
                     } else {
                         ScrollView {
                             LazyVGrid(columns: columns, spacing: 0) {
@@ -71,7 +70,6 @@ struct FilesView: View {
                             .padding(.bottom, 100)
                         }
                         .padding(.bottom, 10)
-                        .background(Color(.systemGroupedBackground))
                     }
                 }
                 .toolbar { toolbarContent }
@@ -98,15 +96,13 @@ struct FilesView: View {
                         Text("Error sharing document.")
                     }
                 }
-                .toolbarBackground(Material.bar, for: .navigationBar)
-                .toolbarBackground(.visible, for: .navigationBar)
 
+                
                 // Archive toggle floating button
-                if purchaseManager.hasProAccess {
+                if store.isPro {
                     VStack {
                         Spacer()
                         HStack {
-                            Spacer()
                             Button {
                                 let generator = UIImpactFeedbackGenerator(style: .light)
                                 generator.impactOccurred()
@@ -118,17 +114,15 @@ struct FilesView: View {
                                     Image(systemName: showArchived ? "document.on.document" : "archivebox")
                                     Text(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"))
                                 }
-                                .font(.callout)
+                                
                                 .foregroundStyle(.teal)
-                                .frame(height: 15)
                                 .padding()
-                                .background(.white)
-                                .clipShape(Capsule())
-                                .shadow(radius: 5)
+                                .glassEffect()
+                                .padding(.leading, 50)
                                 .transition(.blurReplace)
                                 .id(showArchived) // key for animating between states
                             }
-                            .padding(.bottom, 38)
+                            .padding(.bottom, 30)
                             Spacer()
                         }
                     }
@@ -171,8 +165,8 @@ struct FilesView: View {
                     withAnimation { isSelectionActive = true }
                 } label: {
                     Text(LocalizedStringKey("Select"))
-                    .disabled(!purchaseManager.hasProAccess)
-                    .opacity(purchaseManager.hasProAccess ? 1 : 0.4)
+                    .disabled(!store.isPro)
+                    .opacity(store.isPro ? 1 : 0.4)
                 }
             }
 
@@ -225,8 +219,8 @@ struct FilesView: View {
                             } label: {
                                 Label(LocalizedStringKey(document.isArchived ? "Unarchive" : "Archive"), systemImage: document.isArchived ? "archivebox" : "archivebox")
                             }
-                            .disabled(!purchaseManager.hasProAccess)
-                            .opacity(purchaseManager.hasProAccess ? 1 : 0.4)
+                            .disabled(!store.isPro)
+                            .opacity(store.isPro ? 1 : 0.4)
                             Divider()
                             Button(role: .destructive) {
                                 let generator = UIImpactFeedbackGenerator(style: .rigid)
@@ -302,11 +296,12 @@ struct FilesView: View {
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
-    let purchaseManager = PurchaseManager()
-
+    let store = StoreKitManager()
+    store.isPro = true
+    
     return FilesView()
         .modelContainer(for: Document.self)
-        .environmentObject(purchaseManager)
+        .environmentObject(store)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
         .environment(\.locale, languageSettings.locale)
