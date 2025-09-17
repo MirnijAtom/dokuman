@@ -128,6 +128,7 @@ struct FilesView: View {
                     }
                 }
             }
+            .ignoresSafeArea(edges: .bottom)
         }
     }
 

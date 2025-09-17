@@ -13,6 +13,7 @@ import SwiftUI
 /// Displays user account settings, including theme, language, legal, and storage info.
 struct AccountView: View {
     // MARK: - Environment & State
+    @EnvironmentObject var store: StoreKitManager
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var languageSettings: LanguageSettings
     @State private var showPrivacyPolicy = false
@@ -91,6 +92,9 @@ struct AccountView: View {
                         }
                     }
                     .foregroundStyle(.primary)
+                    Button("Restore Purchases") {
+                        Task { _ = await store.restore() }
+                    }
                 }
                 // MARK: - Legal
                 Section {
@@ -138,4 +142,5 @@ struct AccountView: View {
     AccountView()
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
+        .environmentObject(StoreKitManager())
 }

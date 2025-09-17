@@ -18,6 +18,9 @@ struct TermsAndConditionsView: View {
                 } else {
                     englishContent
                 }
+
+                // Website links block
+                webLinks
             }
             .padding()
         }
@@ -186,6 +189,26 @@ https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
             .font(.body)
             .foregroundColor(.primary)
             .textSelection(.enabled)
+        }
+    }
+
+    // MARK: - Website links (localized labels, fixed URLs)
+    private var webLinks: some View {
+        VStack(spacing: 8) {
+            Divider().padding(.top, 4)
+            HStack(spacing: 12) {
+                Link(locale.identifier.starts(with: "de") ? "Impressum (Website)" : "Impressum (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/impressum.html")!)
+                Text("·").foregroundStyle(.secondary)
+                Link(locale.identifier.starts(with: "de") ? "Datenschutz (Website)" : "Privacy Policy (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/privacy.html")!)
+                Text("·").foregroundStyle(.secondary)
+                Link(locale.identifier.starts(with: "de") ? "Nutzungsbedingungen (Website)" : "Terms of Use (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/terms.html")!)
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .padding(.top, 2)
         }
     }
 }

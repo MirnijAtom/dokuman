@@ -18,6 +18,9 @@ struct PrivacyPolicyView: View {
                 } else {
                     englishContent
                 }
+
+                // Website links block
+                webLinks
             }
             .padding()
         }
@@ -37,36 +40,33 @@ struct PrivacyPolicyView: View {
                 .padding(.bottom)
 
             Text("""
-Your privacy is important to us. DokuMan is designed with a local-first approach and does not collect, store, or share your personal data unless explicitly required and initiated by you.
+Last updated: September 2025
 
-**What data we handle:**
-- You may store sensitive personal documents and ID numbers inside the app.
-- All data remains solely on your device.
-- If you choose to enable iCloud sync, your data is securely stored in your personal iCloud account, managed by Apple.
+This Privacy Policy applies to the apps DokuMan and DevelopFilm, published by Nice Things Studio.
 
-**We do not:**
-- Collect analytics or track your usage.
-- Share data with third parties.
-- Access your documents or personal data in any way.
+Data Collection
+We do not collect or share your personal data. We do not run our own servers and have no access to your documents, photos, or usage data.
 
-**Security Measures:**
-- You may enable Face ID for additional protection.
-- The app does not transmit your data externally.
+On-Device Storage
+All documents, numbers, journal entries, and photos you add are stored locally on your device. They remain under your control and are not transmitted to us.
 
-**Your Rights (GDPR & CCPA):**
-- You can access, modify, or delete your stored data at any time.
-- As data is stored locally, deletion is fully in your control.
-- You are the sole data controller for your stored content.
+Optional iCloud Storage
+If you enable iCloud features, your data is stored with Apple’s iCloud under your Apple ID. We do not operate iCloud and cannot access this data.
 
-**Legal Basis:**
-- Processing is based on your explicit consent and is necessary to provide app functionality.
+Payments
+Subscriptions and in-app purchases are handled by Apple via the App Store. We do not process or see your payment information.
 
-**Contact:**
-If you have privacy-related concerns, contact:  
-dokumanapp [at] gmail [dot] com
+Security
+The app uses the iOS sandbox for data isolation. If enabled, Face ID or passcode protection adds an extra layer of security.
 
-**Changes to this Policy:**
-We may update this privacy policy. Substantial changes will be reflected in-app.
+Your Rights
+You can delete the app at any time to remove data stored on your device. You can also disable iCloud sync in your device settings.
+
+Contact
+If you have questions, contact: aleksandrs[dot]bertulis[at]gmail[dot]com
+
+Changes
+We may update this policy. Significant changes will be shown in the app.
 """)
             .font(.body)
 
@@ -82,40 +82,57 @@ We may update this privacy policy. Substantial changes will be reflected in-app.
                 .padding(.bottom)
 
             Text("""
-Ihre Privatsphäre ist uns wichtig. DokuMan ist lokal ausgelegt und sammelt, speichert oder teilt Ihre personenbezogenen Daten nicht, außer Sie initiieren dies explizit.
+Zuletzt aktualisiert: September 2025
 
-**Welche Daten wir verarbeiten:**
-- Sie können sensible persönliche Dokumente und Identifikationsnummern in der App speichern.
-- Alle Daten bleiben ausschließlich auf Ihrem Gerät.
-- Wenn Sie iCloud-Sync aktivieren, werden Ihre Daten sicher in Ihrem persönlichen iCloud-Konto gespeichert, das von Apple verwaltet wird.
+Diese Datenschutzerklärung gilt für die Apps DokuMan und DevelopFilm von Nice Things Studio.
 
-**Wir tun nicht:**
-- Analysen sammeln oder Ihre Nutzung verfolgen.
-- Daten mit Dritten teilen.
-- Auf Ihre Dokumente oder persönlichen Daten zugreifen.
+Datenerhebung
+Wir erheben oder teilen keine personenbezogenen Daten. Wir betreiben keine eigenen Server und haben keinen Zugriff auf Ihre Dokumente, Fotos oder Nutzungsdaten.
 
-**Sicherheitsmaßnahmen:**
-- Sie können Face ID für zusätzlichen Schutz aktivieren.
-- Die App überträgt Ihre Daten nicht extern.
+Lokale Speicherung
+Alle von Ihnen hinzugefügten Dokumente, Nummern, Journaleinträge und Fotos werden lokal auf Ihrem Gerät gespeichert. Sie bleiben unter Ihrer Kontrolle und werden nicht an uns übermittelt.
 
-**Ihre Rechte (DSGVO & CCPA):**
-- Sie können jederzeit auf Ihre gespeicherten Daten zugreifen, diese ändern oder löschen.
-- Da die Daten lokal gespeichert sind, kontrollieren Sie die Löschung vollständig.
-- Sie sind alleiniger Datenverantwortlicher für Ihre gespeicherten Inhalte.
+Optionale iCloud-Speicherung
+Wenn Sie iCloud-Funktionen aktivieren, werden Ihre Daten unter Ihrer Apple-ID in Apples iCloud gespeichert. Wir betreiben iCloud nicht und haben keinen Zugriff auf diese Daten.
 
-**Rechtsgrundlage:**
-- Die Verarbeitung basiert auf Ihrer ausdrücklichen Zustimmung und ist notwendig für die Funktionalität der App.
+Zahlungen
+Abonnements und In-App-Käufe werden über den App Store von Apple abgewickelt. Wir verarbeiten keine Zahlungsdaten und sehen diese nicht ein.
 
-**Kontakt:**
-Bei datenschutzbezogenen Fragen kontaktieren Sie:  
-dokumanapp [at] gmail [punkt] com
+Sicherheit
+Die App nutzt die iOS-Sandbox zur Datenisolation. Optional aktivierbare Face ID oder Code-Sperre bieten zusätzlichen Schutz.
 
-**Änderungen an dieser Richtlinie:**
-Wir können diese Datenschutzerklärung aktualisieren. Wesentliche Änderungen werden in der App angezeigt.
+Ihre Rechte
+Sie können die App jederzeit löschen, um lokal gespeicherte Daten zu entfernen. iCloud-Synchronisation kann in den Geräteeinstellungen deaktiviert werden.
+
+Kontakt
+Bei Fragen: aleksandrs[dot]bertulis[at]gmail[dot]com
+
+Änderungen
+Wir können diese Erklärung aktualisieren. Wesentliche Änderungen werden in der App angezeigt.
 """)
             .font(.body)
 
             Spacer()
+        }
+    }
+
+    // MARK: - Website links (localized labels, fixed URLs)
+    private var webLinks: some View {
+        VStack(spacing: 8) {
+            Divider().padding(.top, 4)
+            HStack(spacing: 12) {
+                Link(locale.identifier.starts(with: "de") ? "Impressum (Website)" : "Impressum (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/impressum.html")!)
+                Text("·").foregroundStyle(.secondary)
+                Link(locale.identifier.starts(with: "de") ? "Datenschutz (Website)" : "Privacy Policy (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/privacy.html")!)
+                Text("·").foregroundStyle(.secondary)
+                Link(locale.identifier.starts(with: "de") ? "Nutzungsbedingungen (Website)" : "Terms of Use (Website)",
+                     destination: URL(string: "https://mirnijatom.github.io/dokuman/terms.html")!)
+            }
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+            .padding(.top, 2)
         }
     }
 }
