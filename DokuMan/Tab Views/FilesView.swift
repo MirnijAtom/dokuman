@@ -122,7 +122,7 @@ struct FilesView: View {
                                 .transition(.blurReplace)
                                 .id(showArchived) // key for animating between states
                             }
-                            .padding(.bottom, 30)
+                            .padding(.bottom, 120)
                             Spacer()
                         }
                     }
