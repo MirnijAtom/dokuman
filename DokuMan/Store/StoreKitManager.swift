@@ -13,22 +13,26 @@ final class StoreKitManager: ObservableObject {
 
     // MARK: - Product IDs
     enum IDs {
-        static let monthly = "MirnijAtom.DokuMan.monthly.pro"
-        static let yearly  = "MirnijAtom.DokuMan.yearly.pro"
+        static let monthly  = "MirnijAtom.DokuMan.monthly.pro"
+        static let yearly   = "MirnijAtom.DokuMan.yearly.pro"
+        static let lifetime = "MirnijAtom.DokuMan.pro.lifetime" // 🔒 one-time unlock (non-consumable)
     }
 
     // MARK: - Public State (UI-safe)
     @Published var products: [Product] = []
+
     @Published var monthly: Product?
     @Published var yearly: Product?
+    @Published var lifetime: Product?
 
-    // Cached display prices for UI
-    @Published var monthlyPrice: String = "€0.99"
-    @Published var yearlyPrice:  String = "€9.99"
+    // Cached display prices for UI (don’t touch Product in render path)
+    @Published var monthlyPrice:  String = "€0.99"
+    @Published var yearlyPrice:   String = "€9.99"
+    @Published var lifetimePrice: String = "€7.99"
 
-    // Cached trial labels like "14-day free trial", nil if none
+    // Cached trial labels like "14-day free trial", nil if none (subs only)
     @Published var monthlyTrialText: String?
-    @Published var yearlyTrialText: String?
+    @Published var yearlyTrialText:  String?
 
     // Entitlement and UX state
     @Published var isPro: Bool = false
@@ -52,25 +56,28 @@ final class StoreKitManager: ObservableObject {
 
     // MARK: - API
 
-    enum Plan { case monthly, yearly }
+    enum Plan { case monthly, yearly, lifetime }
 
+    /// Fetch products from App Store / StoreKit file (depending on scheme) and refresh entitlements
     func loadProducts() async {
         isLoading = true
         defer { isLoading = false }
 
         do {
-            let ids = [IDs.monthly, IDs.yearly]
+            let ids = [IDs.monthly, IDs.yearly, IDs.lifetime]
             let fetched = try await Product.products(for: ids)
 
             products = fetched
             monthly  = fetched.first(where: { $0.id == IDs.monthly })
             yearly   = fetched.first(where: { $0.id == IDs.yearly })
+            lifetime = fetched.first(where: { $0.id == IDs.lifetime })
 
             // Cache localized display prices
-            if let dp = monthly?.displayPrice { monthlyPrice = dp }
-            if let dp = yearly?.displayPrice  { yearlyPrice  = dp }
+            if let dp = monthly?.displayPrice  { monthlyPrice  = dp }
+            if let dp = yearly?.displayPrice   { yearlyPrice   = dp }
+            if let dp = lifetime?.displayPrice { lifetimePrice = dp }
 
-            // Cache trial texts from introductory offers
+            // Cache trial texts from introductory offers (subs only)
             monthlyTrialText = trialText(for: monthly)
             yearlyTrialText  = trialText(for: yearly)
 
@@ -80,12 +87,14 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
+    /// Purchase a plan (monthly/yearly/lifetime)
     @discardableResult
     func purchase(_ plan: Plan) async -> Bool {
         let product: Product?
         switch plan {
-        case .monthly: product = monthly
-        case .yearly:  product = yearly
+        case .monthly:  product = monthly
+        case .yearly:   product = yearly
+        case .lifetime: product = lifetime
         }
         guard let product else {
             lastError = "Product not available."
@@ -101,10 +110,7 @@ final class StoreKitManager: ObservableObject {
                 try await refreshEntitlements()
                 return true
 
-            case .userCancelled:
-                return false
-
-            case .pending:
+            case .userCancelled, .pending:
                 return false
 
             @unknown default:
@@ -116,6 +122,7 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
+    /// Restore purchases (subs + non-consumable)
     func restore() async {
         do {
             try await AppStore.sync()
@@ -125,15 +132,28 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
+    /// Read current entitlements (subs + lifetime). Lifetime is non-consumable, never expires.
     func refreshEntitlements() async throws {
         var pro = false
+
         for await result in Transaction.currentEntitlements {
-            if let transaction = try? checkVerified(result),
-               transaction.productType == .autoRenewable {
+            guard let transaction = try? checkVerified(result) else { continue }
+
+            switch transaction.productType {
+            case .autoRenewable:
+                // Active subscription
                 pro = true
+
+            case .nonConsumable:
+                // Lifetime unlock (one-time purchase)
+                pro = true
+
+            default:
+                break
             }
         }
-        isPro = pro
+
+        self.isPro = pro
         Entitlements.isPro = pro
     }
 
@@ -156,7 +176,7 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
-    // Build a human readable trial text from a Product introductory offer
+    /// Build a human-readable trial text from a Product introductory offer (subs only)
     private func trialText(for product: Product?) -> String? {
         guard
             let offer = product?.subscription?.introductoryOffer,
@@ -178,7 +198,7 @@ final class StoreKitManager: ObservableObject {
         }
     }
 
-    // Allow calling from detached tasks without MainActor hops
+    /// Allow calling from detached tasks without MainActor hops
     nonisolated private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified:
