@@ -42,7 +42,7 @@
 "Language" = "Language";
 "Storage Info" = "Storage Info";
 "Upgrade to Pro" = "Upgrade to Pro";
-"Manage Subscription" = "Manage Subscription";
+"Manage Subscription" = "Manage Purchases";
 "Privacy Policy" = "Privacy Policy";
 "Terms & Conditions" = "Terms & Conditions";
 "Documents saved: %@" = "Documents saved: %@";
@@ -92,7 +92,7 @@
 "feature_allinone_desc" = "Store IDs, contracts, insurance papers, certificates, and notes — all in one app. No more scattered PDFs or photo roll chaos.";
 
 "feature_secure_title" = "Secure & Private";
-"feature_secure_desc" = "Everything stays on your device or your iCloud — never on third-party servers. With Face ID support, your documents stay protected from prying eyes.";
+"feature_secure_desc" = "Everything stays on your device — never on third-party servers. With Face ID support, your documents stay protected from prying eyes.";
 
 "feature_scan_title" = "Scan & Save Instantly";
 "feature_scan_desc" = "Built-in scanner lets you digitize paper documents with a tap. Automatically saved as searchable PDFs.";
@@ -111,3 +111,16 @@
 "No documents yet. Add files from Photos, Files, or scan them with your camera." = "No documents yet. Add files from Photos, Files, or scan them with your camera.";
 "No numbers yet. Add your important IDs like tax, health insurance, or social security numbers." = "No numbers yet. Add your important IDs like tax, health insurance, or social security numbers.";
 
+/// Paywall (Lifetime)
+"pro_title_have" = "You have DokuMan Pro";
+"pro_title_get" = "Get DokuMan Pro";
+"feature_unlimited_docs" = "Unlimited Documents";
+"feature_unlimited_numbers" = "Unlimited Numbers";
+"feature_archive" = "Archive Your Files";
+"lifetime_title" = "Lifetime Access";
+"lifetime_subtitle" = "One-time purchase. All features, forever on this Apple ID.";
+"lifetime_price_note" = "one-time payment";
+"cta_unlock_lifetime" = "Unlock Lifetime";
+"cta_already_unlocked" = "Already Unlocked";
+"restore_purchases" = "Restore Purchases";
+"legal_lifetime" = "One-time purchase. Payment is charged to your Apple ID. No auto-renewal. You can restore your purchase on a new device with the same Apple ID.";

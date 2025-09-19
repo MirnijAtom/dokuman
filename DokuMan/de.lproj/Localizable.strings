@@ -42,7 +42,7 @@
 "Language" = "Sprache";
 "Storage Info" = "Speicherinformation";
 "Upgrade to Pro" = "Auf Pro upgraden";
-"Manage Subscription" = "Abonnement verwalten";
+"Manage Subscription" = "Käufe verwalten";
 "Privacy Policy" = "Datenschutz-Bestimmungen";
 "Terms & Conditions" = "Geschäftsbedingungen";
 "Documents saved: %@" = "Dokumente gespeichert: %@";
@@ -91,7 +91,7 @@
 "feature_allinone_desc" = "Speichere Ausweise, Verträge, Versicherungspolicen, Zertifikate und Notizen – alles in einer App. Kein PDF-Chaos mehr.";
 
 "feature_secure_title" = "Sicher & Privat";
-"feature_secure_desc" = "Alles bleibt auf deinem Gerät oder in deiner iCloud – niemals auf fremden Servern. Mit Face ID bleiben deine Daten geschützt.";
+"feature_secure_desc" = "Alles bleibt auf deinem Gerät – niemals auf fremden Servern. Mit Face ID bleiben deine Dokumente vor neugierigen Blicken geschützt.";
 
 "feature_scan_title" = "Scannen & Speichern";
 "feature_scan_desc" = "Mit dem integrierten Scanner digitalisierst du Papierdokumente mit nur einem Tipp – direkt als durchsuchbare PDFs.";
@@ -109,3 +109,17 @@
 "Your favorite documents will appear here. Mark important files to access them quickly." = "Deine Favoriten erscheinen hier. Markiere wichtige Dokumente für schnellen Zugriff.";
 "No documents yet. Add files from Photos, Files, or scan them with your camera." = "Noch keine Dokumente. Füge Dateien aus Fotos, Dateien oder per Kamera-Scan hinzu.";
 "No numbers yet. Add your important IDs like tax, health insurance, or social security numbers." = "Noch keine Nummern. Füge deine wichtigen Nummern wie Steuer-ID, Krankenversicherung oder Sozialversicherung hinzu.";
+
+/// Paywall (Lifetime)
+"pro_title_have" = "Du hast DokuMan Pro";
+"pro_title_get" = "Hol dir DokuMan Pro";
+"feature_unlimited_docs" = "Unbegrenzte Dokumente";
+"feature_unlimited_numbers" = "Unbegrenzte Nummern";
+"feature_archive" = "Dateien archivieren";
+"lifetime_title" = "Lebenslanger Zugriff";
+"lifetime_subtitle" = "Einmalzahlung. Alle Funktionen, dauerhaft mit dieser Apple-ID.";
+"lifetime_price_note" = "Einmalzahlung";
+"cta_unlock_lifetime" = "Lebenslang freischalten";
+"cta_already_unlocked" = "Bereits freigeschaltet";
+"restore_purchases" = "Käufe wiederherstellen";
+"legal_lifetime" = "Einmaliger Kauf. Die Zahlung erfolgt über deine Apple-ID. Keine automatische Verlängerung. Du kannst den Kauf auf einem neuen Gerät mit derselben Apple-ID wiederherstellen.";

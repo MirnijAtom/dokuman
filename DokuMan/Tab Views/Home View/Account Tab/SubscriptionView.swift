@@ -5,6 +5,11 @@
 //  Created by Aleksandrs Bertulis on 08.07.25.
 //
 
+//
+//  SubscriptionView.swift
+//  DokuMan
+//
+
 import SwiftUI
 import StoreKit
 
@@ -18,20 +23,6 @@ struct SubscriptionView: View {
     var body: some View {
         ZStack {
             Color(.cyan.withProminence(.tertiary))
-            
-
-            // background blobs
-//            Circle()
-//                .fill(Color.teal.opacity(0.3))
-//                .frame(width: 300, height: 300)
-//                .offset(x: -150, y: -200)
-//                .blur(radius: 60)
-//
-//            Circle()
-//                .fill(Color.teal.opacity(0.2))
-//                .frame(width: 250, height: 250)
-//                .offset(x: 120, y: 300)
-//                .blur(radius: 40)
 
             VStack {
                 VStack(spacing: 24) {
@@ -42,22 +33,24 @@ struct SubscriptionView: View {
                         .padding(.horizontal, 20)
 
                     // entitlement banner
-                    Text(store.isPro ? "You have DokuMan Pro" : "Get DokuMan Pro")
+                    Text(store.isPro ? LocalizedStringKey("pro_title_have")
+                                     : LocalizedStringKey("pro_title_get"))
                         .font(.largeTitle).bold()
 
                     // features
                     VStack(alignment: .leading, spacing: 12) {
-                        Label("Unlimited Documents", systemImage: "doc.on.doc")
-                        Label("Unlimited Numbers", systemImage: "numbers")
-                        Label("Archive Your Files", systemImage: "archivebox")
+                        Label(LocalizedStringKey("feature_unlimited_docs"), systemImage: "doc.on.doc")
+                        Label(LocalizedStringKey("feature_unlimited_numbers"), systemImage: "numbers")
+                        Label(LocalizedStringKey("feature_archive"), systemImage: "archivebox")
                     }
                     .font(.headline)
 
                     // LIFETIME CARD
                     VStack(spacing: 8) {
-                        Text("Lifetime Access")
-                            .font(.headline)
-                        Text("One-time purchase. All features, forever on this Apple ID.")
+                        Text(LocalizedStringKey("lifetime_title"))
+                            .font(.title2)
+
+                        Text(LocalizedStringKey("lifetime_subtitle"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -65,11 +58,11 @@ struct SubscriptionView: View {
 
                         Spacer(minLength: 4)
 
-                        // Price
+                        // Localized price comes from StoreKit
                         Text(store.lifetimePrice)
                             .font(.title3).bold()
 
-                        Text("one-time payment")
+                        Text(LocalizedStringKey("lifetime_price_note"))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
@@ -85,61 +78,58 @@ struct SubscriptionView: View {
                             .stroke(Color.teal, lineWidth: 1)
                     )
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("Lifetime. One-time payment \(store.lifetimePrice).")
+                    .accessibilityLabel(
+                        Text("\(NSLocalizedString("lifetime_title", comment: "")) \(store.lifetimePrice)")
+                    )
 
                     VStack (spacing: 2) {
-                    // UNLOCK BUTTON
-                    Button {
-                        Task {
-                            _ = await store.purchase(.lifetime)
+                        // UNLOCK BUTTON
+                        Button {
+                            Task { _ = await store.purchase(.lifetime) }
+                        } label: {
+                            if store.isLoading {
+                                ProgressView().tint(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            } else {
+                                Text(store.isPro ? LocalizedStringKey("cta_already_unlocked")
+                                                 : LocalizedStringKey("cta_unlock_lifetime"))
+                                    .font(.title3)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            }
                         }
-                    } label: {
-                        if store.isLoading {
-                            ProgressView().tint(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                        } else {
-                            Text(store.isPro ? "Already Unlocked" : "Unlock Lifetime")
-                                .font(.title3)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                        }
-                    }
-                    .glassEffect(.regular.tint(.cyan))
-                    .foregroundColor(.black)
-                    .disabled(store.isPro || store.isLoading || store.lifetime == nil)
+                        .glassEffect(.regular.tint(.cyan))
+                        .foregroundColor(.black)
+                        .disabled(store.isPro || store.isLoading || store.lifetime == nil)
 
-                    // LINKS
+                        // LINKS
                         HStack {
-                            Button("Privacy Policy") { showPrivacyPolicy = true }
+                            Button(LocalizedStringKey("Privacy Policy")) { showPrivacyPolicy = true }
                             Text("•").font(.headline)
-                            Button("Terms & Conditions") { showTerms = true }
+                            Button(LocalizedStringKey("Terms & Conditions")) { showTerms = true }
                         }
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        .sheet(isPresented: $showPrivacyPolicy) {
-                            PrivacyPolicyView()
-                        }
-                        .sheet(isPresented: $showTerms) {
-                            TermsAndConditionsView()
-                        }
-                        
-                        // RESTORE (required by Apple, restores non-consumable)
+                        .sheet(isPresented: $showPrivacyPolicy) { PrivacyPolicyView() }
+                        .sheet(isPresented: $showTerms) { TermsAndConditionsView() }
+
+                        // RESTORE (required by Apple)
                         Button {
                             Task { await store.restore() }
                         } label: {
-                            Text("Restore Purchases")
+                            Text(LocalizedStringKey("restore_purchases"))
                         }
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                        
-                        // LEGAL FOOTNOTE for non-consumable
-                        Text(footnoteText)
+
+                        // LEGAL FOOTNOTE (non-consumable)
+                        Text(LocalizedStringKey("legal_lifetime"))
                             .font(.caption2)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal)
-                        
+
                         // Error surface
                         if let err = store.lastError {
                             Text(err)
@@ -159,14 +149,7 @@ struct SubscriptionView: View {
             }
         }
         .ignoresSafeArea()
-        .task {
-            await store.loadProducts()
-        }
-    }
-
-    // One-time purchase legal copy (short + compliant)
-    private var footnoteText: String {
-        "One-time purchase. Payment is charged to your Apple ID. No auto-renewal. You can restore your purchase on a new device with the same Apple ID."
+        .task { await store.loadProducts() }
     }
 }
 
