@@ -69,7 +69,7 @@ struct FilesView: View {
                             .padding(.horizontal)
                             .padding(.bottom, 100)
                         }
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 70)
                     }
                 }
                 .toolbar { toolbarContent }

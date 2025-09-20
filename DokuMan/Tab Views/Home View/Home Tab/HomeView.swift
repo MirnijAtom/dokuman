@@ -34,7 +34,7 @@ struct HomeView: View {
                 }
                 .padding(.top)
             }
-            .padding(.bottom, 10)
+            .padding(.bottom, 50)
             .background(Color(.systemGroupedBackground))
             .navigationTitle(store.isPro ? "DokuMan Pro" : "Home")
             .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)

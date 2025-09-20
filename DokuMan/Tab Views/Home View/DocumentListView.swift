@@ -111,6 +111,7 @@ struct DocumentListView: View {
                     }
                 }
             }
+            .padding(.bottom, 70)
             .navigationTitle(title)
             .fullScreenCover(item: $selectedDocument) { document in
                 PDFFullScreenView(document: document)
