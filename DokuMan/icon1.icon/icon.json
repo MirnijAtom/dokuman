@@ -1,7 +1,5 @@
 {
-  "fill" : {
-    "automatic-gradient" : "extended-gray:1.00000,1.00000"
-  },
+  "fill" : "system-light",
   "groups" : [
     {
       "blur-material" : 0.5,
