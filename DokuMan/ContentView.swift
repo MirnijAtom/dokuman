@@ -72,8 +72,8 @@ struct ContentView: View {
                             .glassEffect()
 
                     }
-                    .padding(.bottom, 70)
-                    .padding(.trailing, 35)
+                    .padding(.bottom, 65)
+                    .padding(.trailing, 30)
                 }
                 .overlay {
                     if isAppLocked {

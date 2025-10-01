@@ -13,6 +13,7 @@ import SwiftData
 /// Represents a document with versions, category, and metadata.
 @Model
 class Document: Identifiable {
+    var createdDate: Date = Date()
     /// Unique identifier for the document (required by SwiftUI)
     var id: UUID = UUID()
     /// The display name of the document
@@ -87,13 +88,14 @@ class Number {
 /// Provides label, icon, and color for each category
 /// (Extend as needed for new categories)
 enum DocumentCategory: String, CaseIterable, Codable {
-    case wohnung, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
+    case wohnung, privat, versicherung, visa, konto, arbeit, steuern, gesundheit, studium
     case fahrzeug, internet, mitgliedschaft, quittungen, behoerden, rechtliches, familie, sonstiges
 
     /// Localized label for display
     var label: LocalizedStringKey {
         switch self {
         case .wohnung: return "Wohnung"
+        case .privat: return "Privat"
         case .versicherung: return "Versicherung"
         case .visa: return "Visa"
         case .konto: return "Konto"
@@ -116,6 +118,7 @@ enum DocumentCategory: String, CaseIterable, Codable {
     var icon: String {
         switch self {
         case .wohnung: return "house.fill"
+        case .privat: return "person.fill"
         case .versicherung: return "shield.lefthalf.filled.badge.checkmark"
         case .visa: return "globe"
         case .konto: return "creditcard.fill"
@@ -138,6 +141,7 @@ enum DocumentCategory: String, CaseIterable, Codable {
     var color: Color {
         switch self {
         case .wohnung: return .blue
+        case .privat: return .blue.opacity(0.7)
         case .versicherung: return .orange
         case .visa: return .teal
         case .konto: return .purple

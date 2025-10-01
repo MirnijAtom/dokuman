@@ -92,7 +92,7 @@ struct AccountView: View {
                         }
                     }
                     .foregroundStyle(.primary)
-                    Button("Restore Purchases") {
+                    Button(LocalizedStringKey("Restore Purchases")) {
                         Task { _ = await store.restore() }
                     }
                 }

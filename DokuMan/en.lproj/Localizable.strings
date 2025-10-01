@@ -47,6 +47,7 @@
 "Terms & Conditions" = "Terms & Conditions";
 "Documents saved: %@" = "Documents saved: %@";
 "Numbers saved: %@" = "Numbers saved: %@";
+"Restore Purchases" = "Restore Purchases";
 
 
 // MARK: - Add Document View
@@ -67,6 +68,7 @@
 
 // MARK: - Document Categories
 "Wohnung" = "Apartment";
+"Privat" = "Private";
 "Versicherung" = "Insurance";
 "Visa" = "Visa";
 "Konto" = "Account";

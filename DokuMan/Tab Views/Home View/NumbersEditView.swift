@@ -64,7 +64,7 @@ struct NumbersEditView: View {
                     .frame(maxWidth: .infinity)
                 }
             } else {
-                Section(header: Text(LocalizedStringKey("Your numbers")).numberTextStyle()) {
+                Section {
                     ForEach(numbers) { number in
                         HStack {
                             Text(number.name)

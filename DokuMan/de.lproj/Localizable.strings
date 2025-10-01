@@ -47,6 +47,7 @@
 "Terms & Conditions" = "Geschäftsbedingungen";
 "Documents saved: %@" = "Dokumente gespeichert: %@";
 "Numbers saved: %@" = "Nummern gespeichert: %@";
+"Restore Purchases" = "Käufe wiederherstellen";
 
 // MARK: - Add Document View
 "Import from Files" = "Aus Dateien importieren";
@@ -66,6 +67,7 @@
 
 // MARK: - Document Categories
 "Wohnung" = "Wohnung";
+"Privat" = "Privat";
 "Versicherung" = "Versicherung";
 "Visa" = "Visum";
 "Konto" = "Konto";

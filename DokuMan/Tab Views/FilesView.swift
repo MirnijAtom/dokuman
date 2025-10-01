@@ -14,7 +14,7 @@ import SwiftUI
 struct FilesView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
-    @Query var documents: [Document]
+    @Query(sort: \Document.createdDate, order: .reverse) var documents: [Document]
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var languageSettings: LanguageSettings
     @EnvironmentObject var store: StoreKitManager
@@ -118,11 +118,11 @@ struct FilesView: View {
                                 .foregroundStyle(.teal)
                                 .padding()
                                 .glassEffect()
-                                .padding(.leading, 50)
+                                .padding(.leading, 20)
                                 .transition(.blurReplace)
                                 .id(showArchived) // key for animating between states
                             }
-                            .padding(.bottom, 120)
+                            .padding(.bottom, 100)
                             Spacer()
                         }
                     }
