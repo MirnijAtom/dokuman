@@ -1,26 +1,28 @@
 import SwiftUI
+import SwiftData
 
 // MARK: - DocumentListView
 
-/// Displays a grid of documents for a given category or filter, with support for selection, sharing, and context menu actions.
 struct DocumentListView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
-    /// The title for the navigation bar.
+    @EnvironmentObject var store: StoreKitManager
+
     var title: LocalizedStringKey
-    /// The documents to display in the grid.
     var documents: [Document]
+
     @State private var selectedDocument: Document? = nil
-    @State private var fullScreenIsPresented = false // (Unused, could be removed)
+    @State private var selectedDocumentToShare: Document? = nil
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSharing = false
     @State private var isSelectionActive = false
-    /// Two-column flexible grid layout for document previews.
+
+    // MARK: - Layout
     let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    /// A4 size in points (approx. 595 x 842, scaled for preview)
+
     let a4Size = CGSize(width: 148.75, height: 210.5)
 
     // MARK: - Body
@@ -29,93 +31,31 @@ struct DocumentListView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 16) {
                     ForEach(documents) { document in
-                        ZStack(alignment: .topTrailing) {
-                            Button(action: {
-                                let generator = UIImpactFeedbackGenerator(style: .light)
-                                generator.impactOccurred()
-                                selectedDocument = document
-                                fullScreenIsPresented = true
-                            }) {
-                                VStack(spacing: 8) {
-                                    PDFPreview(data: document.versions.first!.fileData)
-                                        .scaleEffect(1.03)
-                                        .frame(width: a4Size.width, height: a4Size.height)
-                                        .clipped()
-                                        .cornerRadius(5)
-                                        .shadow(radius: 3)
-                                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 5))
-                                        .contextMenu {
-                                            Button("Favorites toggle") {
-                                                let generator = UIImpactFeedbackGenerator(style: .light)
-                                                generator.impactOccurred()
-                                                toggleFavorites(document, modelContext: modelContext)
-                                            }
-                                            Button("Archive toggle") {
-                                                let generator = UIImpactFeedbackGenerator(style: .light)
-                                                generator.impactOccurred()
-                                                archiveDocument(document, modelContext: modelContext)
-                                            }
-                                            Button("Delete", role: .destructive) {
-                                                let generator = UIImpactFeedbackGenerator(style: .rigid)
-                                                generator.impactOccurred()
-                                                deleteDocument(document, modelContext: modelContext)
-                                            }
-                                        }
-                                    Text(document.name)
-                                        .font(.caption)
-                                        .foregroundColor(.primary)
-                                        .lineLimit(1)
-                                }
-                            }
-                            .padding()
-                            if isSelectionActive {
-                                Button(action: {
-                                    let generator = UIImpactFeedbackGenerator(style: .light)
-                                    generator.impactOccurred()
-                                    toggleSelection(of: document)
-                                }) {
-                                    Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
-                                        .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
-                                        .opacity(selectedDocuments.contains(document) ? 1 : 0.4)
-                                        .font(.title)
-                                        .background(Color(.systemBackground))
-                                        .clipShape(Circle())
-                                        .padding(20)
-                                }
-                            }
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        documentCell(document)
                     }
                 }
                 .padding(.horizontal)
             }
-            .toolbar {
-                if isSelectionActive {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isSharing = true
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                isSelectionActive = false
-                            }
-                        } label: {
-                            Label("Share", systemImage: "square.and.arrow.up")
-                        }
-                    }
-                } else {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button("Select") {
-                            let generator = UIImpactFeedbackGenerator(style: .light)
-                            generator.impactOccurred()
-                            withAnimation { isSelectionActive = true }
-                        }
-                    }
-                }
-            }
             .padding(.bottom, 70)
             .navigationTitle(title)
+            .toolbar { toolbarContent }
+
+            // Fullscreen PDF
             .fullScreenCover(item: $selectedDocument) { document in
                 PDFFullScreenView(document: document)
             }
+
+            // Share single
+            .sheet(item: $selectedDocumentToShare) { document in
+                let urls = exportTempURLs(from: [document])
+                if !urls.isEmpty {
+                    ShareSheet(activityItems: urls)
+                } else {
+                    Text("Error sharing document.")
+                }
+            }
+
+            // Share multiple
             .sheet(isPresented: $isSharing) {
                 let urls = exportTempURLs(from: selectedDocuments)
                 if !urls.isEmpty {
@@ -127,30 +67,165 @@ struct DocumentListView: View {
         }
     }
 
-    // MARK: - Helpers
-    /// Exports the selected documents as temporary PDF URLs for sharing.
-    func exportTempURLs(from documents: Set<Document>) -> [URL] {
-        var urls: [URL] = []
-        for doc in documents {
-            let tempURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent(doc.name)
-                .appendingPathExtension("pdf")
-            do {
-                try doc.versions.first!.fileData.write(to: tempURL)
-                urls.append(tempURL)
-            } catch {
-                print("Failed to write PDF to temp for \(doc.name): \(error)")
+    // MARK: - Toolbar
+    @ToolbarContentBuilder
+    var toolbarContent: some ToolbarContent {
+        if isSelectionActive {
+            ToolbarItem(placement: .topBarLeading) {
+                Button("Cancel") {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation {
+                        isSelectionActive = false
+                        selectedDocuments.removeAll()
+                    }
+                }
+            }
+
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    isSharing = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation { isSelectionActive = false }
+                    }
+                } label: {
+                    Label("Share", systemImage: "square.and.arrow.up")
+                }
+            }
+        } else {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Select") {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation {
+                        isSelectionActive = true
+                    }
+                }
+                .disabled(!store.isPro)
+                .opacity(store.isPro ? 1 : 0.4)
             }
         }
-        return urls
     }
-    /// Toggles the selection state of a document in selection mode.
+
+    // MARK: - Document Cell
+    @ViewBuilder
+    func documentCell(_ document: Document) -> some View {
+        ZStack(alignment: .topTrailing) {
+            Button {
+                let generator = UIImpactFeedbackGenerator(style: .light)
+                generator.impactOccurred()
+                selectedDocument = document
+            } label: {
+                VStack(spacing: 8) {
+                    PDFPreview(data: document.versions.first!.fileData)
+                        .scaleEffect(1.03)
+                        .frame(width: a4Size.width, height: a4Size.height)
+                        .clipped()
+                        .cornerRadius(8)
+                        .shadow(radius: 2)
+                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 8))
+                        .contextMenu { contextMenu(for: document) }
+
+                    Text(document.name)
+                        .font(.caption)
+                        .foregroundColor(.primary)
+                        .lineLimit(1)
+                }
+            }
+            .padding(10)
+
+            if isSelectionActive {
+                Button {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    toggleSelection(of: document)
+                } label: {
+                    Image(systemName: selectedDocuments.contains(document) ? "checkmark.circle.fill" : "circle")
+                        .foregroundColor(selectedDocuments.contains(document) ? .green : .gray)
+                        .font(.title)
+                        .background(Color(.systemBackground))
+                        .clipShape(Circle())
+                        .padding(15)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Context Menu
+    @ViewBuilder
+    func contextMenu(for document: Document) -> some View {
+        Button {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            selectedDocumentToShare = document
+        } label: {
+            Label("Share", systemImage: "square.and.arrow.up")
+        }
+
+        Button {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            toggleFavorites(document, modelContext: modelContext)
+        } label: {
+            Label(
+                document.isFavorite ? "Remove from favorites" : "Add to favorites",
+                systemImage: document.isFavorite ? "star.slash" : "star"
+            )
+        }
+
+        Button {
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            archiveDocument(document, modelContext: modelContext)
+        } label: {
+            Label(
+                document.isArchived ? "Unarchive" : "Archive",
+                systemImage: "archivebox"
+            )
+        }
+        .disabled(!store.isPro)
+        .opacity(store.isPro ? 1 : 0.4)
+
+        Divider()
+
+        Button(role: .destructive) {
+            let generator = UIImpactFeedbackGenerator(style: .rigid)
+            generator.impactOccurred()
+            deleteDocument(document, modelContext: modelContext)
+        } label: {
+            Label("Delete", systemImage: "trash")
+        }
+    }
+
+    // MARK: - Helpers
     func toggleSelection(of document: Document) {
         if selectedDocuments.contains(document) {
             selectedDocuments.remove(document)
         } else {
             selectedDocuments.insert(document)
         }
+    }
+
+    func exportTempURLs(from documents: Set<Document>) -> [URL] {
+        var urls: [URL] = []
+
+        for doc in documents {
+            let tempURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent(doc.name)
+                .appendingPathExtension("pdf")
+
+            do {
+                try doc.versions.first!.fileData.write(to: tempURL)
+                urls.append(tempURL)
+            } catch {
+                print("❌ Failed to export \(doc.name): \(error)")
+            }
+        }
+
+        return urls
     }
 }
 
