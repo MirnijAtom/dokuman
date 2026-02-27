@@ -20,35 +20,72 @@ struct HomeView: View {
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     /// The selected tab index (bound to parent TabView).
     @Binding var selectedTab: Int
+    let onAddTap: () -> Void
+    
+    private var nonEmptyCategories: [DocumentCategory] {
+        DocumentCategory.allCases.filter { category in
+            documents.contains(where: { $0.category == category })
+        }
+    }
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-//                    Text("\(purchaseManager.hasProAccess)")
+            List {
+                Section("Favorites") {
                     FavoritesSectionView()
-                    CategoriesSectionView()
-                    NumbersSectionView(selectedTab: $selectedTab)
-                        .padding(.bottom, 100)
                 }
-                .padding(.top)
+
+                Section("Documents") {
+                    if nonEmptyCategories.isEmpty {
+                        ContentUnavailableView(
+                            "No documents yet",
+                            systemImage: "doc",
+                            description: Text("Add files from Photos, Files, or scan them with your camera.")
+                        )
+                    } else {
+                        ForEach(nonEmptyCategories, id: \.self) { category in
+                            NavigationLink {
+                                DocumentListView(
+                                    title: category.label,
+                                    documents: documents.filter { $0.category == category }
+                                )
+                            } label: {
+                                HStack {
+                                    HStack {
+                                        Image(systemName: category.icon)
+                                            .frame(width: 25)
+                                        Text(category.label)
+                                    }
+                                    .foregroundColor(category.color)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                            }
+                        }
+                    }
+                    Button(LocalizedStringKey("Add document")) {
+                        onAddTap()
+                    }
+                    .font(.headline)
+                    .foregroundStyle(.teal)
+                    .frame(maxWidth: .infinity, minHeight: 56)
+                    .glassEffect()
+                }
+
+                Section("Numbers") {
+                    NumbersSectionView(selectedTab: $selectedTab)
+                }
             }
-            .padding(.bottom, 50)
-            .background(Color(.systemGroupedBackground))
+            .listStyle(.insetGrouped)
             .navigationTitle(store.isPro ? "DokuMan Pro" : "Home")
-            .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .ignoresSafeArea(edges: .bottom)
         }
-        .id(store.isPro)
     }
 }
 
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
-    HomeView(selectedTab: .constant(0))
+    HomeView(selectedTab: .constant(0)) { }
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)

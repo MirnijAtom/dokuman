@@ -15,8 +15,6 @@ struct CategoriesSectionView: View {
     // MARK: - Query & Environment
     /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
-    @EnvironmentObject var languageSettings: LanguageSettings
-
     // MARK: - Computed Properties
     /// Categories that have at least one document.
     private var nonEmptyCategories: [DocumentCategory] {
@@ -56,38 +54,13 @@ struct CategoriesSectionView: View {
     // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "tag.fill")
-                Text(LocalizedStringKey("Categories"))
-            }
-            .font(.headline)
-            .padding(.horizontal)
-            .padding(.vertical, 5)
             if nonEmptyCategories.isEmpty {
-                GeometryReader { geometry in
-                    HStack {
-                        VStack {
-                            Text(LocalizedStringKey("No documents yet. Add files from Photos, Files, or scan them with your camera."))
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.center)
-                                .frame(width: geometry.size.width * 0.6)
-                                .padding(.horizontal)
-                                .padding(.leading, 26) // extra left padding
-                        }
-                        .frame(width: geometry.size.width * 0.6, alignment: .center)
-
-                        VStack {
-                            Image("emptyCategoriesIcon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.25, height: 70)
-                                .padding()
-                        }
-                        .frame(width: geometry.size.width * 0.4, alignment: .center)
-                    }
-                }
-                .frame(height: 110)
-                .padding(.bottom, 20)
+                ContentUnavailableView(
+                    "No documents yet",
+                    systemImage: "doc",
+                    description: Text("Add files from Photos, Files, or scan them with your camera.")
+                )
+                .frame(maxWidth: .infinity)
             } else {
                 VStack(spacing: 0) {
                     ForEach(nonEmptyCategories, id: \.self) { category in
@@ -97,16 +70,9 @@ struct CategoriesSectionView: View {
                         }
                     }
                 }
-                .background(.regularMaterial)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .padding(.horizontal)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(27)
-        .id(languageSettings.locale.identifier) // Force refresh when locale changes
     }
 }
 

@@ -170,7 +170,6 @@ struct FilesView: View {
                     .opacity(store.isPro ? 1 : 0.4)
                 }
             }
-
         }
     }
 

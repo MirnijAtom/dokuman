@@ -25,58 +25,15 @@
             let visibleNumbers = isExpanded ? numbers : Array(numbers.prefix(3))
             
             VStack(alignment: .leading, spacing: 8) {
-                
-                // Header
-                HStack {
-                    Image(systemName: "numbers.rectangle")
-                    Text(LocalizedStringKey("Numbers"))
-                        .font(.headline)
-                    
-                    Spacer()
-                    if !numbers.isEmpty {
-                        Button(LocalizedStringKey("Edit")) {
-                            let generator = UIImpactFeedbackGenerator(style: .light)
-                            generator.impactOccurred()
-                            selectedTab = 2
-                        }
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.vertical, 5)
-                
                 // Content
                 if numbers.isEmpty {
-                    Button {
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        selectedTab = 2
-                    } label: {
-                        GeometryReader { geometry in
-                            HStack {
-                                VStack {
-                                    Text(LocalizedStringKey("No numbers yet. Add your important IDs like tax, health insurance, or social security numbers."))
-                                        .lineLimit(nil)
-                                        .multilineTextAlignment(.center)
-                                        .frame(width: geometry.size.width * 0.5)
-                                        .padding(.horizontal)
-                                        .padding(.leading, 26)
-                                }
-                                .frame(width: geometry.size.width * 0.5, alignment: .center)
-
-                                VStack {
-                                    Image("emptyNumbersIcon")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: geometry.size.width * 0.4, height: 70)
-                                        .padding()
-                                }
-                                .frame(width: geometry.size.width * 0.5, alignment: .center)
-                            }
-                        }
-                        .frame(height: 110)
-                        .foregroundColor(.primary)
-
-                    }
+                    ContentUnavailableView(
+                        "No numbers yet",
+                        systemImage: "numbers",
+                        description: Text("Add your important IDs like tax, health insurance, or social security numbers.")
+                    )
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
                 } else {
                     VStack {
                         ForEach(visibleNumbers) { number in
@@ -164,14 +121,18 @@
                         .foregroundStyle(.teal)
                     }
                 }
-
-                
+                Button(LocalizedStringKey(numbers.isEmpty ? "Add number" : "See all")) {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    selectedTab = 2
+                }
+                .font(.headline)
+                .foregroundStyle(.teal)
+                .frame(maxWidth: .infinity, minHeight: 56)
+                .glassEffect()
+                .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(maxWidth: .infinity, minHeight: 126)
-            .padding(.vertical, 12)
-//            .background(.teal)
-            .background(Color(.secondarySystemGroupedBackground))
-            .cornerRadius(27)
         }
     }
 

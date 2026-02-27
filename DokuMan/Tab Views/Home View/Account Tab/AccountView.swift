@@ -130,7 +130,6 @@ struct AccountView: View {
                     SubscriptionView()
                 }
             }
-            .id(languageSettings.locale.identifier)
             .navigationTitle(LocalizedStringKey("Account"))
         }
     }

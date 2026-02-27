@@ -27,42 +27,40 @@ struct DocumentListView: View {
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                LazyVGrid(columns: columns, spacing: 16) {
-                    ForEach(documents) { document in
-                        documentCell(document)
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .padding(.bottom, 70)
-            .navigationTitle(title)
-            .toolbar { toolbarContent }
-
-            // Fullscreen PDF
-            .fullScreenCover(item: $selectedDocument) { document in
-                PDFFullScreenView(document: document)
-            }
-
-            // Share single
-            .sheet(item: $selectedDocumentToShare) { document in
-                let urls = exportTempURLs(from: [document])
-                if !urls.isEmpty {
-                    ShareSheet(activityItems: urls)
-                } else {
-                    Text("Error sharing document.")
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: 16) {
+                ForEach(documents) { document in
+                    documentCell(document)
                 }
             }
+            .padding(.horizontal)
+        }
+        .padding(.bottom, 70)
+        .navigationTitle(title)
+        .toolbar { toolbarContent }
 
-            // Share multiple
-            .sheet(isPresented: $isSharing) {
-                let urls = exportTempURLs(from: selectedDocuments)
-                if !urls.isEmpty {
-                    ShareSheet(activityItems: urls)
-                } else {
-                    Text("Error sharing documents.")
-                }
+        // Fullscreen PDF
+        .fullScreenCover(item: $selectedDocument) { document in
+            PDFFullScreenView(document: document)
+        }
+
+        // Share single
+        .sheet(item: $selectedDocumentToShare) { document in
+            let urls = exportTempURLs(from: [document])
+            if !urls.isEmpty {
+                ShareSheet(activityItems: urls)
+            } else {
+                Text("Error sharing document.")
+            }
+        }
+
+        // Share multiple
+        .sheet(isPresented: $isSharing) {
+            let urls = exportTempURLs(from: selectedDocuments)
+            if !urls.isEmpty {
+                ShareSheet(activityItems: urls)
+            } else {
+                Text("Error sharing documents.")
             }
         }
     }

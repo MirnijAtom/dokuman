@@ -23,6 +23,15 @@ extension View {
 
 /// A view for adding a new document, including import, scan, photo, and manual entry.
 struct AddDocumentView: View {
+    enum EntryPoint: String, Identifiable {
+        case files
+        case scanner
+        case photos
+        case number
+
+        var id: String { rawValue }
+    }
+
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -40,93 +49,116 @@ struct AddDocumentView: View {
     @State private var showScanner = false
     @State private var showNumbersEdit = false
     @State private var showSubscription = false
+    @State private var didHandleEntryPoint = false
     @State private var allCategories = [
         "Wohnung", "Versicherung", "Visa", "Konto", "Arbeit", "Gesundheit", "Studium", "Fahrzeug", "Interner & Handy", "Mitgliedschaften", "Rechnungen & Quittungen", "Behörden", "Rechtliches", "Familie", "Sonstiges"
     ]
+    let entryPoint: EntryPoint?
+
+    init(entryPoint: EntryPoint? = nil) {
+        self.entryPoint = entryPoint
+    }
+    
+    private var isQuickEntry: Bool {
+        entryPoint != nil
+    }
+    
+    private func dismissQuickEntryIfNeeded() {
+        if isQuickEntry, data.isEmpty {
+            dismiss()
+        }
+    }
 
     // MARK: - Body
     var body: some View {
         NavigationStack {
             if data.isEmpty {
-                List {
-                    Button {
-                        if documents.count < 5 || store.isPro {
-                            showFileImporter.toggle()
+                if isQuickEntry {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                        Text("Opening...")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    List {
+                        Button {
+                            if documents.count < 5 || store.isPro {
+                                showFileImporter.toggle()
+                                let generator = UIImpactFeedbackGenerator(style: .light)
+                                generator.impactOccurred()
+                            } else {
+                                showSubscription = true
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "doc")
+                                    .addDocumentButtonStyle()
+                                    .foregroundColor(.blue)
+                                Text(LocalizedStringKey("Import from Files"))
+                                    .foregroundColor(.primary)
+                                    .font(.subheadline)
+                                Spacer()
+                            }
+                        }
+                        Button {
+                            if documents.count < 5 || store.isPro {
+                            showScanner.toggle()
                             let generator = UIImpactFeedbackGenerator(style: .light)
                             generator.impactOccurred()
-                        } else {
-                            showSubscription = true
+                            } else {
+                                showSubscription = true
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "document.viewfinder")
+                                    .addDocumentButtonStyle()
+                                    .foregroundColor(.teal)
+                                Text(LocalizedStringKey("Scan document"))
+                                    .foregroundColor(.primary)
+                                    .font(.subheadline)
+                                Spacer()
+                            }
                         }
-                    } label: {
-                        HStack {
-                            Image(systemName: "doc")
-                                .addDocumentButtonStyle()
-                                .foregroundColor(.blue)
-                            Text(LocalizedStringKey("Import from Files"))
-                                .foregroundColor(.primary)
-                                .font(.subheadline)
-                            Spacer()
+                        Button {
+                            if documents.count < 5 || store.isPro {
+                            showPhotoPicker.toggle()
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            } else {
+                                showSubscription = true
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "photo.on.rectangle")
+                                    .addDocumentButtonStyle()
+                                    .foregroundColor(.orange)
+                                Text(LocalizedStringKey("Upload from Photos"))
+                                    .foregroundColor(.primary)
+                                    .font(.subheadline)
+                                Spacer()
+                            }
                         }
-                    }
-                    Button {
-                        if documents.count < 5 || store.isPro {
-                        showScanner.toggle()
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        } else {
-                            showSubscription = true
+                        Button {
+                            if numbers.count < 5 || store.isPro {
+                            showNumbersEdit.toggle()
+                            let generator = UIImpactFeedbackGenerator(style: .light)
+                            generator.impactOccurred()
+                            } else {
+                                showSubscription = true
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "numbers")
+                                    .addDocumentButtonStyle()
+                                    .foregroundColor(.purple)
+                                Text(LocalizedStringKey("Add number"))
+                                    .foregroundColor(.primary)
+                                    .font(.subheadline)
+                                Spacer()
+                            }
                         }
-                    } label: {
-                        HStack {
-                            Image(systemName: "document.viewfinder")
-                                .addDocumentButtonStyle()
-                                .foregroundColor(.teal)
-                            Text(LocalizedStringKey("Scan document"))
-                                .foregroundColor(.primary)
-                                .font(.subheadline)
-                            Spacer()
-                        }
-                    }
-                    Button {
-                        if documents.count < 5 || store.isPro {
-                        showPhotoPicker.toggle()
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        } else {
-                            showSubscription = true
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "photo.on.rectangle")
-                                .addDocumentButtonStyle()
-                                .foregroundColor(.orange)
-                            Text(LocalizedStringKey("Upload from Photos"))
-                                .foregroundColor(.primary)
-                                .font(.subheadline)
-                            Spacer()
-                        }
-                    }
-                    Button {
-                        if numbers.count < 5 || store.isPro {
-                        showNumbersEdit.toggle()
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        } else {
-                            showSubscription = true
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "numbers")
-                                .addDocumentButtonStyle()
-                                .foregroundColor(.purple)
-                            Text(LocalizedStringKey("Add number"))
-                                .foregroundColor(.primary)
-                                .font(.subheadline)
-                            Spacer()
-                        }
-                    }
-                    .sheet(isPresented: $showSubscription) {
-                        SubscriptionView()
                     }
                 }
             } else {
@@ -175,8 +207,16 @@ struct AddDocumentView: View {
             }
         }
         .id(languageSettings.locale.identifier)
-        .fullScreenCover(isPresented: $showScanner) {
+        .fullScreenCover(isPresented: $showScanner, onDismiss: {
+            if isQuickEntry, data.isEmpty {
+                dismiss()
+            }
+        }) {
             DocumentScanner { images in
+                if images.isEmpty, isQuickEntry {
+                    dismiss()
+                    return
+                }
                 print("[Scanner] Number of images received: \(images.count)")
                 let pdfData = imagesToPDF(images: images)
                 print("[Scanner] PDF data size: \(pdfData.count) bytes")
@@ -184,11 +224,17 @@ struct AddDocumentView: View {
                 nameFieldIsFocused = true
             }
         }
-        .sheet(isPresented: $showPhotoPicker) {
+        .sheet(isPresented: $showPhotoPicker, onDismiss: {
+            if isQuickEntry, data.isEmpty {
+                dismiss()
+            }
+        }) {
             PhotoPicker { images in
                 if let first = images.first {
                     data = imageToPDF(image: first)
                     nameFieldIsFocused = true
+                } else if isQuickEntry {
+                    dismiss()
                 }
             }
         }
@@ -197,6 +243,7 @@ struct AddDocumentView: View {
             case .success(let url):
                 guard url.startAccessingSecurityScopedResource() else {
                     print("No permission to access file")
+                    dismissQuickEntryIfNeeded()
                     return
                 }
                 defer { url.stopAccessingSecurityScopedResource() }
@@ -208,15 +255,44 @@ struct AddDocumentView: View {
                     print("Error reading file: \(error)")
                     let errorGenerator = UINotificationFeedbackGenerator()
                     errorGenerator.notificationOccurred(.error)
+                    dismissQuickEntryIfNeeded()
                 }
             case .failure(let error):
                 print("Failed to import PDF: \(error)")
                 let errorGenerator = UINotificationFeedbackGenerator()
                 errorGenerator.notificationOccurred(.error)
+                dismissQuickEntryIfNeeded()
             }
         }
         .sheet(isPresented: $showNumbersEdit) {
             NumbersEditView()
+        }
+        .onAppear {
+            guard let entryPoint, !didHandleEntryPoint else { return }
+            didHandleEntryPoint = true
+            switch entryPoint {
+            case .files:
+                if documents.count < 5 || store.isPro { showFileImporter = true } else { showSubscription = true }
+            case .scanner:
+                if documents.count < 5 || store.isPro { showScanner = true } else { showSubscription = true }
+            case .photos:
+                if documents.count < 5 || store.isPro { showPhotoPicker = true } else { showSubscription = true }
+            case .number:
+                if numbers.count < 5 || store.isPro { showNumbersEdit = true } else { showSubscription = true }
+            }
+        }
+        .onChange(of: showNumbersEdit) { _, isShown in
+            if isQuickEntry, entryPoint == .number, !isShown {
+                dismiss()
+            }
+        }
+        .onChange(of: showFileImporter) { _, isShown in
+            if !isShown {
+                dismissQuickEntryIfNeeded()
+            }
+        }
+        .sheet(isPresented: $showSubscription) {
+            SubscriptionView()
         }
     }
 

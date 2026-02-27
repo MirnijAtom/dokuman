@@ -17,44 +17,21 @@ struct FavoritesSectionView: View {
     /// A4 size in points (scaled for preview)
     let a4Size = CGSize(width: 132, height: 187)
     @State private var selectedDocument: Document? = nil
-    @State private var fullScreenIsPresented = false // (Unused, could be removed)
     /// All non-archived documents, sorted by name.
     @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
 
     // MARK: - Body
     var body: some View {
         let favorites = documents.filter { $0.isFavorite }
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: "star.fill")
-                Text(LocalizedStringKey("Favorites"))
-            }
-            .font(.headline)
-            .padding(.horizontal)
+        Group {
             if favorites.isEmpty {
-                GeometryReader { geometry in
-                    HStack {
-                        VStack {
-                            Text(LocalizedStringKey("Your favorite documents will appear here. Mark important files to access them quickly."))
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.center)
-                                .frame(width: geometry.size.width * 0.5)
-                                .padding(.horizontal)
-                                .padding(.leading, 26)
-                        }
-                        .frame(width: geometry.size.width * 0.5, alignment: .center)
-
-                        VStack {
-                            Image("emptyFavoritesIcon")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.25, height: 70)
-                                .padding()
-                        }
-                        .frame(width: geometry.size.width * 0.5, alignment: .center)
-                    }
-                }
-                .frame(height: 110)
+                ContentUnavailableView(
+                    "No favorites yet",
+                    systemImage: "star",
+                    description: Text("Mark important documents as favorites for quick access.")
+                )
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
@@ -63,7 +40,6 @@ struct FavoritesSectionView: View {
                                 let generator = UIImpactFeedbackGenerator(style: .light)
                                 generator.impactOccurred()
                                 selectedDocument = document
-                                fullScreenIsPresented = true
                             } label: {
                                 PDFPreview(data: document.versions.first!.fileData)
                                     .scaleEffect(1.03)
@@ -115,16 +91,11 @@ struct FavoritesSectionView: View {
                                     }
                             }
                         }
-                        .padding(5)
+                        .padding(.vertical, 4)
                     }
-                    .padding(.horizontal)
                 }
             }
         }
-        .frame(maxHeight: 226)
-        .padding(.vertical, 12)
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(27)
         .fullScreenCover(item: $selectedDocument) { document in
             PDFFullScreenView(document: document)
         }

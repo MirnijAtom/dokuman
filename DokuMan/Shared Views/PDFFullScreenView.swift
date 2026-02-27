@@ -36,7 +36,7 @@ struct PDFFullScreenView: View {
                     Button {
                         dismiss()
                     } label: {
-                        Label("Back", systemImage: "arrow.backward")
+                        Text("Done")
                     }
                 }
             }
