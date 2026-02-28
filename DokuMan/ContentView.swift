@@ -12,98 +12,94 @@ import SwiftUI
 
 // MARK: - ContentView
 
-/// The main tab view for the DokuMan app, containing Home, Files, Numbers, and Account tabs, plus a floating add button.
+/// The main root view for the DokuMan app, with Home as entry point and a floating add button.
 struct ContentView: View {
     // MARK: - State & Queries
-    @EnvironmentObject var store: StoreKitManager
-
-    @State private var selectedTab: Int = 0
     @State private var showAddOptions = false
     @State private var addEntryPoint: AddDocumentView.EntryPoint?
+    @State private var showNumbersFromAddSheet = false
+    @State private var hideFloatingAddButton = false
     @State private var isAppLocked = true
         
     @State private var showWelcomeSheet = false
     @AppStorage("welcomeSheetNotShownYet") private var welcomeSheetNotShownYet = true
 
-    @Query(sort: \Document.name, animation: .default) var documents: [Document]
-
     // MARK: - Body
     var body: some View {
-              
-                TabView(selection: $selectedTab) {
-                    HomeView(selectedTab: $selectedTab) {
-                        showAddOptions = true
-                    }
-                        .ignoresSafeArea()
-                        .tabItem {
-                            Label("Home", systemImage: selectedTab == 0 ? "house.fill" : "house")
-                        }
-                        .tag(0)
-                    FilesView()
-                        .tabItem {
-                            Label("Files", systemImage: selectedTab == 1 ? "folder.fill" : "folder")
-                        }
-                        .tag(1)
-                    NumbersEditView()
-                        .tabItem {
-                            Label("Numbers", systemImage: selectedTab == 2 ? "numbers.rectangle.fill" : "numbers.rectangle")
-                        }
-                        .tag(2)
-                    
-                
-                    
-                    AccountView()
-                        .tabItem {
-                            Label("Account", systemImage: selectedTab == 3 ? "person.fill" : "person")
-                        }
-                        .tag(3)
+        ZStack {
+            NavigationStack {
+                HomeView {
+                    showAddOptions = true
+                } onNumbersEditingChange: { isEditing in
+                    hideFloatingAddButton = isEditing
                 }
-                .tint(.teal)
-                .sheet(isPresented: $showAddOptions) {
-                    AddOptionsSheet { entryPoint in
-                        showAddOptions = false
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                            addEntryPoint = entryPoint
-                        }
-                    }
-                    .presentationDetents([.height(330)])
-                }
-                .sheet(item: $addEntryPoint) { entryPoint in
-                    AddDocumentView(entryPoint: entryPoint)
-                }
-                .overlay(alignment: .bottomTrailing) {
-                    Button {
-                        showAddOptions = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .font(.system(size: 35))
-                            .foregroundStyle(.teal)
-                            .padding()
-                            .glassEffect()
-                    }
-                    .padding(.bottom, 65)
-                    .padding(.trailing, 30)
-                }
-                .overlay {
-                    if isAppLocked {
-                        Color.white.opacity(0.95)
-                            .ignoresSafeArea()
-                            .overlay(
-                                VStack(spacing: 16) {
-                                    Image(systemName: "lock.fill")
-                                        .font(.system(size: 50))
-                                        .foregroundColor(.black)
-                                    Text("Authenticating...")
-                                        .foregroundColor(.black)
-                                        .font(.headline)
-                                }
-                            )
+                .navigationDestination(isPresented: $showNumbersFromAddSheet) {
+                    NumbersEditView { isEditing in
+                        hideFloatingAddButton = isEditing
                     }
                 }
-            
-        
+            }
+
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    if !hideFloatingAddButton {
+                        Button(action: {
+                            showAddOptions = true
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title2)
+                                .foregroundColor(.white)
+                                .padding()
+                                .glassEffect(.regular.tint(.cyan))
+//                                .background(
+//                                    Circle()
+//                                        .fill(Color.cyan)
+//                                )
+                        }
+                        .padding(.trailing, 32)
+                        .padding(.bottom, 2)
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showAddOptions) {
+            AddOptionsSheet { entryPoint in
+                showAddOptions = false
+                if entryPoint == .number {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        showNumbersFromAddSheet = true
+                    }
+                } else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        addEntryPoint = entryPoint
+                    }
+                }
+            }
+            .presentationDetents([.height(330)])
+        }
+        .sheet(item: $addEntryPoint) { entryPoint in
+            AddDocumentView(entryPoint: entryPoint)
+        }
+        .overlay {
+            if isAppLocked {
+                Color.white.opacity(0.95)
+                    .ignoresSafeArea()
+                    .overlay(
+                        VStack(spacing: 16) {
+                            Image(systemName: "lock.fill")
+                                .font(.system(size: 50))
+                                .foregroundColor(.black)
+                            Text("Authenticating...")
+                                .foregroundColor(.black)
+                                .font(.headline)
+                        }
+                    )
+            }
+        }
         .onAppear {
-                authenticate()
+            authenticate()
         }
         .onChange(of: isAppLocked) {
             welcomeSheet()
@@ -168,7 +164,7 @@ private struct AddOptionsSheet: View {
                     .foregroundStyle(color)
                     .frame(width: 28)
                 Text(title)
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .font(.subheadline)
                 Spacer()
             }
@@ -185,7 +181,7 @@ private struct AddOptionsSheet: View {
     let languageSettings = LanguageSettings()
     let store = StoreKitManager()
     ContentView()
-        .modelContainer(for: Document.self)
+        .modelContainer(for: [Document.self, Number.self])
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
         .environmentObject(store)

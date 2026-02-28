@@ -21,7 +21,7 @@
 "Account" = "Account";
 
 // MARK: - Files View
-"Documents" = "Files";
+"Documents" = "Documents";
 "Archive" = "Archive";
 "Show documents" = "Show documents";
 "Show archive" = "Show archive";

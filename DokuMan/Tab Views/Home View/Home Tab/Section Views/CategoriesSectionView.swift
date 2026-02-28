@@ -72,7 +72,7 @@ struct CategoriesSectionView: View {
                 }
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 126, maxHeight: 226)
+        .frame(maxWidth: .infinity, minHeight: 126)
     }
 }
 

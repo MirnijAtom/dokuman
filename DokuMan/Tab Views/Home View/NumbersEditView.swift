@@ -40,10 +40,14 @@ struct NumbersEditView: View {
     @State private var showSubscription = false
     @State private var alertMessage = ""
     @State private var copiedID: UUID? = nil
+    let onEditingStateChange: (Bool) -> Void
+
+    init(onEditingStateChange: @escaping (Bool) -> Void = { _ in }) {
+        self.onEditingStateChange = onEditingStateChange
+    }
     
     // MARK: - Body
     var body: some View {
-        NavigationStack {
         List {
             if numbers.isEmpty && editingNumber == nil {
                 Section {
@@ -66,30 +70,35 @@ struct NumbersEditView: View {
             } else {
                 Section {
                     ForEach(numbers) { number in
-                        HStack {
-                            Text(number.name)
-                                .numberTextStyle()
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                            ZStack {
-                                Text(number.idNumber)
+                        HStack(alignment: .center) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text(number.name)
                                     .numberTextStyle()
                                     .foregroundStyle(.primary)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                    .opacity(copiedID == number.id ? 0 : 1)
-                                    .animation(.easeInOut, value: copiedID)
-                                Text(LocalizedStringKey("Copied!"))
-                                    .numberTextStyle()
-                                    .foregroundStyle(.primary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .opacity(copiedID == number.id ? 1 : 0)
-                                    .animation(.easeInOut, value: copiedID)
+
+                                ZStack(alignment: .leading) {
+                                    Text(number.idNumber)
+                                        .numberTextStyle()
+                                        .foregroundStyle(.secondary)
+                                        .multilineTextAlignment(.leading)
+                                        .opacity(copiedID == number.id ? 0 : 1)
+                                        .animation(.easeInOut, value: copiedID)
+
+                                    Text(LocalizedStringKey("Copied!"))
+                                        .numberTextStyle()
+                                        .foregroundStyle(.secondary)
+                                        .opacity(copiedID == number.id ? 1 : 0)
+                                        .animation(.easeInOut, value: copiedID)
+                                }
                             }
-                            Divider()
+
+                            Spacer()
+
                             Button {
                                 UIPasteboard.general.string = number.idNumber
-                                let generator = UIImpactFeedbackGenerator()
-                                generator.impactOccurred()
+                                UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
                                 copiedID = number.id
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                                     copiedID = nil
@@ -97,37 +106,36 @@ struct NumbersEditView: View {
                             } label: {
                                 Image(systemName: "document.on.document")
                                     .numberTextStyle()
-                                    .foregroundStyle(Color.secondary)
-                                    .padding(.leading, 4)
+                                    .foregroundStyle(.secondary)
                             }
                         }
+                        .padding(.vertical, 6)
                     }
                     .onDelete(perform: deleteNumber)
-                    if let newNumber = editingNumber {
-                        HStack {
-                            TextField(LocalizedStringKey("Name"), text: $nameInputText)
-                                .autocorrectionDisabled(true)
-                                .focused($nameFocusedField, equals: newNumber.id)
-                                .numberTextStyle()
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                            TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
-                                .autocorrectionDisabled(true)
-                                .autocapitalization(.allCharacters)
-                                .focused($focusedField, equals: newNumber.id)
-                                .numberTextStyle()
-                                .foregroundStyle(Color.primary)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            Divider()
-                            Image(systemName: "document.on.document")
-                                .font(.subheadline)
-                                .foregroundStyle(Color.clear)
-                                .padding(.leading, 4)
+                        if let newNumber = editingNumber {
+                            VStack(alignment: .leading, spacing: 6) {
+                                TextField(LocalizedStringKey("Name"), text: $nameInputText)
+                                    .autocorrectionDisabled(true)
+                                    .focused($nameFocusedField, equals: newNumber.id)
+                                    .numberTextStyle()
+                                    .foregroundStyle(Color.primary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+
+                                Divider()
+
+                                TextField(LocalizedStringKey("Type ID"), text: $numberInputText)
+                                    .autocorrectionDisabled(true)
+                                    .autocapitalization(.allCharacters)
+                                    .focused($focusedField, equals: newNumber.id)
+                                    .numberTextStyle()
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .padding(.vertical, 6)
+                            .listRowSeparator(.visible, edges: .top)
                         }
                     }
                 }
-            }
             Button {
                 if numbers.count < 5 || store.isPro {
                     let newNumber = Number(name: "", idNumber: "", isCompleted: true)
@@ -144,10 +152,8 @@ struct NumbersEditView: View {
                     Spacer()
                 }
             }
-            .font(.subheadline)
-            .fontWidth(.compressed)
-            .fontWeight(.light)
-            .fontDesign(.monospaced)
+            .font(.headline)
+            .foregroundStyle(.teal)
             .sheet(isPresented: $showSubscription) {
                 SubscriptionView()
             }
@@ -185,6 +191,7 @@ struct NumbersEditView: View {
                             numberInputText = ""
                         }
                     }
+                    .tint(.cyan)
                     .alert(alertMessage, isPresented: $showAlert) {
                         Button(LocalizedStringKey("OK"), role: .cancel) { }
                     }
@@ -194,8 +201,13 @@ struct NumbersEditView: View {
         .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         .navigationTitle(LocalizedStringKey("Numbers"))
         .id(languageSettings.locale.identifier)
+        .onChange(of: editingNumber != nil) { _, isEditing in
+            onEditingStateChange(isEditing)
+        }
+        .onDisappear {
+            onEditingStateChange(false)
+        }
     }
-}
     // MARK: - Helpers
     /// Deletes a number at the specified offsets from the model context.
     func deleteNumber(at offsets: IndexSet) {
@@ -210,6 +222,19 @@ struct NumbersEditView: View {
     let themeSettings = ThemeSettings()
     let store = StoreKitManager()
     let languageSettings = LanguageSettings()
+    NavigationStack{
+        NumbersEditView(onEditingStateChange: { _ in })
+            .modelContainer(makeNumbersPreviewContainer())
+            .environmentObject(themeSettings)
+            .environmentObject(store)
+            .environmentObject(languageSettings)
+            .environment(\.locale, languageSettings.locale)
+            .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
+    }
+}
+
+@MainActor
+private func makeNumbersPreviewContainer() -> ModelContainer {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Number.self, configurations: config)
     let completed = Number(name: "Steuer-ID", idNumber: "12X1212345", isCompleted: true)
@@ -217,15 +242,8 @@ struct NumbersEditView: View {
         Number(name: "Sozialversicherung", idNumber: "12123456A123"),
         Number(name: "Krankenversicherung", idNumber: "X123456789")
     ]
-    for number in incomplete {
-        container.mainContext.insert(number)
-    }
+
+    incomplete.forEach { container.mainContext.insert($0) }
     container.mainContext.insert(completed)
-    return NumbersEditView()
-        .modelContainer(container)
-        .environmentObject(themeSettings)
-        .environmentObject(store)
-        .environmentObject(languageSettings)
-        .environment(\.locale, languageSettings.locale)
-        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
+    return container
 }

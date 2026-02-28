@@ -26,6 +26,8 @@ struct FilesView: View {
     @State private var isSelectionActive = false
     @State private var showArchived: Bool = false
     @State private var isShareSheetPresented = false
+    @State private var documentPendingDeletion: Document?
+    @State private var showDeleteSelectedConfirmation = false
 
     // MARK: - Layout
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -40,134 +42,156 @@ struct FilesView: View {
 
     // MARK: - Body
     var body: some View {
-        NavigationStack {
-            ZStack {
-                VStack {
-                    if documents.isEmpty {
-                        VStack {
-                            Image("emptyFilesIcon")
-                                .resizable()
-                                .scaledToFit()
-                                .padding(.trailing, 30)
-                                .frame(height: 100)
-                            Text("Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera.")
-                                .lineLimit(nil)
-                                .multilineTextAlignment(.center)
-                                .padding()
-                                .padding(.trailing, 30)
-                                .foregroundStyle(.secondary)
-                        }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    } else {
-                        ScrollView {
-                            LazyVGrid(columns: columns, spacing: 0) {
-                                ForEach(filteredDocuments) { document in
-                                    documentCell(document)
-                                }
-                                .animation(.default, value: filteredDocuments)
-                            }
-                            .padding(.horizontal)
-                            .padding(.bottom, 100)
-                        }
-                        .padding(.bottom, 70)
-                    }
-                }
-                .toolbar { toolbarContent }
-                .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
-                .navigationTitle(showArchived ? LocalizedStringKey("Archive") : LocalizedStringKey("Documents"))
-                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-                .focused($isSearchFocused)
-                .fullScreenCover(item: $selectedDocument) { document in
-                    PDFFullScreenView(document: document)
-                }
-                .sheet(item: $selectedDocumentToShare) { document in
-                    let urls = exportTempURLs(from: [document])
-                    if !urls.isEmpty {
-                        ShareSheet(activityItems: urls)
-                    } else {
-                        Text("Error sharing document.")
-                    }
-                }
-                .sheet(isPresented: $isShareSheetPresented) {
-                    let urls = exportTempURLs(from: selectedDocuments)
-                    if !urls.isEmpty {
-                        ShareSheet(activityItems: urls)
-                    } else {
-                        Text("Error sharing document.")
-                    }
-                }
-
-                
-                // Archive toggle floating button
-                if store.isPro {
+        ZStack {
+            VStack {
+                if documents.isEmpty {
                     VStack {
-                        Spacer()
-                        HStack {
-                            Button {
-                                let generator = UIImpactFeedbackGenerator(style: .light)
-                                generator.impactOccurred()
-                                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
-                                    showArchived.toggle()
-                                }
-                            } label: {
-                                HStack {
-                                    Image(systemName: showArchived ? "document.on.document" : "archivebox")
-                                    Text(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"))
-                                }
-                                
-                                .foregroundStyle(.teal)
-                                .padding()
-                                .glassEffect()
-                                .padding(.leading, 20)
-                                .transition(.blurReplace)
-                                .id(showArchived) // key for animating between states
-                            }
-                            .padding(.bottom, 100)
-                            Spacer()
-                        }
+                        Image("emptyFilesIcon")
+                            .resizable()
+                            .scaledToFit()
+                            .padding(.trailing, 30)
+                            .frame(height: 100)
+                        Text("Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera.")
+                            .lineLimit(nil)
+                            .multilineTextAlignment(.center)
+                            .padding()
+                            .padding(.trailing, 30)
+                            .foregroundStyle(.secondary)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    ScrollView {
+                        LazyVGrid(columns: columns, spacing: 0) {
+                            ForEach(filteredDocuments) { document in
+                                documentCell(document)
+                            }
+                            .animation(.default, value: filteredDocuments)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom, 100)
+                    }
+                    .padding(.bottom, 70)
                 }
             }
-            .ignoresSafeArea(edges: .bottom)
+            .toolbar { toolbarContent }
+            .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
+            .navigationTitle(showArchived ? LocalizedStringKey("Archive") : LocalizedStringKey("Documents"))
+            .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .focused($isSearchFocused)
+            .fullScreenCover(item: $selectedDocument) { document in
+                PDFFullScreenView(document: document)
+            }
+            .sheet(item: $selectedDocumentToShare) { document in
+                let urls = exportTempURLs(from: [document])
+                if !urls.isEmpty {
+                    ShareSheet(activityItems: urls)
+                } else {
+                    Text("Error sharing document.")
+                }
+            }
+            .sheet(isPresented: $isShareSheetPresented) {
+                let urls = exportTempURLs(from: selectedDocuments)
+                if !urls.isEmpty {
+                    ShareSheet(activityItems: urls)
+                } else {
+                    Text("Error sharing document.")
+                }
+            }
+            .confirmationDialog(
+                "Delete document?",
+                isPresented: Binding(
+                    get: { documentPendingDeletion != nil },
+                    set: { newValue in
+                        if !newValue { documentPendingDeletion = nil }
+                    }
+                ),
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    if let document = documentPendingDeletion {
+                        deleteDocument(document, modelContext: modelContext)
+                    }
+                    documentPendingDeletion = nil
+                }
+                Button("Cancel", role: .cancel) {
+                    documentPendingDeletion = nil
+                }
+            }
+            .confirmationDialog(
+                "Delete selected documents?",
+                isPresented: $showDeleteSelectedConfirmation,
+                titleVisibility: .visible
+            ) {
+                Button("Delete", role: .destructive) {
+                    for document in selectedDocuments {
+                        deleteDocument(document, modelContext: modelContext)
+                    }
+                    selectedDocuments.removeAll()
+                    withAnimation { isSelectionActive = false }
+                }
+                Button("Cancel", role: .cancel) {}
+            }
         }
+        .ignoresSafeArea(edges: .bottom)
     }
 
     // MARK: - Toolbar
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
-            ToolbarItem(placement: .topBarLeading) {
-                Button(LocalizedStringKey("Cancel")) {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                     withAnimation {
                         isSelectionActive = false
                         selectedDocuments = []
                     }
+                } label: {
+                    Image(systemName: "checkmark")
                 }
             }
-            ToolbarItem(placement: .topBarTrailing) {
+
+            ToolbarItemGroup(placement: .bottomBar) {
                 Button {
                     let generator = UINotificationFeedbackGenerator()
                     generator.notificationOccurred(.success)
                     isShareSheetPresented = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation { isSelectionActive = false }
-                    }
                 } label: {
                     Label(LocalizedStringKey("Share"), systemImage: "square.and.arrow.up")
                 }
+                Button(role: .destructive) {
+                    showDeleteSelectedConfirmation = true
+                } label: {
+                    Label(LocalizedStringKey("Delete"), systemImage: "trash")
+                }
+                Spacer()
             }
         } else {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                    withAnimation { isSelectionActive = true }
-                } label: {
-                    Text(LocalizedStringKey("Select"))
+                Menu {
+                    Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        withAnimation { isSelectionActive = true }
+                    } label: {
+                        Label(LocalizedStringKey("Select"), systemImage: "checkmark.circle")
+                    }
                     .disabled(!store.isPro)
-                    .opacity(store.isPro ? 1 : 0.4)
+
+                    Button {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                            showArchived.toggle()
+                        }
+                    } label: {
+                        Label(LocalizedStringKey(showArchived ? "Show documents" : "Show archive"),
+                              systemImage: showArchived ? "doc.text" : "archivebox")
+                    }
+                    .disabled(!store.isPro)
+                } label: {
+                    Image(systemName: "ellipsis")
                 }
             }
         }
@@ -225,7 +249,7 @@ struct FilesView: View {
                             Button(role: .destructive) {
                                 let generator = UIImpactFeedbackGenerator(style: .rigid)
                                 generator.impactOccurred()
-                                deleteDocument(document, modelContext: modelContext)
+                                documentPendingDeletion = document
                             } label: {
                                 Label(LocalizedStringKey("Delete"), systemImage: "trash")
                             }

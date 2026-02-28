@@ -16,6 +16,8 @@ struct DocumentListView: View {
     @State private var selectedDocuments: Set<Document> = []
     @State private var isSharing = false
     @State private var isSelectionActive = false
+    @State private var documentPendingDeletion: Document?
+    @State private var showDeleteSelectedConfirmation = false
 
     // MARK: - Layout
     let columns = [
@@ -63,46 +65,83 @@ struct DocumentListView: View {
                 Text("Error sharing documents.")
             }
         }
+        .confirmationDialog(
+            "Delete document?",
+            isPresented: Binding(
+                get: { documentPendingDeletion != nil },
+                set: { newValue in
+                    if !newValue { documentPendingDeletion = nil }
+                }
+            ),
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                if let document = documentPendingDeletion {
+                    deleteDocument(document, modelContext: modelContext)
+                }
+                documentPendingDeletion = nil
+            }
+            Button("Cancel", role: .cancel) {
+                documentPendingDeletion = nil
+            }
+        }
+        .confirmationDialog(
+            "Delete selected documents?",
+            isPresented: $showDeleteSelectedConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Delete", role: .destructive) {
+                for document in selectedDocuments {
+                    deleteDocument(document, modelContext: modelContext)
+                }
+                selectedDocuments.removeAll()
+                withAnimation { isSelectionActive = false }
+            }
+            Button("Cancel", role: .cancel) {}
+        }
     }
 
     // MARK: - Toolbar
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                     withAnimation {
                         isSelectionActive = false
                         selectedDocuments.removeAll()
                     }
+                } label: {
+                    Image(systemName: "checkmark")
                 }
             }
 
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItemGroup(placement: .bottomBar) {
                 Button {
                     let generator = UINotificationFeedbackGenerator()
                     generator.notificationOccurred(.success)
                     isSharing = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation { isSelectionActive = false }
-                    }
                 } label: {
                     Label("Share", systemImage: "square.and.arrow.up")
                 }
+                Button(role: .destructive) {
+                    showDeleteSelectedConfirmation = true
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+                Spacer()
             }
         } else {
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Select") {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                    withAnimation {
-                        isSelectionActive = true
+                    Button("Select") {
+                        let generator = UIImpactFeedbackGenerator(style: .light)
+                        generator.impactOccurred()
+                        withAnimation {
+                            isSelectionActive = true
+                        }
                     }
-                }
-                .disabled(!store.isPro)
-                .opacity(store.isPro ? 1 : 0.4)
             }
         }
     }
@@ -192,7 +231,7 @@ struct DocumentListView: View {
         Button(role: .destructive) {
             let generator = UIImpactFeedbackGenerator(style: .rigid)
             generator.impactOccurred()
-            deleteDocument(document, modelContext: modelContext)
+            documentPendingDeletion = document
         } label: {
             Label("Delete", systemImage: "trash")
         }

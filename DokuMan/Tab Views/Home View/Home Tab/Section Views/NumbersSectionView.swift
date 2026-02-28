@@ -11,14 +11,12 @@
     // MARK: - NumbersSectionView
 
     /// Displays a summary of user numbers/IDs, with quick copy and expand/collapse functionality.
-    struct NumbersSectionView: View {
-        // MARK: - Query & State
-        /// All numbers/IDs in the database.
-        @Query var numbers: [Number]
-        /// The selected tab index (bound to parent TabView).
-        @Binding var selectedTab: Int
-        @State private var isExpanded = false
-        @State private var copiedID: UUID? = nil
+struct NumbersSectionView: View {
+    // MARK: - Query & State
+    /// All numbers/IDs in the database.
+    @Query var numbers: [Number]
+    @State private var isExpanded = false
+    @State private var copiedID: UUID? = nil
 
         // MARK: - Body
         var body: some View {
@@ -121,16 +119,6 @@
                         .foregroundStyle(.teal)
                     }
                 }
-                Button(LocalizedStringKey(numbers.isEmpty ? "Add number" : "See all")) {
-                    let generator = UIImpactFeedbackGenerator(style: .light)
-                    generator.impactOccurred()
-                    selectedTab = 2
-                }
-                .font(.headline)
-                .foregroundStyle(.teal)
-                .frame(maxWidth: .infinity, minHeight: 56)
-                .glassEffect()
-                .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(maxWidth: .infinity, minHeight: 126)
         }
@@ -153,7 +141,7 @@
 //        for number in numbers {
 //            container.mainContext.insert(number)
 //        }
-        return NumbersSectionView(selectedTab: .constant(0))
+        return NumbersSectionView()
             .modelContainer(container)
             .environmentObject(themeSettings)
             .environmentObject(languageSettings)
