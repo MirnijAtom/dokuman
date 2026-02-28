@@ -5,146 +5,105 @@
     //  Created by Aleksandrs Bertulis on 10.05.25.
     //
 
-    import SwiftData
-    import SwiftUI
+import SwiftData
+import SwiftUI
 
-    // MARK: - NumbersSectionView
+// MARK: - NumbersSectionView
 
-    /// Displays a summary of user numbers/IDs, with quick copy and expand/collapse functionality.
+/// Displays a compact summary of user numbers/IDs with quick copy support.
 struct NumbersSectionView: View {
     // MARK: - Query & State
-    /// All numbers/IDs in the database.
-    @Query var numbers: [Number]
-    @State private var isExpanded = false
+    @Query(sort: \Number.date) var numbers: [Number]
     @State private var copiedID: UUID? = nil
 
-        // MARK: - Body
-        var body: some View {
-            let visibleNumbers = isExpanded ? numbers : Array(numbers.prefix(3))
-            
-            VStack(alignment: .leading, spacing: 8) {
-                // Content
-                if numbers.isEmpty {
-                    ContentUnavailableView(
-                        "No numbers yet",
-                        systemImage: "numbers",
-                        description: Text("Add your important IDs like tax, health insurance, or social security numbers.")
-                    )
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                } else {
-                    VStack {
-                        ForEach(visibleNumbers) { number in
-                            HStack {
-                                Text(number.name)
+    // MARK: - Body
+    var body: some View {
+        let visibleNumbers = Array(numbers.prefix(5))
+
+        VStack(alignment: .leading, spacing: 4) {
+            if numbers.isEmpty {
+                ContentUnavailableView(
+                    "No numbers yet",
+                    systemImage: "numbers",
+                    description: Text("Add your important IDs like tax, health insurance, or social security numbers.")
+                )
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+            } else {
+                ForEach(Array(visibleNumbers.enumerated()), id: \.element.id) { index, number in
+                    HStack(alignment: .center) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(number.name)
+                                .numberTextStyle()
+                                .foregroundStyle(.primary)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            ZStack(alignment: .leading) {
+                                Text(number.idNumber)
                                     .numberTextStyle()
+                                    .foregroundStyle(.secondary)
                                     .lineLimit(1)
                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                                Divider()
-                                
-                                
-                                ZStack {
-                                    Text(number.idNumber)
-                                        .numberTextStyle()
-                                        .foregroundStyle(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .opacity(copiedID == number.id ? 0 : 1)
-                                        .animation(.easeInOut, value: copiedID)
-                                        .onTapGesture {
-                                            UIPasteboard.general.string = number.idNumber
-                                            let generator = UIImpactFeedbackGenerator()
-                                            generator.impactOccurred()
-                                            copiedID = number.id
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                                copiedID = nil
-                                            }
-                                        }
-                                    Text(LocalizedStringKey("Copied!"))
-                                        .numberTextStyle()
-                                        .foregroundStyle(.primary)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .opacity(copiedID == number.id ? 1 : 0)
-                                        .animation(.easeInOut, value: copiedID)
-                                }
+                                    .opacity(copiedID == number.id ? 0 : 1)
+                                    .animation(.easeInOut, value: copiedID)
 
-                                
-                                Divider()
-                                
-                                Button {
-                                    let generator = UIImpactFeedbackGenerator(style: .light)
-                                    generator.impactOccurred()
-                                    UIPasteboard.general.string = number.idNumber
-                                    
-                                    copiedID = number.id
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                        copiedID = nil
-                                    }
-                                } label: {
-                                    Image(systemName: "document.on.document")
-                                        .numberTextStyle()
-                                        .foregroundStyle(Color.secondary)
-                                        .padding(.leading, 4)
+                                Text(LocalizedStringKey("Copied!"))
+                                    .numberTextStyle()
+                                    .foregroundStyle(.secondary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .opacity(copiedID == number.id ? 1 : 0)
+                                    .animation(.easeInOut, value: copiedID)
+                            }
+                        }
+
+                        Spacer()
+
+                        Button {
+                            UIPasteboard.general.string = number.idNumber
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+
+                            // Force state refresh so repeated taps on the same row always animate.
+                            copiedID = nil
+                            DispatchQueue.main.async {
+                                copiedID = number.id
+                            }
+
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                if copiedID == number.id {
+                                    copiedID = nil
                                 }
                             }
-                            .frame(height: 30)
-                            .padding(.horizontal)
-                            .padding(.top, number == numbers.first ? 8 : 0)
-                            .padding(.bottom, number == numbers.last ? 8 : 0)
-                            if number != numbers.last {
-                                Divider()
-                            }
+                        } label: {
+                            Image(systemName: "document.on.document")
+                                .numberTextStyle()
+                                .foregroundStyle(.secondary)
+                                .padding(8)
+                                .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                     }
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal)
-                }
-                if numbers.count > 3 {
-                    Button {
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        withAnimation {
-                            isExpanded.toggle()
-                        }
-                    } label: {
-                        HStack {
-                            Spacer ()
-                            VStack {
-                                Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
-                                    .padding(.top, 6)
-                            }
-                            Spacer()
-                        }
-                        .foregroundStyle(.teal)
+                    .padding(.vertical, 4)
+
+                    if index < visibleNumbers.count - 1 {
+                        Divider()
                     }
                 }
             }
-            .frame(maxWidth: .infinity, minHeight: 126)
         }
+        .frame(maxWidth: .infinity, minHeight: 126)
     }
+}
 
-    #Preview {
-        let themeSettings = ThemeSettings()
-        let languageSettings = LanguageSettings()
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Number.self, configurations: config)
-//        let numbers = [
-//            Number(name: "Sozialversicherung", idNumber: "12 123456 A 123", isCompleted: true),
-//            Number(name: "Krankenversicherung", idNumber: "X123456789", isCompleted: true),
-//            Number(name: "Insurance", idNumber: "ABVDSA4362346", isCompleted: true),
-//            Number(name: "Lawyer insurance", idNumber: "436416JBI76a", isCompleted: true),
-//            Number(name: "Bank insurance", idNumber: "12123123", isCompleted: true),
-//            Number(name: "Renteversicherung", idNumber: "X123KHG456789", isCompleted: true),
-//            Number(name: "Passport number", idNumber: "DE6598735", isCompleted: true)
-//        ]
-//        for number in numbers {
-//            container.mainContext.insert(number)
-//        }
-        return NumbersSectionView()
-            .modelContainer(container)
-            .environmentObject(themeSettings)
-            .environmentObject(languageSettings)
-            .environment(\.locale, languageSettings.locale)
-            .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
-    }
+#Preview {
+    let themeSettings = ThemeSettings()
+    let languageSettings = LanguageSettings()
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Number.self, configurations: config)
+    NumbersSectionView()
+        .modelContainer(container)
+        .environmentObject(themeSettings)
+        .environmentObject(languageSettings)
+        .environment(\.locale, languageSettings.locale)
+        .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
+}

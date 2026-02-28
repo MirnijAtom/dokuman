@@ -106,8 +106,9 @@ struct NumbersEditView: View {
                             } label: {
                                 Image(systemName: "document.on.document")
                                     .numberTextStyle()
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(.primary)
                             }
+                            .buttonStyle(.plain)
                         }
                         .padding(.vertical, 6)
                     }
@@ -158,6 +159,7 @@ struct NumbersEditView: View {
                 SubscriptionView()
             }
         }
+        .safeAreaPadding(.bottom, 92)
         .toolbar {
             if editingNumber != nil {
                 ToolbarItem(placement: .topBarLeading) {

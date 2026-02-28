@@ -37,7 +37,7 @@ struct DocumentListView: View {
             }
             .padding(.horizontal)
         }
-        .padding(.bottom, 70)
+        .safeAreaPadding(.bottom, 92)
         .navigationTitle(title)
         .toolbar { toolbarContent }
 

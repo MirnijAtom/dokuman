@@ -115,6 +115,7 @@ struct AccountView: View {
                 // Reserved for future settings
             }
         }
+        .safeAreaPadding(.bottom, 92)
         .sheet(isPresented: $showPrivacyPolicy) {
             PrivacyPolicyView()
         }

@@ -94,6 +94,7 @@ struct HomeView: View {
                 .glassEffect()
             }
         }
+        .safeAreaPadding(.bottom, 92)
         .listStyle(.insetGrouped)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
