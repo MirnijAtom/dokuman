@@ -21,6 +21,7 @@ struct HomeView: View {
     @Query(sort: \Number.date) var numbers: [Number]
     @State private var showDocumentsView = false
     @State private var showNumbersView = false
+    @State private var showGetPro = false
     let onAddTap: () -> Void
     let onNumbersEditingChange: (Bool) -> Void
     
@@ -97,6 +98,14 @@ struct HomeView: View {
         .safeAreaPadding(.bottom, 92)
         .listStyle(.insetGrouped)
         .toolbar {
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 NavigationLink {
                     AccountView()
@@ -110,6 +119,11 @@ struct HomeView: View {
         }
         .navigationDestination(isPresented: $showNumbersView) {
             NumbersEditView(onEditingStateChange: onNumbersEditingChange)
+        }
+        .fullScreenCover(isPresented: $showGetPro) {
+            NavigationStack {
+                SubscriptionView()
+            }
         }
     }
 }

@@ -20,7 +20,17 @@ class LanguageSettings: ObservableObject {
 
     /// Initializes the language settings, loading from UserDefaults if available.
     init() {
-        let savedLanguage = UserDefaults.standard.string(forKey: "language") ?? "en"
-        self.locale = Locale(identifier: savedLanguage)
+        if let savedLanguage = UserDefaults.standard.string(forKey: "language"), !savedLanguage.isEmpty {
+            self.locale = Locale(identifier: savedLanguage)
+            return
+        }
+
+        // First launch: pick app language from device preferences (supports DE/EN).
+        let supportedLanguages: Set<String> = ["de", "en"]
+        let preferred = Locale.preferredLanguages
+            .compactMap { Locale(identifier: $0).language.languageCode?.identifier.lowercased() }
+            .first { supportedLanguages.contains($0) } ?? "en"
+
+        self.locale = Locale(identifier: preferred)
     }
-} 
+}

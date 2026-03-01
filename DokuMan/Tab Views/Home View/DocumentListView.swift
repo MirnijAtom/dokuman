@@ -18,6 +18,7 @@ struct DocumentListView: View {
     @State private var isSelectionActive = false
     @State private var documentPendingDeletion: Document?
     @State private var showDeleteSelectedConfirmation = false
+    @State private var showGetPro = false
 
     // MARK: - Layout
     let columns = [
@@ -99,12 +100,25 @@ struct DocumentListView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
+        .fullScreenCover(isPresented: $showGetPro) {
+            NavigationStack {
+                SubscriptionView()
+            }
+        }
     }
 
     // MARK: - Toolbar
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
@@ -134,14 +148,22 @@ struct DocumentListView: View {
                 Spacer()
             }
         } else {
-            ToolbarItem(placement: .topBarTrailing) {
-                    Button("Select") {
-                        let generator = UIImpactFeedbackGenerator(style: .light)
-                        generator.impactOccurred()
-                        withAnimation {
-                            isSelectionActive = true
-                        }
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
                     }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Select") {
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    withAnimation {
+                        isSelectionActive = true
+                    }
+                }
             }
         }
     }

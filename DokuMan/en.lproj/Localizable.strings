@@ -13,6 +13,11 @@
 "Edit" = "Edit";
 "Delete" = "Delete";
 "OK" = "OK";
+"Done" = "Done";
+"Get Pro" = "Get Pro";
+"Authenticating..." = "Authenticating...";
+"Opening..." = "Opening...";
+"Unlock DokuMan" = "Unlock DokuMan";
 
 // MARK: - Tab Bar
 "Home" = "Home";
@@ -29,6 +34,12 @@
 "Remove from favorites" = "Remove from favorites";
 "Unarchive" = "Unarchive";
 "Error sharing documents." = "Error sharing documents.";
+"Error sharing document." = "Error sharing document.";
+"Error sharing PDF." = "Error sharing PDF.";
+"Delete document?" = "Delete document?";
+"Delete selected documents?" = "Delete selected documents?";
+"Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera." = "Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera.";
+"Add mockup files" = "Add mockup files";
 
 // MARK: - Home View
 "Favorites" = "Favorites";
@@ -38,6 +49,10 @@
 "Copied!" = "Copied!";
 "See all" = "See all";
 "Add document" = "Add document";
+"No favorites yet" = "No favorites yet";
+"Mark important documents as favorites for quick access." = "Mark important documents as favorites for quick access.";
+"Add files from Photos, Files, or scan them with your camera." = "Add files from Photos, Files, or scan them with your camera.";
+"Add your important IDs like tax, health insurance, or social security numbers." = "Add your important IDs like tax, health insurance, or social security numbers.";
 
 // MARK: - Account View
 "Dark mode" = "Dark mode";
@@ -89,26 +104,26 @@
 
 // MARK: - Welcome Sheet
 "welcome_title" = "Welcome to DokuMan";
-"welcome_subtitle" = "Your personal vault for documents, numbers, and important papers — right in your pocket.";
+"welcome_subtitle" = "Your personal document vault. Always within reach.";
 "welcome_nav_title" = "Welcome to DokuMan";
 
-"feature_allinone_title" = "All-in-One Organizer";
-"feature_allinone_desc" = "Store IDs, contracts, insurance papers, certificates, and notes — all in one app. No more scattered PDFs or photo roll chaos.";
+"feature_allinone_title" = "All in One Place";
+"feature_allinone_desc" = "Documents and important numbers in one app.";
 
 "feature_secure_title" = "Secure & Private";
-"feature_secure_desc" = "Everything stays on your device — never on third-party servers. With Face ID support, your documents stay protected from prying eyes.";
+"feature_secure_desc" = "Stays on your device. Protected with Face ID.";
 
-"feature_scan_title" = "Scan & Save Instantly";
-"feature_scan_desc" = "Built-in scanner lets you digitize paper documents with a tap. Automatically saved as searchable PDFs.";
+"feature_scan_title" = "Scan & Save";
+"feature_scan_desc" = "Scan documents and store them as PDFs.";
 
 "feature_favorites_title" = "Favorites & Archive";
-"feature_favorites_desc" = "Keep important items just a tap away. Or archive things you don’t need right now but might later.";
+"feature_favorites_desc" = "Quick access to important files or archive them.";
 
 "feature_simple_title" = "Simple. Fast. Clean.";
-"feature_simple_desc" = "Designed for comfort. Smooth animations, light footprint, and zero clutter. It just works — like a good app should.";
+"feature_simple_desc" = "Clear design. No clutter.";
 
-"feature_personal_title" = "Personalized Experience";
-"feature_personal_desc" = "Customize your document categories, pick your favorite language, and tailor your workflow.";
+"feature_personal_title" = "Personalized";
+"feature_personal_desc" = "Adjust categories and language to your needs.";
 
 
 "Your favorite documents will appear here. Mark important files to access them quickly." = "Your favorite documents will appear here. Mark important files to access them quickly.";

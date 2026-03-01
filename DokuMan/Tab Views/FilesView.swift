@@ -28,6 +28,7 @@ struct FilesView: View {
     @State private var isShareSheetPresented = false
     @State private var documentPendingDeletion: Document?
     @State private var showDeleteSelectedConfirmation = false
+    @State private var showGetPro = false
 
     // MARK: - Layout
     let columns = [GridItem(.flexible()), GridItem(.flexible())]
@@ -131,6 +132,11 @@ struct FilesView: View {
                 }
                 Button("Cancel", role: .cancel) {}
             }
+            .fullScreenCover(isPresented: $showGetPro) {
+                NavigationStack {
+                    SubscriptionView()
+                }
+            }
         }
         .ignoresSafeArea(edges: .bottom)
     }
@@ -139,6 +145,14 @@ struct FilesView: View {
     @ToolbarContentBuilder
     var toolbarContent: some ToolbarContent {
         if isSelectionActive {
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     let generator = UIImpactFeedbackGenerator(style: .light)
@@ -168,6 +182,14 @@ struct FilesView: View {
                 Spacer()
             }
         } else {
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
                     Button {

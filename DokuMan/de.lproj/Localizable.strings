@@ -13,6 +13,11 @@
 "Edit" = "Bearbeiten";
 "Delete" = "Löschen";
 "OK" = "OK";
+"Done" = "Fertig";
+"Get Pro" = "Pro holen";
+"Authenticating..." = "Authentifizierung...";
+"Opening..." = "Wird geöffnet...";
+"Unlock DokuMan" = "DokuMan entsperren";
 
 // MARK: - Tab Bar
 "Home" = "Home";
@@ -29,6 +34,12 @@
 "Remove from favorites" = "Aus Favoriten entfernen";
 "Unarchive" = "Dearchivieren";
 "Error sharing documents." = "Fehler beim Teilen von Dokumenten.";
+"Error sharing document." = "Fehler beim Teilen des Dokuments.";
+"Error sharing PDF." = "Fehler beim Teilen der PDF.";
+"Delete document?" = "Dokument löschen?";
+"Delete selected documents?" = "Ausgewählte Dokumente löschen?";
+"Tap the plus button to add your first document. You can upload from Files, Photos, or scan with your camera." = "Tippe auf die Plus-Taste, um dein erstes Dokument hinzuzufügen. Du kannst aus Dateien oder Fotos hochladen oder mit der Kamera scannen.";
+"Add mockup files" = "Beispieldateien hinzufügen";
 
 // MARK: - Home View
 "Favorites" = "Favoriten";
@@ -38,6 +49,10 @@
 "Copied!" = "Kopiert!";
 "See all" = "Alle anzeigen";
 "Add document" = "Dokument hinzufügen";
+"No favorites yet" = "Noch keine Favoriten";
+"Mark important documents as favorites for quick access." = "Markiere wichtige Dokumente als Favoriten für schnellen Zugriff.";
+"Add files from Photos, Files, or scan them with your camera." = "Füge Dateien aus Fotos oder Dateien hinzu oder scanne sie mit deiner Kamera.";
+"Add your important IDs like tax, health insurance, or social security numbers." = "Füge wichtige Nummern hinzu, zum Beispiel Steuer-ID, Krankenversicherung oder Sozialversicherungsnummer.";
 
 // MARK: - Account View
 "Dark mode" = "Dunkelmodus";
@@ -88,26 +103,26 @@
 
 // MARK: - Welcome Sheet
 "welcome_title" = "Willkommen bei DokuMan";
-"welcome_subtitle" = "Dein persönlicher Tresor für Dokumente, Nummern und wichtige Unterlagen – immer griffbereit.";
+"welcome_subtitle" = "Dein persönlicher Dokumenten-Tresor. Immer griffbereit.";
 "welcome_nav_title" = "Willkommen bei DokuMan";
 
-"feature_allinone_title" = "Alles-in-einem Organizer";
-"feature_allinone_desc" = "Speichere Ausweise, Verträge, Versicherungspolicen, Zertifikate und Notizen – alles in einer App. Kein PDF-Chaos mehr.";
+"feature_allinone_title" = "Alles an einem Ort";
+"feature_allinone_desc" = "Dokumente und wichtige Nummern in einer App.";
 
 "feature_secure_title" = "Sicher & Privat";
-"feature_secure_desc" = "Alles bleibt auf deinem Gerät – niemals auf fremden Servern. Mit Face ID bleiben deine Dokumente vor neugierigen Blicken geschützt.";
+"feature_secure_desc" = "Bleibt auf deinem Gerät. Geschützt mit Face ID.";
 
 "feature_scan_title" = "Scannen & Speichern";
-"feature_scan_desc" = "Mit dem integrierten Scanner digitalisierst du Papierdokumente mit nur einem Tipp – direkt als durchsuchbare PDFs.";
+"feature_scan_desc" = "Dokumente scannen und als PDF sichern.";
 
 "feature_favorites_title" = "Favoriten & Archiv";
-"feature_favorites_desc" = "Wichtige Dokumente immer schnell erreichbar. Oder archiviere, was du später noch brauchen könntest.";
+"feature_favorites_desc" = "Wichtige Dateien schnell finden oder archivieren.";
 
 "feature_simple_title" = "Einfach. Schnell. Klar.";
-"feature_simple_desc" = "Intuitive Bedienung, sauberes Design, keine Ablenkung. Genau wie eine gute App sein sollte.";
+"feature_simple_desc" = "Intuitive Bedienung ohne Ablenkung.";
 
-"feature_personal_title" = "Ganz nach deinem Stil";
-"feature_personal_desc" = "Kategorien anpassen, Sprache wählen, deine Arbeitsweise optimieren.";
+"feature_personal_title" = "Individuell anpassbar";
+"feature_personal_desc" = "Kategorien und Sprache nach deinen Bedürfnissen.";
 
 
 "Your favorite documents will appear here. Mark important files to access them quickly." = "Deine Favoriten erscheinen hier. Markiere wichtige Dokumente für schnellen Zugriff.";

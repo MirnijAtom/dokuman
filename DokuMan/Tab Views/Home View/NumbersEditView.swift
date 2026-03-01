@@ -38,6 +38,7 @@ struct NumbersEditView: View {
     @State private var numberInputText: String = ""
     @State private var showAlert = false
     @State private var showSubscription = false
+    @State private var showGetPro = false
     @State private var alertMessage = ""
     @State private var copiedID: UUID? = nil
     let onEditingStateChange: (Bool) -> Void
@@ -161,6 +162,14 @@ struct NumbersEditView: View {
         }
         .safeAreaPadding(.bottom, 92)
         .toolbar {
+            if !store.isPro {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Get Pro") {
+                        showGetPro = true
+                    }
+                }
+                ToolbarSpacer(.fixed, placement: .topBarTrailing)
+            }
             if editingNumber != nil {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(LocalizedStringKey("Cancel"), role: .destructive) {
@@ -202,6 +211,11 @@ struct NumbersEditView: View {
         }
         .toolbarColorScheme(themeSettings.isDarkMode ? .dark : .light)
         .navigationTitle(LocalizedStringKey("Numbers"))
+        .fullScreenCover(isPresented: $showGetPro) {
+            NavigationStack {
+                SubscriptionView()
+            }
+        }
         .id(languageSettings.locale.identifier)
         .onChange(of: editingNumber != nil) { _, isEditing in
             onEditingStateChange(isEditing)

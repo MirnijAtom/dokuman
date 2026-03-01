@@ -50,13 +50,9 @@ struct ContentView: View {
                         }) {
                             Image(systemName: "plus")
                                 .font(.title2)
-                                .foregroundColor(.white)
+                                .bold()
                                 .padding()
                                 .glassEffect(.regular.tint(.cyan))
-//                                .background(
-//                                    Circle()
-//                                        .fill(Color.cyan)
-//                                )
                         }
                         .padding(.trailing, 32)
                         .padding(.bottom, 2)
@@ -115,7 +111,7 @@ struct ContentView: View {
         var error: NSError?
 
         if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-            let reason = "Unlock DokuMan"
+            let reason = NSLocalizedString("Unlock DokuMan", comment: "")
 
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, _ in
                 DispatchQueue.main.async {

@@ -76,7 +76,7 @@ struct ArchiveView: View {
             .safeAreaPadding(.bottom, 92)
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Archive")
-            Button("Add mockup files") {
+            Button(LocalizedStringKey("Add mockup files")) {
                 addMockupFiles()
             }
         }
