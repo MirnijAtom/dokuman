@@ -324,6 +324,7 @@ struct AddDocumentView: View {
         let newDocument = Document(name: name, category: category, versions: [newDocumentVersion])
         modelContext.insert(newDocument)
         try? modelContext.save()
+        ReviewRequester.recordDocumentSaved()
         print("Saved: \(newDocument.name)")
         data = Data()
         name = ""

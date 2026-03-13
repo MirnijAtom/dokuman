@@ -179,6 +179,7 @@ struct NumbersEditView: View {
             AddNumberSheet { name, idNumber, category in
                 let newNumber = Number(name: name, idNumber: idNumber, isCompleted: true, category: category)
                 modelContext.insert(newNumber)
+                ReviewRequester.recordNumberSaved()
             }
         }
         .sheet(item: $numberToEdit) { number in

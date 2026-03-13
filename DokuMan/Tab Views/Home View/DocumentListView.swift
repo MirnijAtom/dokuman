@@ -308,6 +308,7 @@ struct DocumentListView: View {
     .modelContainer(for: Document.self)
     .environmentObject(themeSettings)
     .environmentObject(languageSettings)
+    .environmentObject(StoreKitManager())
     .environment(\.locale, languageSettings.locale)
     .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
 }

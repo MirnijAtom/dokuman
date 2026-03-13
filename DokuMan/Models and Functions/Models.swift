@@ -99,6 +99,7 @@ enum NumberCategory: String, CaseIterable, Codable {
     case healthInsurance
     case work
     case financeBanking
+    case taxes
     case vehicle
     case homeUtilities
     case travel
@@ -112,6 +113,7 @@ enum NumberCategory: String, CaseIterable, Codable {
         case .healthInsurance: return "Health & Insurance"
         case .work: return "Work"
         case .financeBanking: return "Finance & Banking"
+        case .taxes: return "Taxes"
         case .vehicle: return "Vehicle"
         case .homeUtilities: return "Home & Utilities"
         case .travel: return "Travel"
@@ -127,6 +129,7 @@ enum NumberCategory: String, CaseIterable, Codable {
         case .healthInsurance: return "cross.case.fill"
         case .work: return "briefcase.fill"
         case .financeBanking: return "creditcard.fill"
+        case .taxes: return "doc.text.fill"
         case .vehicle: return "car.fill"
         case .homeUtilities: return "house.fill"
         case .travel: return "airplane"

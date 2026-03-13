@@ -49,44 +49,37 @@ struct CategoriesSectionView: View {
 
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if nonEmptyCategories.isEmpty {
-                ContentUnavailableView(
-                    "No documents yet",
-                    systemImage: "doc",
-                    description: Text("Add files from Photos, Files, or scan them with your camera.")
-                )
-                .frame(maxWidth: .infinity)
+        if nonEmptyCategories.isEmpty {
+            ContentUnavailableView(
+                "No documents yet",
+                systemImage: "doc",
+                description: Text("Add files from Photos, Files, or scan them with your camera.")
+            )
+            .frame(maxWidth: .infinity)
+            .listRowSeparator(.hidden)
 
-                Button(LocalizedStringKey("Add document")) {
-                    onAddTap()
-                }
-                .font(.headline)
-                .foregroundStyle(.teal)
-                .frame(maxWidth: .infinity, minHeight: 56)
-                .glassEffect()
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(nonEmptyCategories, id: \.self) { category in
-                        categoryRow(for: category)
-                        if category != nonEmptyCategories.last {
-                            Divider()
-                                .padding(.vertical, 12)
-                        }
-                    }
-                }
-
-                Button(LocalizedStringKey("See all")) {
-                    onSeeAll()
-                }
-                .font(.headline)
-                .foregroundStyle(.teal)
-                .frame(maxWidth: .infinity, minHeight: 56)
-                .glassEffect()
-                .padding(.top, 12)
+            Button(LocalizedStringKey("Add document")) {
+                onAddTap()
             }
+            .font(.headline)
+            .foregroundStyle(.teal)
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .glassEffect()
+            .listRowSeparator(.hidden)
+        } else {
+            ForEach(Array(nonEmptyCategories.enumerated()), id: \.element) { index, category in
+                categoryRow(for: category)
+            }
+
+            Button(LocalizedStringKey("See all")) {
+                onSeeAll()
+            }
+            .font(.headline)
+            .foregroundStyle(.teal)
+            .frame(maxWidth: .infinity, minHeight: 56)
+            .glassEffect()
+            .listRowSeparator(.hidden)
         }
-        .frame(maxWidth: .infinity, minHeight: 126)
     }
 }
 
