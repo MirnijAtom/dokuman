@@ -84,8 +84,10 @@ struct NumbersSectionView: View {
                         .buttonStyle(.plain)
                     }
 
-                    Divider()
-                        .padding(.vertical, 4)
+                    if index < visibleNumbers.count - 1 {
+                        Divider()
+                            .padding(.vertical, 4)
+                    }
                 }
             }
         }
