@@ -16,8 +16,6 @@ struct HomeView: View {
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var themeSettings: ThemeSettings
     @EnvironmentObject var store: StoreKitManager
-    /// All non-archived documents, sorted by name.
-    @Query(filter: #Predicate<Document> { !$0.isArchived }, sort: \.name) var documents: [Document]
     @Query(sort: \Number.date) var numbers: [Number]
     @State private var showDocumentsView = false
     @State private var showNumbersView = false
@@ -25,12 +23,6 @@ struct HomeView: View {
     let onAddTap: () -> Void
     let onNumbersEditingChange: (Bool) -> Void
     
-    private var nonEmptyCategories: [DocumentCategory] {
-        DocumentCategory.allCases.filter { category in
-            documents.contains(where: { $0.category == category })
-        }
-    }
-
     // MARK: - Body
     var body: some View {
         List {
@@ -39,49 +31,10 @@ struct HomeView: View {
             }
 
             Section("Documents") {
-                if nonEmptyCategories.isEmpty {
-                    VStack(spacing: 12) {
-                        ContentUnavailableView(
-                            "No documents yet",
-                            systemImage: "doc",
-                            description: Text("Add files from Photos, Files, or scan them with your camera.")
-                        )
-                        Button(LocalizedStringKey("Add document")) {
-                            onAddTap()
-                        }
-                        .font(.headline)
-                        .foregroundStyle(.teal)
-                        .frame(maxWidth: .infinity, minHeight: 56)
-                        .glassEffect()
-                    }
-                    .listRowSeparator(.hidden)
-                } else {
-                    ForEach(nonEmptyCategories, id: \.self) { category in
-                        NavigationLink {
-                            DocumentListView(
-                                title: category.label,
-                                documents: documents.filter { $0.category == category }
-                            )
-                        } label: {
-                            HStack {
-                                HStack {
-                                    Image(systemName: category.icon)
-                                        .frame(width: 25)
-                                    Text(category.label)
-                                }
-                                .foregroundColor(category.color)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                        }
-                    }
-                    Button(LocalizedStringKey("See all")) {
-                        showDocumentsView = true
-                    }
-                    .font(.headline)
-                    .foregroundStyle(.teal)
-                    .frame(maxWidth: .infinity, minHeight: 56)
-                    .glassEffect()
-                }
+                CategoriesSectionView(
+                    onAddTap: onAddTap,
+                    onSeeAll: { showDocumentsView = true }
+                )
             }
 
             Section("Numbers") {
@@ -93,6 +46,7 @@ struct HomeView: View {
                 .foregroundStyle(.teal)
                 .frame(maxWidth: .infinity, minHeight: 56)
                 .glassEffect()
+                .listRowSeparator(.hidden, edges: .top)
             }
         }
         .safeAreaPadding(.bottom, 92)
@@ -125,17 +79,67 @@ struct HomeView: View {
                 SubscriptionView()
             }
         }
+        .onAppear {
+            normalizeLegacyNumberCategories()
+        }
+    }
+
+    private func normalizeLegacyNumberCategories() {
+        var changed = false
+        for number in numbers where NumberCategory(rawValue: number.categoryRawValue) == nil {
+            number.category = .other
+            changed = true
+        }
+        if changed {
+            try? modelContext.save()
+        }
     }
 }
 
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
+    let container = makeHomePreviewContainer()
     HomeView(onAddTap: { }, onNumbersEditingChange: { _ in })
-        .modelContainer(for: Document.self)
+        .modelContainer(container)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
         .environmentObject(StoreKitManager())
         .environment(\.locale, languageSettings.locale)
         .preferredColorScheme(themeSettings.isDarkMode ? .dark : .light)
+}
+
+@MainActor
+private func makeHomePreviewContainer() -> ModelContainer {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Document.self, Number.self, configurations: config)
+
+    // Seed preview data
+    let previewDocs: [Document] = [
+        Document(
+            name: "Meldebescheinigung",
+            category: .wohnung,
+            versions: [DocumentVersion(fileData: loadPDF(named: "meldebescheinigung"), dateAdded: Date())]
+        ),
+        Document(
+            name: "Versicherungspolice",
+            category: .versicherung,
+            versions: [DocumentVersion(fileData: loadPDF(named: "krankenversicherung"), dateAdded: Date())]
+        ),
+        Document(
+            name: "Arbeitsvertrag",
+            category: .arbeit,
+            versions: [DocumentVersion(fileData: loadPDF(named: "lebenslauf"), dateAdded: Date())]
+        )
+    ]
+    previewDocs.forEach { container.mainContext.insert($0) }
+
+    let previewNumbers: [Number] = [
+        Number(name: "Steuer-ID", idNumber: "12X1212345", isCompleted: true, category: .personalIDs),
+        Number(name: "Krankenversicherung", idNumber: "X123456789", category: .healthInsurance),
+        Number(name: "IBAN", idNumber: "DE89 3704 0044 0532 0130 00", category: .financeBanking)
+    ]
+    previewNumbers.forEach { container.mainContext.insert($0) }
+
+    return container
 }

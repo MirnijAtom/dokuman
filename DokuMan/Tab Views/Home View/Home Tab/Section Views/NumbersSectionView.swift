@@ -83,15 +83,12 @@ struct NumbersSectionView: View {
                         }
                         .buttonStyle(.plain)
                     }
-                    .padding(.vertical, 4)
 
-                    if index < visibleNumbers.count - 1 {
-                        Divider()
-                    }
+                    Divider()
+                        .padding(.vertical, 4)
                 }
             }
         }
-        .frame(maxWidth: .infinity, minHeight: 126)
     }
 }
 

@@ -73,12 +73,67 @@ class Number {
     /// Whether the number is marked as completed
     var isCompleted: Bool
     var date: Date = Date()
+    /// Persisted category storage for migration-safe decoding.
+    var categoryRawValue: String = NumberCategory.other.rawValue
+
+    /// Category for this number. Falls back to `.other` for legacy/invalid values.
+    var category: NumberCategory {
+        get { NumberCategory(rawValue: categoryRawValue) ?? .other }
+        set { categoryRawValue = newValue.rawValue }
+    }
     
     /// Initializes a new Number
-    init(name: String, idNumber: String, isCompleted: Bool = false) {
+    init(name: String, idNumber: String, isCompleted: Bool = false, category: NumberCategory = .other) {
         self.name = name
         self.idNumber = idNumber
         self.isCompleted = isCompleted
+        self.categoryRawValue = category.rawValue
+    }
+}
+
+// MARK: - NumberCategory Enum
+
+/// All possible categories for a saved number/ID.
+enum NumberCategory: String, CaseIterable, Codable {
+    case personalIDs
+    case healthInsurance
+    case work
+    case financeBanking
+    case vehicle
+    case homeUtilities
+    case travel
+    case membershipsLoyalty
+    case emergencyContacts
+    case other
+
+    var label: LocalizedStringKey {
+        switch self {
+        case .personalIDs: return "Personal IDs"
+        case .healthInsurance: return "Health & Insurance"
+        case .work: return "Work"
+        case .financeBanking: return "Finance & Banking"
+        case .vehicle: return "Vehicle"
+        case .homeUtilities: return "Home & Utilities"
+        case .travel: return "Travel"
+        case .membershipsLoyalty: return "Memberships & Loyalty"
+        case .emergencyContacts: return "Emergency Contacts"
+        case .other: return "Other"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .personalIDs: return "person.text.rectangle"
+        case .healthInsurance: return "cross.case.fill"
+        case .work: return "briefcase.fill"
+        case .financeBanking: return "creditcard.fill"
+        case .vehicle: return "car.fill"
+        case .homeUtilities: return "house.fill"
+        case .travel: return "airplane"
+        case .membershipsLoyalty: return "person.3.fill"
+        case .emergencyContacts: return "phone.badge.checkmark"
+        case .other: return "tray.fill"
+        }
     }
 }
 
@@ -160,4 +215,3 @@ enum DocumentCategory: String, CaseIterable, Codable {
         }
     }
 }
-

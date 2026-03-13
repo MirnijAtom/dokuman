@@ -78,9 +78,20 @@
 "Your numbers" = "Deine Nummern";
 "Name" = "Name";
 "Type ID" = "ID eingeben";
+"Category" = "Kategorie";
 "New number" = "Neue Nummer";
 "Name is missing" = "Name fehlt";
 "Number is missing" = "Nummer fehlt";
+"Personal IDs" = "Persönliche Ausweise";
+"Health & Insurance" = "Gesundheit & Versicherung";
+"Work" = "Arbeit";
+"Finance & Banking" = "Finanzen & Banking";
+"Vehicle" = "Fahrzeug";
+"Home & Utilities" = "Wohnen & Versorgung";
+"Travel" = "Reisen";
+"Memberships & Loyalty" = "Mitgliedschaften & Treueprogramme";
+"Emergency Contacts" = "Notfallkontakte";
+"Other" = "Sonstiges";
 
 // MARK: - Document Categories
 "Wohnung" = "Wohnung";

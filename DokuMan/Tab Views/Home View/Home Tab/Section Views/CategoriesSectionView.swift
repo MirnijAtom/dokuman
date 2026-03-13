@@ -23,6 +23,9 @@ struct CategoriesSectionView: View {
         }
     }
 
+    let onAddTap: () -> Void
+    let onSeeAll: () -> Void
+
     // MARK: - Category Row
     /// Renders a navigation row for a given document category.
     @ViewBuilder
@@ -30,7 +33,6 @@ struct CategoriesSectionView: View {
         NavigationLink {
             DocumentListView(title: category.label, documents: documents.filter { $0.category == category })
         } label: {
-            HStack {
                 HStack {
                     Image(systemName: category.icon)
                         .frame(width: 25)
@@ -38,12 +40,6 @@ struct CategoriesSectionView: View {
                 }
                 .foregroundColor(category.color)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
-            }
-            .frame(height: 40)
-            .padding(.horizontal)
-            .padding(.vertical, 0)
         }
         .simultaneousGesture(TapGesture().onEnded {
             let generator = UIImpactFeedbackGenerator(style: .light)
@@ -61,15 +57,33 @@ struct CategoriesSectionView: View {
                     description: Text("Add files from Photos, Files, or scan them with your camera.")
                 )
                 .frame(maxWidth: .infinity)
+
+                Button(LocalizedStringKey("Add document")) {
+                    onAddTap()
+                }
+                .font(.headline)
+                .foregroundStyle(.teal)
+                .frame(maxWidth: .infinity, minHeight: 56)
+                .glassEffect()
             } else {
                 VStack(spacing: 0) {
                     ForEach(nonEmptyCategories, id: \.self) { category in
                         categoryRow(for: category)
                         if category != nonEmptyCategories.last {
                             Divider()
+                                .padding(.vertical, 12)
                         }
                     }
                 }
+
+                Button(LocalizedStringKey("See all")) {
+                    onSeeAll()
+                }
+                .font(.headline)
+                .foregroundStyle(.teal)
+                .frame(maxWidth: .infinity, minHeight: 56)
+                .glassEffect()
+                .padding(.top, 12)
             }
         }
         .frame(maxWidth: .infinity, minHeight: 126)
@@ -79,7 +93,7 @@ struct CategoriesSectionView: View {
 #Preview {
     let themeSettings = ThemeSettings()
     let languageSettings = LanguageSettings()
-    return CategoriesSectionView()
+    return CategoriesSectionView(onAddTap: { }, onSeeAll: { })
         .modelContainer(for: Document.self)
         .environmentObject(themeSettings)
         .environmentObject(languageSettings)
