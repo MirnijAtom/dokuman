@@ -6,6 +6,7 @@ import SwiftData
 struct DocumentListView: View {
     // MARK: - Environment & State
     @Environment(\.modelContext) var modelContext
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var store: StoreKitManager
 
     var title: LocalizedStringKey
@@ -103,6 +104,11 @@ struct DocumentListView: View {
         .fullScreenCover(isPresented: $showGetPro) {
             NavigationStack {
                 SubscriptionView()
+            }
+        }
+        .onChange(of: documents.isEmpty) { isEmpty in
+            if isEmpty {
+                dismiss()
             }
         }
     }

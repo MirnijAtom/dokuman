@@ -445,7 +445,7 @@
 				INFOPLIST_FILE = DokuMan/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "To let you add documents from your photo library.\n";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.\nUsed to unlock the app and protect your documents.\n";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.";
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "To access and import your files into DokuMan.\n";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To let you add documents from your photo library.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -485,7 +485,7 @@
 				INFOPLIST_FILE = DokuMan/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSCameraUsageDescription = "To let you add documents from your photo library.\n";
-				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.\nUsed to unlock the app and protect your documents.\n";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Used to unlock the app and protect your documents.";
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "To access and import your files into DokuMan.\n";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "To let you add documents from your photo library.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
