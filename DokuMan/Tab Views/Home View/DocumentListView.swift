@@ -106,7 +106,7 @@ struct DocumentListView: View {
                 SubscriptionView()
             }
         }
-        .onChange(of: documents.isEmpty) { isEmpty in
+        .onChange(of: documents.isEmpty) { _, isEmpty in
             if isEmpty {
                 dismiss()
             }
